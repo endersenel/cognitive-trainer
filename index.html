@@ -12,7 +12,6 @@
         header { background: #151515; padding: 6px 10px; text-align: center; border-bottom: 1px solid #333; flex-shrink: 0; }
         h1 { margin: 0 0 6px 0; font-size: clamp(0.85rem, 3vw, 1.1rem); color: #00e5ff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         
-        /* Demografik Bilgi Formu */
         .demo-bar { display: flex; gap: 4px; justify-content: center; align-items: center; width: 100%; flex-wrap: wrap; margin-bottom: 6px; }
         .demo-field { display: flex; flex-direction: column; align-items: flex-start; }
         .demo-field label { font-size: 0.6rem; color: #00e5ff; margin-bottom: 1px; font-weight: bold; }
@@ -30,36 +29,36 @@
 
         #game-area { flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; background: #0e0e0e; display: flex; justify-content: center; align-items: center; padding: 10px; }
 
-        /* Detaylı Yönerge Kartı */
-        #instruction-card { position: absolute; width: min(92%, 460px); max-height: 85%; overflow-y: auto; background: rgba(20,20,20,0.95); border: 2px solid #00e5ff; padding: 16px; border-radius: 12px; text-align: left; z-index: 100; box-shadow: 0 0 20px rgba(0,229,255,0.2); }
+        #instruction-card { position: absolute; width: min(92%, 480px); max-height: 85%; overflow-y: auto; background: rgba(20,20,20,0.95); border: 2px solid #00e5ff; padding: 16px; border-radius: 12px; text-align: left; z-index: 100; box-shadow: 0 0 20px rgba(0,229,255,0.2); }
         #instruction-card h3 { margin-top: 0; color: #00e5ff; font-size: clamp(0.95rem, 3.5vw, 1.2rem); text-align: center; }
-        #instruction-card p { font-size: clamp(0.72rem, 2.6vw, 0.85rem); line-height: 1.4; color: #ddd; margin-bottom: 8px; }
-        .score-info { background: #111; border-left: 3px solid #00e676; padding: 6px; font-size: 0.7rem; color: #aaa; margin-top: 8px; }
+        #instruction-card p { font-size: clamp(0.72rem, 2.6vw, 0.85rem); line-height: 1.4; color: #ddd; margin-bottom: 6px; }
+        .eval-info { background: #181818; border-left: 3px solid #00e5ff; padding: 6px 8px; font-size: 0.72rem; color: #bbb; margin-top: 6px; border-radius: 0 4px 4px 0; }
+        .score-info { background: #111; border-left: 3px solid #00e676; padding: 6px 8px; font-size: 0.72rem; color: #aaa; margin-top: 6px; border-radius: 0 4px 4px 0; }
 
-        /* Simon & Flanker & Dual Buttons */
-        #dual-buttons { display: none; width: 100%; max-width: 400px; gap: 20px; justify-content: center; z-index: 10; }
-        .choice-btn { flex: 1; padding: 20px 0; font-size: 1.2rem; font-weight: bold; border-radius: 10px; border: 2px solid #fff; cursor: pointer; text-align: center; color: #fff; }
+        #antisaccade-touch-zone { display: none; position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 5; }
+        .antisaccade-half { position: absolute; width: 50%; height: 100%; top: 0; cursor: pointer; }
+        #antisaccade-left-zone { left: 0; border-right: 1px dashed rgba(255,255,255,0.1); }
+        #antisaccade-right-zone { right: 0; }
+
+        #dual-buttons { display: none; width: 100%; max-width: 400px; gap: 20px; justify-content: center; z-index: 10; position: absolute; bottom: 15px; }
+        .choice-btn { flex: 1; padding: 16px 0; font-size: 1rem; font-weight: bold; border-radius: 10px; border: 2px solid #fff; cursor: pointer; text-align: center; color: #fff; }
         .btn-left { background: #ff1744; }
         .btn-right { background: #29b6f6; }
 
-        /* Target Circle */
-        #target-circle { position: absolute; width: clamp(100px, 25vw, 140px); height: clamp(100px, 25vw, 140px); border-radius: 50%; background: #000; border: 3px solid #fff; display: none; justify-content: center; align-items: center; font-size: clamp(1rem, 3.5vw, 1.3rem); font-weight: 900; box-shadow: 0 0 25px rgba(255,255,255,0.4); text-align: center; padding: 8px; cursor: pointer; }
+        #target-circle { position: absolute; width: clamp(100px, 25vw, 140px); height: clamp(100px, 25vw, 140px); border-radius: 50%; background: #000; border: 3px solid #fff; display: none; justify-content: center; align-items: center; font-size: clamp(1.2rem, 4vw, 1.8rem); font-weight: 900; box-shadow: 0 0 25px rgba(255,255,255,0.4); text-align: center; padding: 8px; cursor: pointer; z-index: 20; }
 
-        /* Spatial Grid */
         #spatial-grid { display: none; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 8px; width: 100%; height: 100%; max-width: 500px; max-height: 500px; margin: auto; }
         .spatial-btn { border-radius: 12px; opacity: 0.3; transition: opacity 0.1s; display: flex; justify-content: center; align-items: center; font-size: clamp(1.1rem, 4vw, 1.6rem); font-weight: 900; color: #000; cursor: pointer; border: 2px solid #fff; width: 100%; height: 100%; }
         .spatial-btn.active { opacity: 1; box-shadow: 0 0 35px #fff; transform: scale(0.98); }
 
-        /* Corsi Block Grid */
-        #memory-grid { display: none; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 8px; width: min(75vw, 75vh, 300px); height: min(75vw, 75vh, 300px); margin: auto; }
+        #memory-grid { display: none; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 8px; width: min(70vw, 70vh, 280px); height: min(70vw, 70vh, 280px); margin: auto; }
         .memory-block { background: #222; border: 2px solid #00e5ff; border-radius: 8px; cursor: pointer; width: 100%; height: 100%; }
         .memory-block.lit { background: #00e5ff !important; box-shadow: 0 0 25px #00e5ff !important; }
 
-        /* Numpad Grid */
         #numpad-grid { display: none; grid-template-columns: repeat(3, 1fr); gap: 8px; width: min(75vw, 260px); margin: auto; }
         .num-btn { background: #222; border: 1px solid #00e5ff; color: #fff; font-size: 1.2rem; font-weight: bold; padding: 12px 0; border-radius: 6px; text-align: center; cursor: pointer; }
+        .num-btn:active { background: #00e5ff; color: #000; }
 
-        /* Trail Area */
         #trail-area { display: none; position: relative; width: 100%; height: 100%; }
         .trail-node { position: absolute; width: clamp(38px, 9vw, 46px); height: clamp(38px, 9vw, 46px); border-radius: 50%; background: #00e5ff; color: #000; font-weight: 900; font-size: clamp(0.85rem, 2.5vw, 1.1rem); display: flex; justify-content: center; align-items: center; box-shadow: 0 0 10px rgba(0,0,0,0.5); cursor: pointer; border: 2px solid #fff; }
 
@@ -161,14 +160,20 @@
         <div id="instruction-card">
             <h3 id="instr-title">Test Yönergesi</h3>
             <p id="instr-text">Test detayları yükleniyor...</p>
+            <div id="instr-eval" class="eval-info">Değerlendirme Ölçütleri Yükleniyor...</div>
             <div id="instr-score-formula" class="score-info">Puanlama Formülü Yükleniyor...</div>
+        </div>
+
+        <div id="antisaccade-touch-zone">
+            <div id="antisaccade-left-zone" class="antisaccade-half"></div>
+            <div id="antisaccade-right-zone" class="antisaccade-half"></div>
         </div>
 
         <div id="target-circle"></div>
 
         <div id="dual-buttons">
-            <div class="choice-btn btn-left" id="btn-left-opt">SOL (SOLA)</div>
-            <div class="choice-btn btn-right" id="btn-right-opt">SAĞ (SAĞA)</div>
+            <div class="choice-btn btn-left" id="btn-left-opt">SOL</div>
+            <div class="choice-btn btn-right" id="btn-right-opt">SAĞ</div>
         </div>
 
         <div id="spatial-grid">
@@ -192,79 +197,94 @@
     <script>
         const instructions = {
             gonogo: { 
-                title: "1. Go/No-Go Testi (Motor İnhibisyon)", 
-                text: "Rastgele zamanlarda yeşil 'DOKUN!' (Go, %70) veya kırmızı 'DUR!' (No-Go, %30) uyarısı çıkar. Kırmızı uyarıda kendinizi durdurmalısınız.",
-                scoreFormula: "Puan = (Doğru Go / Toplam Go * 50) + (Başarılı İnhibisyon / Toplam No-Go * 50) - (Ort. RT / 20)"
+                title: "1. Go/No-Go Testi", 
+                text: "Yeşil 'DOKUN!' uyarısında (%70 olasılık) olabildiğince hızlı dokunun. Kırmızı 'DUR!' uyarısında (%30 olasılık) dokunmayarak motor tepkinizi baskılayın.", 
+                eval: "Ölçülen Bilişsel Yetenek: Prefrontal Korteks Baskılama (Inhibition) & İmpuls Kontrolü. Yüksek Reaksiyon Hızı + Düşük Yanlış Dokunma İdealdir.",
+                scoreFormula: "Puan = (Doğru Go% * 50) + (Doğru NoGo% * 50) - (Ort. RT / 20)" 
             },
             stroop: { 
-                title: "2. Stroop Testi (Bilişsel Çatışma)", 
-                text: "Ekranda beliren kelimenin mürekkep rengi ile anlamı eşleştiğinde dokunun. Uyumsuz durumlarda baskılama yapın.",
-                scoreFormula: "Puan = Doğru * 10 - (Ort. RT / 15) - (Hata * 15)"
+                title: "2. Stroop Testi", 
+                text: "Kelimenin yazı rengi ile anlamı aynı olduğunda dokunun. Kelime ve renk çeliştiğinde dokunmayarak kendinizi frenleyin.", 
+                eval: "Ölçülen Bilişsel Yetenek: Bilişsel Çatışma Yönetimi & Otomatik Yanıt Baskılama. Çelişkili Durumlardaki Tepki Gecikmesi (Stroop Etkisi) Ölçülür.",
+                scoreFormula: "Puan = Doğru * 10 - (Ort. RT / 15) - (Hata * 15)" 
             },
             simon: { 
-                title: "3. Simon Effect Testi (Mekânsal Çatışma)", 
-                text: "Dairenin nerede çıktığına aldanmayın! Kırmızı için SOL, Mavi için SAĞ butona basın.",
-                scoreFormula: "Puan = 100 - (Gecikme ms * 0.2) - (Hata * 20)"
+                title: "3. Simon Effect Testi", 
+                text: "Dairenin ekrandaki konumuna aldanmayın. Kırmızı görünürse SOL, Mavi görünürse SAĞ butona basın.", 
+                eval: "Ölçülen Bilişsel Yetenek: Mekânsal Çatışma ve Uyaran-Tepki Uyumluluğu. Uyaran Konumu ile Yanıt Butonu Çeliştiğindeki Performans Ölçülür.",
+                scoreFormula: "Puan = 100 - (Gecikme ms * 0.2) - (Hata * 20)" 
             },
             flanker: { 
-                title: "4. Flanker Testi (Çeldirici İnhibisyonu)", 
-                text: "Yanlardaki çeldirici oklara bakmayın (<<><<). Sadece ortadaki 3. okun yönündeki butona dokunun.",
-                scoreFormula: "Puan = (Doğru % * 100) - (Flanker Gecikmesi / 10)"
+                title: "4. Flanker Testi", 
+                text: "Yanlardaki çeldirici oklara bakmayın (<<><<). Sadece ortadaki 3. okun yönündeki butona dokunun.", 
+                eval: "Ölçülen Bilişsel Yetenek: Seçici Görsel Dikkat & Odaklanma Kalitesi. Çeldirici Uyaranların Dikkati Dağıtma Derecesi Ölçülür.",
+                scoreFormula: "Puan = (Doğru % * 100) - (Gecikme / 10)" 
             },
             antisaccade: { 
-                title: "5. Anti-Saccade Testi (Refleks Baskılama)", 
-                text: "Işık yandığında doğal refleksiniz ışığa yönelmektir. Kural: Işığın TAM ZIT boş tarafındaki ekrana dokunun.",
-                scoreFormula: "Puan = (Başarılı Zıt Tepki * 20) - (Reaksiyon ms / 25)"
+                title: "5. Anti-Saccade Testi", 
+                text: "Sarı ışık yandığında ışığa DOKUNMAYIN! Doğal refleksinizi baskılayarak ekranın TAM ZIT tarafındaki boş alana dokunun.", 
+                eval: "Ölçülen Bilişsel Yetenek: Okülomotor Kontrol & Görsel Refleks İnhibisyonu. Işığa Bakma/Dokunma Eğilimini Frenleme Kapasitesi Ölçülür.",
+                scoreFormula: "Puan = (Başarılı Zıt Tepki * 20) - (Reaksiyon ms / 25)" 
             },
             trailA: { 
                 title: "6. Trail Making Test A", 
-                text: "2 deneme turundan sonra 1'den 20'ye kadar olan sayı dizilimini en hızlı şekilde sırayla birleştirin.",
-                scoreFormula: "Puan = Max(0, 1000 - [Süre sn * 10 + Hata * 50])"
+                text: "1'den 20'ye kadar olan sayı dizilimini en hızlı şekilde sırayla birleştirin.", 
+                eval: "Ölçülen Bilişsel Yetenek: Görsel Tarama Hızı, Motor İşlem Hızı ve Motor Koordinasyon.",
+                scoreFormula: "Puan = Max(0, 1000 - [Süre sn * 10 + Hata * 50])" 
             },
             trailB: { 
                 title: "7. Trail Making Test B", 
-                text: "2 deneme turundan sonra 1-A-2-B-3-C... şeklinde ardışık sayı ve harf dizilimini en hızlı şekilde tamamlayın.",
-                scoreFormula: "Puan = Max(0, 1000 - [Süre sn * 10 + Hata * 50])"
+                text: "1-A-2-B-3-C... şeklinde ardışık sayı ve harf dizilimini sırasıyla tamamlayın.", 
+                eval: "Ölçülen Bilişsel Yetenek: Zihinsel Esneklik, Görev Değiştirme (Task Switching) ve Çalışma Belleği.",
+                scoreFormula: "Puan = Max(0, 1000 - [Süre sn * 10 + Hata * 50])" 
             },
             memory: { 
-                title: "8. Görsel Dizilim Bellek Testi (Corsi)", 
-                text: "Mavi karelerin yanma sırasını aklınızda tutun ve aynı sırayla dokunun. 2 hatada test sonlanır.",
-                scoreFormula: "Puan = (Maksimum Seviye * 100) + (Başarılı Blok * 10) - (Hata * 25)"
+                title: "8. Görsel Dizilim Bellek (Corsi)", 
+                text: "Mavi karelerin yanma sırasını takip edip aynı sırayla dokunun. 2 hatada test tamamlanır.", 
+                eval: "Ölçülen Bilişsel Yetenek: Görsel-Uzamsal Çalışma Belleği ve Dizi Hatırlama Kapasitesi (Corsi Span).",
+                scoreFormula: "Puan = (Seviye * 100) + (Başarılı Blok * 10) - (Hata * 25)" 
             },
             nback: { 
                 title: "9. Spatial N-Back Bellek", 
-                text: "Yanan kare 1 Adım Önceki yanan kare ile AYNİ konumda ise 'EŞLEŞTİ' butonuna basın.",
-                scoreFormula: "Puan = (Doğru % * 80) + (1000 / Ortalama RT * 200)"
+                text: "Yanan kare BİR ÖNCEKİ yanan kare ile AYNI konumdaysa 'EŞLEŞTİ (AYNI)' butonuna, farklıysa 'FARKLI' butonuna basın.", 
+                eval: "Ölçülen Bilişsel Yetenek: Çalışma Belleği Güncelleme ve Sürekli Dikkat. Anlık Zihinsel Yük Yönetimi Ölçülür.",
+                scoreFormula: "Puan = (Doğru % * 80) + (1000 / Ort. RT * 200)" 
             },
             digit_span: { 
                 title: "10. Görsel Sayı Dizilimi Belleği", 
-                text: "Ekranda gösterilen rakam dizisini sırasıyla aklınızda tutun ve klavyeden girin.",
-                scoreFormula: "Puan = (Maksimum Dizi Uzunluğu * 150) - (Hata * 30)"
+                text: "Ekranda sırayla gösterilen sayı dizisini aklınızda tutun. Gösterim bitince klavyeden sırayla girin.", 
+                eval: "Ölçülen Bilişsel Yetenek: Kısa Süreli Sayısal Dizi Belleği (Digit Span Forward). Odaklanma ve Ardışık İşleme Kapasitesi Ölçülür.",
+                scoreFormula: "Puan = (Dizi Uzunluğu * 150) - (Hata * 30)" 
             },
             sprint_ball: { 
                 title: "11. Saha Depar (Top Getirme)", 
-                text: "Sesli İngilizce renk komutunu duyduğunuzda depar atıp nesneyi getirin ve süreyi durdurun (10 Deneme).",
-                scoreFormula: "Puan = Max(0, 100 - [Ortalama Depar Süresi ms / 100])"
+                text: "Sesli verilen İngilizce renk komutuna göre depar atıp nesneyi getirin ve ekrana dokunun (10 Deneme).", 
+                eval: "Ölçülen Kinetik Yetenek: İşitsel Reaksiyon Hızı, Patlayıcı İvmelenme ve Yön Değiştirme Çevikliği.",
+                scoreFormula: "Puan = Max(0, 100 - [Ort. Depar Süresi ms / 100])" 
             },
             agility_run: { 
                 title: "12. Renk Koni Çeviklik Deparı", 
-                text: "Sahada aktif olan koniye depar atın ve dönüşte dokunarak süreyi kaydedin.",
-                scoreFormula: "Puan = (Doğru Depar % * 60) + Max(0, 40 - [Ortalama Süre ms / 200])"
+                text: "Aktif olan koniye depar atın ve dönüşte dokunarak süreyi durdurun.", 
+                eval: "Ölçülen Kinetik Yetenek: Çevre Algısı, Görsel Reaksiyon Hızı ve Kinetik Çeviklik.",
+                scoreFormula: "Puan = (Doğru % * 60) + Max(0, 40 - [Ort. Süre ms / 200])" 
             },
             complex_agility: { 
                 title: "13. Karmaşık Çift Komut Deparı", 
-                text: "Sesli verilen renk ile ekran rengi EŞLEŞTİĞİNDE depar atın. Çelişki varsa yerinizde sabit kalın!",
-                scoreFormula: "Puan = (Doğru Depar * 10) + (Doğru Frenleme * 15) - (Hatalı Depar * 20)"
+                text: "Ses ve Ekran Rengi EŞLEŞTİĞİNDE depar atın. Çelişki varsa yerinizde sabit kalın!", 
+                eval: "Ölçülen Kinetik Yetenek: Saha İçi Karar Verme, Hızlı Motor İnhibisyon ve Yalancı Depar Engelleme.",
+                scoreFormula: "Puan = (Doğru Depar * 10) + (Doğru Frenleme * 15) - (Hatalı Depar * 20)" 
             },
             choice_react: { 
                 title: "14. Çoklu Seçenek Reaksiyon Deparı", 
-                text: "4 koni arasından belirtilen hedef renge en hızlı yönelme deparını gerçekleştirin.",
-                scoreFormula: "Puan = Max(0, 100 - [Reaksiyon ms / 50] - [Yanlış Yön * 15])"
+                text: "4 koni arasından belirtilen hedef renge en hızlı deparı atın.", 
+                eval: "Ölçülen Kinetik Yetenek: Karmaşık Uyaran Seçimi ve Yönsel Motor Reaksiyon Hızı.",
+                scoreFormula: "Puan = Max(0, 100 - [Reaksiyon ms / 50] - [Yanlış Yön * 15])" 
             },
             visual_search: { 
                 title: "15. Görsel Arama & Depar", 
-                text: "Karmaşık semboller arasından hedef renkteki objeyi tespit edip o koniye depar atın.",
-                scoreFormula: "Puan = (1000 / Arama Depar Süresi ms * 500) - (Hatalı Obje * 25)"
+                text: "Karmaşık semboller arasından hedef renkli objeyi bulun ve o koniye depar atın.", 
+                eval: "Ölçülen Kinetik Yetenek: Karmaşık Görsel Alan Taraması, Hedef Tespit Süresi ve Kinetik Depar.",
+                scoreFormula: "Puan = (1000 / Arama Depar Süresi ms * 500) - (Hata * 25)" 
             }
         };
 
@@ -337,6 +357,9 @@
         const colorPickerBar = document.getElementById('color-picker-bar');
         const gameArea = document.getElementById('game-area');
         const targetCircle = document.getElementById('target-circle');
+        const antisaccadeTouchZone = document.getElementById('antisaccade-touch-zone');
+        const antisaccadeLeftZone = document.getElementById('antisaccade-left-zone');
+        const antisaccadeRightZone = document.getElementById('antisaccade-right-zone');
         const dualButtons = document.getElementById('dual-buttons');
         const btnLeftOpt = document.getElementById('btn-left-opt');
         const btnRightOpt = document.getElementById('btn-right-opt');
@@ -347,6 +370,7 @@
         const instructionCard = document.getElementById('instruction-card');
         const instrTitle = document.getElementById('instr-title');
         const instrText = document.getElementById('instr-text');
+        const instrEval = document.getElementById('instr-eval');
         const instrScoreFormula = document.getElementById('instr-score-formula');
 
         const startBtn = document.getElementById('start-btn');
@@ -365,6 +389,9 @@
         exportBtn.addEventListener('click', exportCSV);
 
         targetCircle.addEventListener('pointerdown', handleCircleTap);
+        antisaccadeLeftZone.addEventListener('pointerdown', (e) => handleAntiSaccadeZoneTap(e, 'LEFT'));
+        antisaccadeRightZone.addEventListener('pointerdown', (e) => handleAntiSaccadeZoneTap(e, 'RIGHT'));
+
         btnLeftOpt.addEventListener('pointerdown', (e) => handleDualChoiceTap(e, 'LEFT'));
         btnRightOpt.addEventListener('pointerdown', (e) => handleDualChoiceTap(e, 'RIGHT'));
 
@@ -397,16 +424,21 @@
             instructionCard.style.display = 'block';
             instrTitle.textContent = instructions[mod] ? instructions[mod].title : "Test Yönergesi";
             instrText.textContent = instructions[mod] ? instructions[mod].text : "Açıklama mevcut değil.";
+            instrEval.textContent = instructions[mod] ? instructions[mod].eval : "";
             instrScoreFormula.textContent = instructions[mod] ? instructions[mod].scoreFormula : "";
 
             targetCircle.style.display = 'none';
+            antisaccadeTouchZone.style.display = 'none';
             dualButtons.style.display = (mod === 'simon' || mod === 'flanker' || mod === 'nback') ? 'flex' : 'none';
             spatialGrid.style.display = (mod === 'agility_run' || mod === 'complex_agility' || mod === 'choice_react') ? 'grid' : 'none';
-            memoryGrid.style.display = (mod === 'memory') ? 'grid' : 'none';
+            memoryGrid.style.display = (mod === 'memory' || mod === 'nback') ? 'grid' : 'none';
             numpadGrid.style.display = (mod === 'digit_span') ? 'grid' : 'none';
             trailArea.style.display = (mod === 'trailA' || mod === 'trailB') ? 'block' : 'none';
             colorPickerBar.style.display = (mod === 'sprint_ball' || mod === 'agility_run' || mod === 'complex_agility' || mod === 'choice_react' || mod === 'visual_search') ? 'block' : 'none';
             
+            btnLeftOpt.textContent = "SOL";
+            btnRightOpt.textContent = "SAĞ";
+
             statTimer.textContent = '0.00 s';
             statScore.textContent = '0';
         }
@@ -432,6 +464,7 @@
             trailStage = "DEMO1";
             memoryLevel = 3;
             memoryConsecutiveErrors = 0;
+            lastNBackPos = null;
             statErrors.textContent = '0';
             statLastRt.textContent = '0 ms';
             statScore.textContent = '0';
@@ -469,6 +502,7 @@
 
             if (mod === 'gonogo' || mod === 'stroop' || mod === 'sprint_ball' || mod === 'simon' || mod === 'flanker' || mod === 'antisaccade' || mod === 'visual_search') {
                 targetCircle.style.display = 'none';
+                antisaccadeTouchZone.style.display = 'none';
                 const delay = Math.floor(Math.random() * 1500) + 1000;
                 timerTimeout = setTimeout(() => triggerSingleTarget(mod), delay);
             } else if (mod === 'agility_run' || mod === 'complex_agility' || mod === 'choice_react') {
@@ -500,7 +534,6 @@
                 targetCircle.style.backgroundColor = isRedColor ? '#ff1744' : '#29b6f6';
                 targetCircle.textContent = '';
                 
-                
                 currentCorrectAnswer = isRedColor ? 'LEFT' : 'RIGHT';
                 playSound(isRedColor ? 400 : 700);
 
@@ -519,12 +552,11 @@
                 targetCircle.textContent = selected.text;
                 targetCircle.style.color = '#00e5ff';
                 
-                btnLeftOpt.textContent = "SOL ( < )";
-                btnRightOpt.textContent = "SAĞ ( > )";
                 currentCorrectAnswer = selected.correct;
                 playSound(500);
 
             } else if (mod === 'antisaccade') {
+                antisaccadeTouchZone.style.display = 'block';
                 const isLeftPos = Math.random() < 0.5;
                 targetCircle.style.left = isLeftPos ? '10%' : '75%';
                 targetCircle.style.top = '35%';
@@ -532,7 +564,7 @@
                 targetCircle.textContent = 'IŞIK';
                 targetCircle.style.color = '#000';
                 
-                currentCorrectAnswer = isLeftPos ? 'RIGHT_AREA' : 'LEFT_AREA';
+                currentCorrectAnswer = isLeftPos ? 'RIGHT' : 'LEFT';
                 playSound(800);
 
             } else if (mod === 'stroop') {
@@ -580,6 +612,24 @@
             }
         }
 
+        function handleAntiSaccadeZoneTap(e, tappedZone) {
+            e.preventDefault();
+            if (!isWaiting) return;
+
+            const rt = Math.round(performance.now() - trialStartTime);
+            isWaiting = false;
+            antisaccadeTouchZone.style.display = 'none';
+
+            const isCorrect = (tappedZone === currentCorrectAnswer);
+            recordResult('ANTISACCADE', rt, isCorrect, isCorrect ? 'Doğru Anti-Saccade Zıt Dokunma' : 'Hatalı Taraf Dokunma');
+            if (!isCorrect) playSound(120, 'sawtooth');
+
+            statLastRt.textContent = rt + ' ms';
+            targetCircle.style.display = 'none';
+            updateStats();
+            setTimeout(nextTrial, 800);
+        }
+
         function handleDualChoiceTap(e, choice) {
             e.preventDefault();
             if (!isWaiting) return;
@@ -607,8 +657,9 @@
 
             const mod = moduleSelect.value;
             if (mod === 'antisaccade') {
-                recordResult('ANTISACCADE', rt, false, 'Refleks İhlali (Işığa Dokundu)');
+                recordResult('ANTISACCADE', rt, false, 'Refleks İhlali (Doğrudan Işığa Dokundu)');
                 playSound(120, 'sawtooth');
+                antisaccadeTouchZone.style.display = 'none';
             } else if (mod === 'stroop') {
                 const isCorrect = (currentCorrectAnswer === 'MATCH');
                 recordResult('STROOP', rt, isCorrect, isCorrect ? 'Doğru Eşleşme' : 'Çelişki Hatası');
@@ -824,10 +875,12 @@
             }
         }
 
+        // GÖRSEL SAYI DİZİLİMİ BELLEĞİ (DÜZELTİLMİŞ HIZ VE KONTROL)
         function setupDigitSpanTask() {
             numpadGrid.innerHTML = '';
             memorySequence = [];
             playerMemorySequence = [];
+            numpadGrid.style.display = 'none';
 
             for (let i = 1; i <= 9; i++) {
                 const btn = document.createElement('div');
@@ -837,6 +890,7 @@
                 numpadGrid.appendChild(btn);
             }
 
+            // 4 elemanlı rastgele rakam dizisi
             for (let i = 0; i < 4; i++) {
                 memorySequence.push(Math.floor(Math.random() * 9) + 1);
             }
@@ -844,42 +898,54 @@
             let idx = 0;
             isWaiting = false;
             targetCircle.style.display = 'flex';
-            targetCircle.style.left = '35%'; targetCircle.style.top = '30%';
+            targetCircle.style.left = '35%'; 
+            targetCircle.style.top = '30%';
+            targetCircle.style.backgroundColor = '#222';
+            targetCircle.style.color = '#00e5ff';
 
-            const interval = setInterval(() => {
+            // Dengeli Hız: 1200 ms aralıklarla sayı gösterimi
+            const displayInterval = setInterval(() => {
                 if (idx < memorySequence.length) {
                     targetCircle.textContent = memorySequence[idx];
                     playSound(600);
                     idx++;
+                    // 800 ms sonra sayıyı silip temiz ekran göster (okuma kolaylığı için)
+                    setTimeout(() => {
+                        targetCircle.textContent = '';
+                    }, 800);
                 } else {
-                    clearInterval(interval);
+                    clearInterval(displayInterval);
                     targetCircle.style.display = 'none';
+                    numpadGrid.style.display = 'grid'; // Numpad açılır
                     isWaiting = true;
                     trialStartTime = performance.now();
                 }
-            }, 1000);
+            }, 1200);
         }
 
         function handleDigitInput(e, val) {
             e.preventDefault();
             if (!isWaiting) return;
 
-            playerMemorySequence.push(val);
+            // Sayısal tip dönüşüm kontrolü
+            playerMemorySequence.push(Number(val));
             const step = playerMemorySequence.length - 1;
 
             if (playerMemorySequence[step] === memorySequence[step]) {
                 playSound(700);
                 if (playerMemorySequence.length === memorySequence.length) {
                     const rt = Math.round(performance.now() - trialStartTime);
-                    recordResult('DIGIT_SPAN', rt, true, 'Doğru Sayı Dizilimi');
+                    recordResult('DIGIT_SPAN', rt, true, `Doğru Dizi (${memorySequence.join('-')})`);
                     statLastRt.textContent = rt + ' ms';
                     updateStats();
+                    numpadGrid.style.display = 'none';
                     setTimeout(nextTrial, 1000);
                 }
             } else {
                 playSound(120, 'sawtooth');
-                recordResult('DIGIT_SPAN', 0, false, 'Yanlış Sayı Dizilimi');
+                recordResult('DIGIT_SPAN', 0, false, `Hatalı Dizi (Hedef: ${memorySequence.join('-')})`);
                 updateStats();
+                numpadGrid.style.display = 'none';
                 setTimeout(nextTrial, 1000);
             }
         }
@@ -895,8 +961,17 @@
 
             btnLeftOpt.textContent = "EŞLEŞTİ (AYNI)";
             btnRightOpt.textContent = "FARKLI";
+            dualButtons.style.display = 'flex';
 
-            const currentPos = Math.floor(Math.random() * 9);
+            let currentPos;
+            if (lastNBackPos !== null && Math.random() < 0.3) {
+                currentPos = lastNBackPos;
+            } else {
+                do {
+                    currentPos = Math.floor(Math.random() * 9);
+                } while (currentPos === lastNBackPos && Math.random() > 0.1);
+            }
+
             const blocks = memoryGrid.children;
             blocks[currentPos].classList.add('lit');
             playSound(600);
@@ -912,11 +987,10 @@
             isWaiting = true;
 
             setTimeout(() => {
-                blocks[currentPos].classList.remove('lit');
-            }, 600);
+                if (blocks[currentPos]) blocks[currentPos].classList.remove('lit');
+            }, 500);
         }
 
-        // BİLİMSEL PUAN HESAPLAMA MOTORU
         function calculateOverallScore() {
             const mod = moduleSelect.value;
             const valid = trialData.filter(d => d.isCorrect);
