@@ -3,17 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>SPPLab - Kinetic & Cognitive Athletic Trainer</title>
     <style>
         * { box-sizing: border-box; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
         body { margin: 0; padding: 0; background: #0a0a0a; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        header { background: #151515; padding: 6px 12px; text-align: center; border-bottom: 1px solid #333; flex-shrink: 0; }
-        h1 { margin: 0; font-size: 1rem; color: #00e5ff; }
+        header { background: #151515; padding: 8px 12px; text-align: center; border-bottom: 1px solid #333; flex-shrink: 0; }
+        h1 { margin: 0 0 6px 0; font-size: 1.05rem; color: #00e5ff; letter-spacing: 0.5px; }
         
-        .panel-row { display: flex; gap: 6px; margin-top: 4px; justify-content: center; }
-        select, input { background: #222; color: #fff; border: 1px solid #00e5ff; padding: 4px 6px; border-radius: 4px; font-size: 0.75rem; }
+        .panel-row { display: flex; gap: 6px; justify-content: center; align-items: center; }
+        select, input { background: #222; color: #fff; border: 1px solid #00e5ff; padding: 5px 8px; border-radius: 4px; font-size: 0.75rem; outline: none; }
+        select:focus, input:focus { border-color: #00e676; }
         
-        #stats-bar { display: flex; justify-content: space-around; background: #1a1a1a; padding: 6px; font-size: 0.75rem; font-weight: bold; border-bottom: 1px solid #333; flex-shrink: 0; }
+        #stats-bar { display: flex; justify-content: space-around; background: #1a1a1a; padding: 8px; font-size: 0.75rem; font-weight: bold; border-bottom: 1px solid #333; flex-shrink: 0; }
         .stat-item span { color: #00e676; }
 
         #game-area { flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; background: #0e0e0e; display: flex; justify-content: center; align-items: center; }
@@ -24,21 +28,22 @@
 
         /* Spatial Grid */
         #spatial-grid { display: none; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; width: 95%; height: 95%; }
-        .spatial-btn { border-radius: 12px; opacity: 0.2; transition: opacity 0.1s; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; font-weight: bold; }
-        .spatial-btn.active { opacity: 1; box-shadow: 0 0 30px #fff; }
+        .spatial-btn { border-radius: 12px; opacity: 0.25; transition: opacity 0.1s, transform 0.1s; display: flex; justify-content: center; align-items: center; font-size: 1.4rem; font-weight: bold; color: #000; cursor: pointer; }
+        .spatial-btn.active { opacity: 1; box-shadow: 0 0 30px #fff; transform: scale(0.98); }
 
         /* Trail Area */
         #trail-area { display: none; position: relative; width: 100%; height: 100%; }
-        .trail-node { position: absolute; width: 48px; height: 48px; border-radius: 50%; background: #00e5ff; color: #000; font-weight: bold; font-size: 1.1rem; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        .trail-node { position: absolute; width: 50px; height: 50px; border-radius: 50%; background: #00e5ff; color: #000; font-weight: bold; font-size: 1.1rem; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 10px rgba(0,0,0,0.5); cursor: pointer; }
+        .trail-node:active { transform: scale(0.9); }
 
-        #instruction { position: absolute; bottom: 8px; width: 100%; text-align: center; font-size: 0.8rem; color: #888; pointer-events: none; padding: 0 10px; }
+        #instruction { position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 0.8rem; color: #aaa; pointer-events: none; padding: 0 10px; font-weight: 500; }
 
-        #controls { padding: 8px; background: #151515; display: flex; gap: 6px; justify-content: center; flex-shrink: 0; border-top: 1px solid #333; }
-        button { flex: 1; max-width: 110px; padding: 10px 0; font-size: 0.8rem; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; }
+        #controls { padding: 10px; background: #151515; display: flex; gap: 8px; justify-content: center; flex-shrink: 0; border-top: 1px solid #333; }
+        button { flex: 1; max-width: 120px; padding: 12px 0; font-size: 0.85rem; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
         .btn-start { background: #00c853; color: white; }
         .btn-stop { background: #d50000; color: white; }
         .btn-export { background: #0288d1; color: white; }
-        button:disabled { background: #333; color: #666; cursor: not-allowed; }
+        button:disabled { background: #333 !important; color: #666 !important; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -46,19 +51,17 @@
     <header>
         <h1>SPPLab - Kinetik & Bilişsel Performans Stüdyosu</h1>
         <div class="panel-row">
-            <input type="text" id="athlete-name" placeholder="Sporcu Adı/ID" value="Sporcu_1" style="width: 100px;">
-            <select id="module-select" style="max-width: 220px;">
+            <select id="athlete-select" style="max-width: 160px;"></select>
+            <select id="module-select" style="max-width: 200px;">
                 <optgroup label="A. Dokunmatik & Bilişsel">
                     <option value="gonogo">1. Go/No-Go (Baskılama)</option>
                     <option value="stroop">2. Stroop (Renk-Kelime Çelişkisi)</option>
-                    <option value="trailA">3. Trail Making A (1-10 Sayı)</option>
+                    <option value="trailA">3. Trail Making A (1-8 Sayı)</option>
                     <option value="trailB">4. Trail Making B (1-A-2-B Esneklik)</option>
-                    <option value="memory">5. Görsel Dizilim Bellek Testi</option>
                 </optgroup>
                 <optgroup label="B. Saha & Kinetik Depar">
-                    <option value="sprint_ball">6. Saha Depar: Nesne/Top Getirme</option>
-                    <option value="agility_run">7. 4 Renk Koni Çeviklik Deparı</option>
-                    <option value="audio_react">8. İşitsel Reaksiyon & Yön Becerisi</option>
+                    <option value="sprint_ball">5. Saha Depar: Nesne/Top Getirme</option>
+                    <option value="agility_run">6. 4 Renk Koni Çeviklik Deparı</option>
                 </optgroup>
             </select>
         </div>
@@ -78,7 +81,7 @@
             <div class="spatial-btn" id="s-red" style="background:#ff1744;">KIRMIZI</div>
             <div class="spatial-btn" id="s-blue" style="background:#29b6f6;">MAVİ</div>
             <div class="spatial-btn" id="s-green" style="background:#00e676;">YEŞİL</div>
-            <div class="spatial-btn" id="s-yellow" style="background:#ffea00; color:#000;">SARI</div>
+            <div class="spatial-btn" id="s-yellow" style="background:#ffea00;">SARI</div>
         </div>
 
         <div id="trail-area"></div>
@@ -93,6 +96,30 @@
     </div>
 
     <script>
+        // -------------------------------------------------------------
+        // 1. SPORCU VERİTABANI (Demografik Bilgiler)
+        // -------------------------------------------------------------
+        const athleteDatabase = [
+            { id: "SP-101", name: "Sporcu_1",  age: 21, gender: "Erkek", sport: "Futbol",      level: "Profesyonel", dominantSide: "Sağ", experienceYears: 8 },
+            { id: "SP-102", name: "Sporcu_2",  age: 19, gender: "Kadın", sport: "Basketbol",   level: "Amatör",       dominantSide: "Sağ", experienceYears: 5 },
+            { id: "SP-103", name: "Sporcu_3",  age: 24, gender: "Kadın", sport: "Voleybol",    level: "Profesyonel", dominantSide: "Sağ", experienceYears: 10 },
+            { id: "SP-104", name: "Sporcu_4",  age: 22, gender: "Erkek", sport: "Tenis",       level: "Yarı Profesyonel", dominantSide: "Sol", experienceYears: 7 },
+            { id: "SP-105", name: "Sporcu_5",  age: 18, gender: "Erkek", sport: "Hentbol",     level: "Genç Takım",  dominantSide: "Sağ", experienceYears: 4 },
+            { id: "SP-106", name: "Sporcu_6",  age: 26, gender: "Kadın", sport: "Atletizm",    level: "Milli Sporcu", dominantSide: "Sağ", experienceYears: 12 },
+            { id: "SP-107", name: "Sporcu_7",  age: 20, gender: "Erkek", sport: "Boks",        level: "Amatör",       dominantSide: "Sol", experienceYears: 3 },
+            { id: "SP-108", name: "Sporcu_8",  age: 23, gender: "Kadın", sport: "Yüzme",       level: "Yarı Profesyonel", dominantSide: "Sağ", experienceYears: 9 },
+            { id: "SP-109", name: "Sporcu_9",  age: 25, gender: "Erkek", sport: "Taekwondo",   level: "Milli Sporcu", dominantSide: "Sağ", experienceYears: 11 },
+            { id: "SP-110", name: "Sporcu_10", age: 17, gender: "Kadın", sport: "Gimnastik",  level: "Genç Takım",  dominantSide: "Sağ", experienceYears: 8 },
+            { id: "SP-111", name: "Sporcu_11", age: 28, gender: "Erkek", sport: "Badminton",   level: "Profesyonel", dominantSide: "Sol", experienceYears: 14 },
+            { id: "SP-112", name: "Sporcu_12", age: 22, gender: "Kadın", sport: "Futbol",      level: "Yarı Profesyonel", dominantSide: "Sağ", experienceYears: 6 },
+            { id: "SP-113", name: "Sporcu_13", age: 20, gender: "Erkek", sport: "Masa Tenisi", level: "Amatör",       dominantSide: "Sağ", experienceYears: 4 },
+            { id: "SP-114", name: "Sporcu_14", age: 27, gender: "Kadın", sport: "Basketbol",   level: "Profesyonel", dominantSide: "Sol", experienceYears: 13 },
+            { id: "SP-115", name: "Sporcu_15", age: 19, gender: "Erkek", sport: "Karate",      level: "Amatör",       dominantSide: "Sağ", experienceYears: 5 }
+        ];
+
+        // -------------------------------------------------------------
+        // 2. SES MOTORU & DEĞİŞKENLER
+        // -------------------------------------------------------------
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
 
@@ -113,9 +140,9 @@
             osc.stop(audioCtx.currentTime + duration);
         }
 
-        // Metinden Ses Üretme (Saha Sesli Komutları İçin)
         function speakText(text) {
             if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
                 const msg = new SpeechSynthesisUtterance(text);
                 msg.lang = 'tr-TR';
                 msg.rate = 1.2;
@@ -133,7 +160,8 @@
         let nextTrailIndex = 0;
         let trailSequence = [];
 
-        const athleteInput = document.getElementById('athlete-name');
+        // DOM Elemanları
+        const athleteSelect = document.getElementById('athlete-select');
         const moduleSelect = document.getElementById('module-select');
         const gameArea = document.getElementById('game-area');
         const targetCircle = document.getElementById('target-circle');
@@ -149,6 +177,7 @@
         const statAvgRt = document.getElementById('stat-avg-rt');
         const statErrors = document.getElementById('stat-errors');
 
+        // Event Listener'lar
         moduleSelect.addEventListener('change', resetLayout);
         startBtn.addEventListener('click', startTest);
         stopBtn.addEventListener('click', stopTest);
@@ -159,6 +188,21 @@
         document.querySelectorAll('.spatial-btn').forEach(btn => {
             btn.addEventListener('pointerdown', (e) => handleSpatialTap(e, btn.id));
         });
+
+        // Sporcu listesini dropdown'a yükleme
+        function initAthleteSelect() {
+            athleteSelect.innerHTML = '';
+            athleteDatabase.forEach(a => {
+                const opt = document.createElement('option');
+                opt.value = a.id;
+                opt.textContent = `${a.id} - ${a.name} (${a.sport})`;
+                athleteSelect.appendChild(opt);
+            });
+        }
+
+        function getSelectedAthlete() {
+            return athleteDatabase.find(a => a.id === athleteSelect.value) || athleteDatabase[0];
+        }
 
         function resetLayout() {
             const mod = moduleSelect.value;
@@ -175,6 +219,9 @@
             element.style.top = Math.max(10, Math.floor(Math.random() * areaH)) + 'px';
         }
 
+        // -------------------------------------------------------------
+        // 3. TEST AKIŞ MANTIĞI
+        // -------------------------------------------------------------
         function startTest() {
             if (!audioCtx) audioCtx = new AudioContext();
             trialData = [];
@@ -187,6 +234,7 @@
             stopBtn.disabled = false;
             exportBtn.disabled = true;
             moduleSelect.disabled = true;
+            athleteSelect.disabled = true;
 
             nextTrial();
         }
@@ -199,6 +247,7 @@
             startBtn.disabled = false;
             stopBtn.disabled = true;
             moduleSelect.disabled = false;
+            athleteSelect.disabled = false;
             if (trialData.length > 0) exportBtn.disabled = false;
         }
 
@@ -237,7 +286,6 @@
             startTime = performance.now();
 
             if (mod === 'sprint_ball') {
-                // Saha Depar Modu: Renk görünür, sesli komut verir, depar süresini ölçer
                 const colors = [
                     { name: 'KIRMIZI TOP', hex: '#ff1744' },
                     { name: 'MAVİ TOP', hex: '#29b6f6' },
@@ -248,7 +296,7 @@
                 targetCircle.style.color = '#000';
                 targetCircle.textContent = selected.name;
                 
-                speakText(selected.name); // Sesli yönlendirme
+                speakText(selected.name);
                 playSound(900);
             } else if (mod === 'gonogo') {
                 const isGo = Math.random() < 0.7;
@@ -291,9 +339,14 @@
             clearTimeout(timerTimeout);
 
             const mod = moduleSelect.value;
-            recordResult(mod.toUpperCase(), rt, true, 'Tamamlandı');
-            statLastRt.textContent = rt + ' ms';
+            if (mod === 'gonogo' && currentTargetColor === 'NOGO') {
+                recordResult('GONOGO', rt, false, 'Hatalı Dokunma (Baskılama Başarısız)');
+                playSound(150, 'sawtooth');
+            } else {
+                recordResult(mod.toUpperCase(), rt, true, 'Tamamlandı');
+            }
 
+            statLastRt.textContent = rt + ' ms';
             targetCircle.style.display = 'none';
             updateStats();
             setTimeout(nextTrial, 800);
@@ -307,7 +360,7 @@
             const activeBtn = document.getElementById(currentTargetColor);
             activeBtn.classList.add('active');
             
-            speakText(activeBtn.textContent + ' KONİSİ'); // Sahadaki koni adını bağırır
+            speakText(activeBtn.textContent + ' KONİSİ');
             playSound(750);
             startTime = performance.now();
         }
@@ -379,9 +432,20 @@
             isWaiting = true;
         }
 
+        // -------------------------------------------------------------
+        // 4. VERİ KAYDI VE SPSS/EXCEL EXPORT (Demografik Entegrasyonlu)
+        // -------------------------------------------------------------
         function recordResult(type, rt, isCorrect, note) {
+            const currentAthlete = getSelectedAthlete();
             trialData.push({
-                athlete: athleteInput.value || 'Unassigned',
+                athleteId: currentAthlete.id,
+                athleteName: currentAthlete.name,
+                age: currentAthlete.age,
+                gender: currentAthlete.gender,
+                sport: currentAthlete.sport,
+                level: currentAthlete.level,
+                dominantSide: currentAthlete.dominantSide,
+                experienceYears: currentAthlete.experienceYears,
                 trial: currentTrial,
                 type: type,
                 reactionTimeMs: rt,
@@ -403,27 +467,35 @@
 
         function finishTest() {
             resetLayout();
-            instruction.textContent = 'Test seti bitti! Verileri CSV indirerek SPSS/Excel ortamına alabilirsiniz.';
+            instruction.textContent = 'Test bitti! Verileri CSV indirerek analiz edebilirsiniz.';
             startBtn.disabled = false;
             stopBtn.disabled = true;
             exportBtn.disabled = false;
             moduleSelect.disabled = false;
+            athleteSelect.disabled = false;
         }
 
         function exportCSV() {
             if (trialData.length === 0) return;
-            let csv = "data:text/csv;charset=utf-8,Sporcu_ID,Deneme,Modul,Reaksiyon_Depar_Zamani_ms,Dogru_Mu,Aciklama\n";
+            
+            // SPSS & R doğrudan aktarımı için Türkçe karakter/boşluk uyumlu başlıklar
+            let csv = "data:text/csv;charset=utf-8,Sporcu_ID,Sporcu_Adi,Yas,Cinsiyet,Brans,Seviye,Baskin_Taraf,Deneyim_Yili,Deneme,Modul,Reaksiyon_Depar_Zamani_ms,Dogru_Mu,Aciklama\n";
+            
             trialData.forEach(r => {
-                csv += `${r.athlete},${r.trial},${r.type},${r.reactionTimeMs},${r.isCorrect ? 1 : 0},${r.note}\n`;
+                csv += `${r.athleteId},${r.athleteName},${r.age},${r.gender},${r.sport},${r.level},${r.dominantSide},${r.experienceYears},${r.trial},${r.type},${r.reactionTimeMs},${r.isCorrect ? 1 : 0},${r.note}\n`;
             });
+
+            const selectedAthlete = getSelectedAthlete();
             const link = document.createElement("a");
             link.setAttribute("href", encodeURI(csv));
-            link.setAttribute("download", `${athleteInput.value}_Cognitive_Data_${new Date().toISOString().slice(0,10)}.csv`);
+            link.setAttribute("download", `${selectedAthlete.id}_${selectedAthlete.name}_CognitiveData_${new Date().toISOString().slice(0,10)}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
 
+        // Başlatma
+        initAthleteSelect();
         resetLayout();
     </script>
 </body>
