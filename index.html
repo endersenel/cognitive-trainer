@@ -30,10 +30,11 @@
 
         #game-area { flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; background: #0e0e0e; display: flex; justify-content: center; align-items: center; padding: 10px; }
 
-        /* Yönerge Kartı */
-        #instruction-card { position: absolute; width: min(90%, 420px); background: rgba(20,20,20,0.95); border: 2px solid #00e5ff; padding: 16px; border-radius: 12px; text-align: center; z-index: 100; box-shadow: 0 0 20px rgba(0,229,255,0.2); }
-        #instruction-card h3 { margin-top: 0; color: #00e5ff; font-size: clamp(0.95rem, 3.5vw, 1.2rem); }
-        #instruction-card p { font-size: clamp(0.75rem, 2.8vw, 0.9rem); line-height: 1.4; color: #ddd; margin-bottom: 0; }
+        /* Detaylı Yönerge Kartı */
+        #instruction-card { position: absolute; width: min(92%, 460px); max-height: 85%; overflow-y: auto; background: rgba(20,20,20,0.95); border: 2px solid #00e5ff; padding: 16px; border-radius: 12px; text-align: left; z-index: 100; box-shadow: 0 0 20px rgba(0,229,255,0.2); }
+        #instruction-card h3 { margin-top: 0; color: #00e5ff; font-size: clamp(0.95rem, 3.5vw, 1.2rem); text-align: center; }
+        #instruction-card p { font-size: clamp(0.72rem, 2.6vw, 0.85rem); line-height: 1.4; color: #ddd; margin-bottom: 8px; }
+        .score-info { background: #111; border-left: 3px solid #00e676; padding: 6px; font-size: 0.7rem; color: #aaa; margin-top: 8px; }
 
         /* Simon & Flanker & Dual Buttons */
         #dual-buttons { display: none; width: 100%; max-width: 400px; gap: 20px; justify-content: center; z-index: 10; }
@@ -54,7 +55,7 @@
         .memory-block { background: #222; border: 2px solid #00e5ff; border-radius: 8px; cursor: pointer; width: 100%; height: 100%; }
         .memory-block.lit { background: #00e5ff !important; box-shadow: 0 0 25px #00e5ff !important; }
 
-        /* Numpad Grid (Digit Span) */
+        /* Numpad Grid */
         #numpad-grid { display: none; grid-template-columns: repeat(3, 1fr); gap: 8px; width: min(75vw, 260px); margin: auto; }
         .num-btn { background: #222; border: 1px solid #00e5ff; color: #fff; font-size: 1.2rem; font-weight: bold; padding: 12px 0; border-radius: 6px; text-align: center; cursor: pointer; }
 
@@ -152,7 +153,7 @@
     <div id="stats-bar">
         <div class="stat-item">Deneme: <span id="stat-trials">0/10</span></div>
         <div class="stat-item">Sayaç: <span id="stat-timer">0.00 s</span></div>
-        <div class="stat-item">Son RT: <span id="stat-last-rt">0 ms</span></div>
+        <div class="stat-item">Puan: <span id="stat-score">0</span></div>
         <div class="stat-item">Hata: <span id="stat-errors">0</span></div>
     </div>
 
@@ -160,6 +161,7 @@
         <div id="instruction-card">
             <h3 id="instr-title">Test Yönergesi</h3>
             <p id="instr-text">Test detayları yükleniyor...</p>
+            <div id="instr-score-formula" class="score-info">Puanlama Formülü Yükleniyor...</div>
         </div>
 
         <div id="target-circle"></div>
@@ -189,21 +191,81 @@
 
     <script>
         const instructions = {
-            gonogo: { title: "1. Go/No-Go Testi", text: "Yeşil 'DOKUN!' çıkınca hızlı dokunun. Kırmızı 'DUR!' çıktığında dokunmayın." },
-            stroop: { title: "2. Stroop Renk-Kelime Testi", text: "Kelimenin YAZI RENGİ ile KELİME ANLAMI eşleşiyorsa dokunun! Eşleşmiyorsa dokunmayın." },
-            simon: { title: "3. Simon Effect Testi", text: "Daire solda veya sağda çıkabilir! Kırmızı çıkarsa SOL butona, Mavi çıkarsa SAĞ butona basın." },
-            flanker: { title: "4. Flanker Testi", text: "Yanlardaki oklara aldanmayın ($<<><<$). Sadece ortadaki 3. okun yönündeki butona dokunun." },
-            antisaccade: { title: "5. Anti-Saccade Testi", text: "Ekranda ışık yandığında, onun yandığı yere değil TAM ZIT TARAFINDAKİ alana dokunun." },
-            trailA: { title: "6. Trail Making Test A", text: "2 Deneme turundan sonra 1'den 20'ye kadar olan sayıları sırasıyla en hızlı şekilde takip edin." },
-            trailB: { title: "7. Trail Making Test B", text: "2 Deneme turundan sonra 1-A-2-B-3-C... sırasını en hızlı şekilde tamamlayın." },
-            memory: { title: "8. Görsel Dizilim Bellek (Corsi)", text: "Yanan mavi blok sırasını hafızanızda tutup aynı sırayla dokunun. 2 hata yapana kadar zorlaşır." },
-            nback: { title: "9. Spatial N-Back Bellek", text: "Işık yandığında: 'Bu ışık BİR ÖNCEKİ adımda yanan kareyle aynı mı?' sorusuna cevap verin." },
-            digit_span: { title: "10. Görsel Sayı Dizilimi Belleği", text: "Ekranda sırayla gösterilen sayıları aklınızda tutun ve klavyeden sırayla girin." },
-            sprint_ball: { title: "11. Saha Depar (Top Getirme)", text: "Sesli verilen İngilizce renk komutunu duyunca depar atıp nesneyi getirin (10 Deneme)." },
-            agility_run: { title: "12. Renk Koni Çeviklik Deparı", text: "Ekran veya sesle aktif olan tek koniye depar atın ve dönüşte dokunun." },
-            complex_agility: { title: "13. Karmaşık Çift Komut Deparı", text: "Sadece Ses ve Yazı Rengi EŞLEŞTİĞİNDE depar atın. Çelişki varsa depar atmayın!" },
-            choice_react: { title: "14. Çoklu Seçenek Reaksiyon Deparı", text: "4 koni arasından ekranda belirtilen hedef renge en hızlı deparı atın." },
-            visual_search: { title: "15. Görsel Arama & Depar", text: "Ekranda beliren karmaşık nesneler içinden hedef rengi bulup o koniye depar atın." }
+            gonogo: { 
+                title: "1. Go/No-Go Testi (Motor İnhibisyon)", 
+                text: "Rastgele zamanlarda yeşil 'DOKUN!' (Go, %70) veya kırmızı 'DUR!' (No-Go, %30) uyarısı çıkar. Kırmızı uyarıda kendinizi durdurmalısınız.",
+                scoreFormula: "Puan = (Doğru Go / Toplam Go * 50) + (Başarılı İnhibisyon / Toplam No-Go * 50) - (Ort. RT / 20)"
+            },
+            stroop: { 
+                title: "2. Stroop Testi (Bilişsel Çatışma)", 
+                text: "Ekranda beliren kelimenin mürekkep rengi ile anlamı eşleştiğinde dokunun. Uyumsuz durumlarda baskılama yapın.",
+                scoreFormula: "Puan = Doğru * 10 - (Ort. RT / 15) - (Hata * 15)"
+            },
+            simon: { 
+                title: "3. Simon Effect Testi (Mekânsal Çatışma)", 
+                text: "Dairenin nerede çıktığına aldanmayın! Kırmızı için SOL, Mavi için SAĞ butona basın.",
+                scoreFormula: "Puan = 100 - (Gecikme ms * 0.2) - (Hata * 20)"
+            },
+            flanker: { 
+                title: "4. Flanker Testi (Çeldirici İnhibisyonu)", 
+                text: "Yanlardaki çeldirici oklara bakmayın (<<><<). Sadece ortadaki 3. okun yönündeki butona dokunun.",
+                scoreFormula: "Puan = (Doğru % * 100) - (Flanker Gecikmesi / 10)"
+            },
+            antisaccade: { 
+                title: "5. Anti-Saccade Testi (Refleks Baskılama)", 
+                text: "Işık yandığında doğal refleksiniz ışığa yönelmektir. Kural: Işığın TAM ZIT boş tarafındaki ekrana dokunun.",
+                scoreFormula: "Puan = (Başarılı Zıt Tepki * 20) - (Reaksiyon ms / 25)"
+            },
+            trailA: { 
+                title: "6. Trail Making Test A", 
+                text: "2 deneme turundan sonra 1'den 20'ye kadar olan sayı dizilimini en hızlı şekilde sırayla birleştirin.",
+                scoreFormula: "Puan = Max(0, 1000 - [Süre sn * 10 + Hata * 50])"
+            },
+            trailB: { 
+                title: "7. Trail Making Test B", 
+                text: "2 deneme turundan sonra 1-A-2-B-3-C... şeklinde ardışık sayı ve harf dizilimini en hızlı şekilde tamamlayın.",
+                scoreFormula: "Puan = Max(0, 1000 - [Süre sn * 10 + Hata * 50])"
+            },
+            memory: { 
+                title: "8. Görsel Dizilim Bellek Testi (Corsi)", 
+                text: "Mavi karelerin yanma sırasını aklınızda tutun ve aynı sırayla dokunun. 2 hatada test sonlanır.",
+                scoreFormula: "Puan = (Maksimum Seviye * 100) + (Başarılı Blok * 10) - (Hata * 25)"
+            },
+            nback: { 
+                title: "9. Spatial N-Back Bellek", 
+                text: "Yanan kare 1 Adım Önceki yanan kare ile AYNİ konumda ise 'EŞLEŞTİ' butonuna basın.",
+                scoreFormula: "Puan = (Doğru % * 80) + (1000 / Ortalama RT * 200)"
+            },
+            digit_span: { 
+                title: "10. Görsel Sayı Dizilimi Belleği", 
+                text: "Ekranda gösterilen rakam dizisini sırasıyla aklınızda tutun ve klavyeden girin.",
+                scoreFormula: "Puan = (Maksimum Dizi Uzunluğu * 150) - (Hata * 30)"
+            },
+            sprint_ball: { 
+                title: "11. Saha Depar (Top Getirme)", 
+                text: "Sesli İngilizce renk komutunu duyduğunuzda depar atıp nesneyi getirin ve süreyi durdurun (10 Deneme).",
+                scoreFormula: "Puan = Max(0, 100 - [Ortalama Depar Süresi ms / 100])"
+            },
+            agility_run: { 
+                title: "12. Renk Koni Çeviklik Deparı", 
+                text: "Sahada aktif olan koniye depar atın ve dönüşte dokunarak süreyi kaydedin.",
+                scoreFormula: "Puan = (Doğru Depar % * 60) + Max(0, 40 - [Ortalama Süre ms / 200])"
+            },
+            complex_agility: { 
+                title: "13. Karmaşık Çift Komut Deparı", 
+                text: "Sesli verilen renk ile ekran rengi EŞLEŞTİĞİNDE depar atın. Çelişki varsa yerinizde sabit kalın!",
+                scoreFormula: "Puan = (Doğru Depar * 10) + (Doğru Frenleme * 15) - (Hatalı Depar * 20)"
+            },
+            choice_react: { 
+                title: "14. Çoklu Seçenek Reaksiyon Deparı", 
+                text: "4 koni arasından belirtilen hedef renge en hızlı yönelme deparını gerçekleştirin.",
+                scoreFormula: "Puan = Max(0, 100 - [Reaksiyon ms / 50] - [Yanlış Yön * 15])"
+            },
+            visual_search: { 
+                title: "15. Görsel Arama & Depar", 
+                text: "Karmaşık semboller arasından hedef renkteki objeyi tespit edip o koniye depar atın.",
+                scoreFormula: "Puan = (1000 / Arama Depar Süresi ms * 500) - (Hatalı Obje * 25)"
+            }
         };
 
         const colorMap = {
@@ -260,7 +322,6 @@
         let isWaiting = false;
         let trialData = [];
         
-        // Modüle Özel Değişkenler
         let currentCorrectAnswer = null;
         let trailStage = "DEMO1";
         let nextTrailIndex = 0;
@@ -286,6 +347,7 @@
         const instructionCard = document.getElementById('instruction-card');
         const instrTitle = document.getElementById('instr-title');
         const instrText = document.getElementById('instr-text');
+        const instrScoreFormula = document.getElementById('instr-score-formula');
 
         const startBtn = document.getElementById('start-btn');
         const stopBtn = document.getElementById('stop-btn');
@@ -293,6 +355,7 @@
 
         const statTrials = document.getElementById('stat-trials');
         const statTimer = document.getElementById('stat-timer');
+        const statScore = document.getElementById('stat-score');
         const statLastRt = document.getElementById('stat-last-rt');
         const statErrors = document.getElementById('stat-errors');
 
@@ -334,6 +397,7 @@
             instructionCard.style.display = 'block';
             instrTitle.textContent = instructions[mod] ? instructions[mod].title : "Test Yönergesi";
             instrText.textContent = instructions[mod] ? instructions[mod].text : "Açıklama mevcut değil.";
+            instrScoreFormula.textContent = instructions[mod] ? instructions[mod].scoreFormula : "";
 
             targetCircle.style.display = 'none';
             dualButtons.style.display = (mod === 'simon' || mod === 'flanker' || mod === 'nback') ? 'flex' : 'none';
@@ -344,9 +408,9 @@
             colorPickerBar.style.display = (mod === 'sprint_ball' || mod === 'agility_run' || mod === 'complex_agility' || mod === 'choice_react' || mod === 'visual_search') ? 'block' : 'none';
             
             statTimer.textContent = '0.00 s';
+            statScore.textContent = '0';
         }
 
-        // KESİNTİSİZ HASSAS SAYAÇ SİSTEMİ
         function startClock() {
             stopClock();
             testOverallStartTime = performance.now();
@@ -370,6 +434,7 @@
             memoryConsecutiveErrors = 0;
             statErrors.textContent = '0';
             statLastRt.textContent = '0 ms';
+            statScore.textContent = '0';
             
             startBtn.disabled = true;
             stopBtn.disabled = false;
@@ -421,14 +486,12 @@
             }
         }
 
-        // 1. TEK CİSİMLİ & ÇATIŞMA TESTLERİ
         function triggerSingleTarget(mod) {
             targetCircle.style.display = 'flex';
             isWaiting = true;
             trialStartTime = performance.now();
 
             if (mod === 'simon') {
-                // Simon Effect: Sol veya Sağ tarafta Kırmızı/Mavi görünür
                 const isLeftPos = Math.random() < 0.5;
                 const isRedColor = Math.random() < 0.5;
                 
@@ -443,7 +506,6 @@
                 playSound(isRedColor ? 400 : 700);
 
             } else if (mod === 'flanker') {
-                // Flanker: <<><< veya >><>>
                 targetCircle.style.left = '35%';
                 targetCircle.style.top = '30%';
                 targetCircle.style.backgroundColor = '#222';
@@ -464,7 +526,6 @@
                 playSound(500);
 
             } else if (mod === 'antisaccade') {
-                // Anti-Saccade: Sol tarafta yanarsa SAĞA dokunulmalıdır
                 const isLeftPos = Math.random() < 0.5;
                 targetCircle.style.left = isLeftPos ? '10%' : '75%';
                 targetCircle.style.top = '35%';
@@ -520,7 +581,6 @@
             }
         }
 
-        // DUAL SEÇENEK TIKLAMA (Simon / Flanker / N-Back)
         function handleDualChoiceTap(e, choice) {
             e.preventDefault();
             if (!isWaiting) return;
@@ -538,7 +598,6 @@
             setTimeout(nextTrial, 800);
         }
 
-        // TEK DOKUNMA TIKLAMA (Stroop, GoNoGo, AntiSaccade, Depar)
         function handleCircleTap(e) {
             e.preventDefault();
             if (!isWaiting) return;
@@ -549,7 +608,6 @@
 
             const mod = moduleSelect.value;
             if (mod === 'antisaccade') {
-                // Doğrudan ışığa basıldığı için HATA sayılır (Zıt alana basılmalıydı)
                 recordResult('ANTISACCADE', rt, false, 'Refleks İhlali (Işığa Dokundu)');
                 playSound(120, 'sawtooth');
             } else if (mod === 'stroop') {
@@ -569,7 +627,6 @@
             setTimeout(nextTrial, 800);
         }
 
-        // 2. KİNETİK VE SAHA DEPARLARI
         function triggerSpatialRun(mod) {
             isWaiting = true;
             const btnIds = ['s-red', 's-blue', 's-green', 's-yellow'];
@@ -578,7 +635,6 @@
             const activeBtn = document.getElementById(chosenId);
 
             if (mod === 'complex_agility') {
-                // Çift Komut: Sesli komut ile aktif olan buton aynıysa DEPAR ATILMALIDIR!
                 const selectedColors = ['RED', 'BLUE', 'GREEN', 'YELLOW'];
                 const spokenColor = selectedColors[Math.floor(Math.random() * selectedColors.length)];
                 
@@ -589,7 +645,6 @@
                 currentCorrectAnswer = colorMatch ? chosenId : 'NO_RUN';
 
                 if (!colorMatch) {
-                    // Yalancı Depar (Depar Atılmamalı)
                     timerTimeout = setTimeout(() => {
                         if (isWaiting) {
                             recordResult('COMPLEX_AGILITY', 0, true, 'Doğru Çelişki Frenlemesi');
@@ -632,7 +687,6 @@
             setTimeout(nextTrial, 800);
         }
 
-        // 3. TRAIL MAKING TEST (TMT A & B)
         function setupTrailNodes(mod) {
             trailArea.innerHTML = '';
             nextTrailIndex = 0;
@@ -693,7 +747,6 @@
             isWaiting = true;
         }
 
-        // 4. CORSI BELLEK TESTİ
         function setupMemoryTask() {
             memoryGrid.innerHTML = '';
             memorySequence = [];
@@ -772,7 +825,6 @@
             }
         }
 
-        // 5. DIGIT SPAN & N-BACK
         function setupDigitSpanTask() {
             numpadGrid.innerHTML = '';
             memorySequence = [];
@@ -790,7 +842,6 @@
                 memorySequence.push(Math.floor(Math.random() * 9) + 1);
             }
 
-            // Sayıları sırayla ekranda gösterme
             let idx = 0;
             isWaiting = false;
             targetCircle.style.display = 'flex';
@@ -866,6 +917,56 @@
             }, 600);
         }
 
+        // BİLİMSEL PUAN HESAPLAMA MOTORU
+        function calculateOverallScore() {
+            const mod = moduleSelect.value;
+            const valid = trialData.filter(d => d.isCorrect);
+            const errors = trialData.filter(d => !d.isCorrect).length;
+            const total = trialData.length;
+            
+            if (total === 0) return 0;
+            const avgRt = valid.length > 0 ? (valid.reduce((acc, c) => acc + c.reactionTimeMs, 0) / valid.length) : 2000;
+            const totalElapsedSec = parseFloat(statTimer.textContent) || 10;
+
+            let score = 0;
+
+            if (mod === 'gonogo') {
+                const goTrials = trialData.filter(d => d.note.includes('Tamamlandı') || d.note.includes('Baskılama Hatası'));
+                const nogoTrials = trialData.filter(d => d.note.includes('Doğru Baskılama') || d.note.includes('Baskılama Hatası'));
+                const correctGo = goTrials.filter(d => d.isCorrect).length;
+                const correctNogo = nogoTrials.filter(d => d.isCorrect).length;
+                score = ((correctGo / Math.max(1, goTrials.length)) * 50) + ((correctNogo / Math.max(1, nogoTrials.length)) * 50) - (avgRt / 20);
+            } else if (mod === 'stroop') {
+                score = (valid.length * 10) - (avgRt / 15) - (errors * 15);
+            } else if (mod === 'simon') {
+                score = 100 - (avgRt * 0.05) - (errors * 20);
+            } else if (mod === 'flanker') {
+                score = ((valid.length / total) * 100) - (avgRt / 20);
+            } else if (mod === 'antisaccade') {
+                score = (valid.length * 20) - (avgRt / 25);
+            } else if (mod === 'trailA' || mod === 'trailB') {
+                score = Math.max(0, 1000 - (totalElapsedSec * 10 + errors * 50));
+            } else if (mod === 'memory') {
+                score = (memoryLevel * 100) + (valid.length * 10) - (errors * 25);
+            } else if (mod === 'nback') {
+                score = ((valid.length / total) * 80) + (1000 / Math.max(1, avgRt) * 200);
+            } else if (mod === 'digit_span') {
+                score = (valid.length * 150) - (errors * 30);
+            } else if (mod === 'sprint_ball') {
+                score = Math.max(0, 100 - (avgRt / 100));
+            } else if (mod === 'agility_run') {
+                score = ((valid.length / total) * 60) + Math.max(0, 40 - (avgRt / 200));
+            } else if (mod === 'complex_agility') {
+                score = (valid.length * 10) - (errors * 20);
+            } else if (mod === 'choice_react') {
+                score = Math.max(0, 100 - (avgRt / 50) - (errors * 15));
+            } else if (mod === 'visual_search') {
+                score = (1000 / Math.max(1, avgRt) * 500) - (errors * 25);
+            }
+
+            return Math.max(0, Math.round(score));
+        }
+
         function recordResult(type, rt, isCorrect, note) {
             const athlete = getAthleteDataFromForm();
             trialData.push({
@@ -886,14 +987,16 @@
         function updateStats() {
             const errors = trialData.filter(d => !d.isCorrect).length;
             statErrors.textContent = errors;
+            statScore.textContent = calculateOverallScore();
         }
 
         function finishTest() {
             stopClock();
             resetLayout();
-            const totalElapsed = ((performance.now() - testOverallStartTime) / 1000).toFixed(2);
+            const totalElapsed = parseFloat(statTimer.textContent) || 0;
+            const finalScore = calculateOverallScore();
             instrTitle.textContent = "Test Tamamlandı!";
-            instrText.textContent = `Toplam Bitirme Süresi: ${totalElapsed} saniye | Verileri CSV olarak indirebilirsiniz.`;
+            instrText.textContent = `Toplam Süre: ${totalElapsed} saniye | Hesaplanan Bilişsel/Kinetik Puan: ${finalScore} | Verileri CSV olarak indirebilirsiniz.`;
             instructionCard.style.display = 'block';
 
             startBtn.disabled = false;
@@ -904,9 +1007,10 @@
 
         function exportCSV() {
             if (trialData.length === 0) return;
-            let csv = "data:text/csv;charset=utf-8,\uFEFFSporcu_ID,Yas,Cinsiyet,Brans,Baskin_Taraf,Deneyim_Yili,Deneme,Modul,Reaksiyon_Zamani_ms,Dogru_Mu,Aciklama\n";
+            const finalScore = calculateOverallScore();
+            let csv = "data:text/csv;charset=utf-8,\uFEFFSporcu_ID,Yas,Cinsiyet,Brans,Baskin_Taraf,Deneyim_Yili,Deneme,Modul,Reaksiyon_Zamani_ms,Dogru_Mu,Aciklama,Hesaplanan_Puan\n";
             trialData.forEach(r => {
-                csv += `${r.athleteId},${r.age},${r.gender},${r.sport},${r.dominantSide},${r.experienceYears},${r.trial},${r.type},${r.reactionTimeMs},${r.isCorrect ? 1 : 0},${r.note}\n`;
+                csv += `${r.athleteId},${r.age},${r.gender},${r.sport},${r.dominantSide},${r.experienceYears},${r.trial},${r.type},${r.reactionTimeMs},${r.isCorrect ? 1 : 0},${r.note},${finalScore}\n`;
             });
             const athlete = getAthleteDataFromForm();
             const link = document.createElement("a");
