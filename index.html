@@ -61,6 +61,7 @@
     <header>
         <h1>SPPLab - Performance Studio</h1>
         
+        <!-- DEMOGRAFİK VERİ FORMU -->
         <div class="demo-bar">
             <div class="demo-field">
                 <label>Sporcu ID</label>
@@ -101,16 +102,21 @@
                     <option value="stroop">2. Stroop (Renk-Kelime Çelişkisi)</option>
                     <option value="simon">3. Simon Effect (Mekânsal Çatışma)</option>
                     <option value="flanker">4. Flanker Testi (Dikkat Dağınıklığı)</option>
+                    <option value="antisaccade">5. Anti-Saccade (Göz Baskılama)</option>
                 </optgroup>
                 <optgroup label="B. Nöropsikolojik Testler">
-                    <option value="trailA">5. Trail Making A (1-20 Sayı)</option>
-                    <option value="trailB">6. Trail Making B (1-A-2-B...)</option>
-                    <option value="memory">7. Görsel Dizilim Bellek Testi (Corsi)</option>
+                    <option value="trailA">6. Trail Making A (1-20 Sayı)</option>
+                    <option value="trailB">7. Trail Making B (1-A-2-B...)</option>
+                    <option value="memory">8. Görsel Dizilim Bellek Testi (Corsi)</option>
+                    <option value="nback">9. Spatial N-Back Bellek</option>
+                    <option value="digit_span">10. Görsel Sayı Dizilimi Belleği</option>
                 </optgroup>
                 <optgroup label="C. Saha & Kinetik Depar">
-                    <option value="sprint_ball">8. Saha Depar: Top/Nesne Getirme (10 Deneme)</option>
-                    <option value="agility_run">9. Renk Koni Çeviklik Deparı</option>
-                    <option value="complex_agility">10. Karmaşık Çift Komut Deparı</option>
+                    <option value="sprint_ball">11. Saha Depar: Top/Nesne Getirme (10 Deneme)</option>
+                    <option value="agility_run">12. Renk Koni Çeviklik Deparı</option>
+                    <option value="complex_agility">13. Karmaşık Çift Komut Deparı</option>
+                    <option value="choice_react">14. Çoklu Seçenek Reaksiyon Deparı</option>
+                    <option value="visual_search">15. Görsel Arama & Depar</option>
                 </optgroup>
             </select>
         </div>
@@ -166,14 +172,19 @@
         const instructions = {
             gonogo: { title: "1. Go/No-Go Testi", text: "Yeşil 'DOKUN!' çıkınca hızlı dokunun. Kırmızı 'DUR!' çıktığında durarak kendinizi baskılayın." },
             stroop: { title: "2. Stroop Renk-Kelime Testi", text: "Kelimenin YAZI RENGİ ile KELİME ANLAMI eşleşiyorsa dokunun! Eşleşmiyorsa dokunmayın." },
-            simon: { title: "3. Simon Effect Testi", text: "Ekranın solunda veya sağında beliren komuta göre sadece doğru renkli butona dokunun." },
-            flanker: { title: "4. Flanker Testi", text: "Yanlardaki oklara aldanmayın, sadece ortadaki okun gösterdiği yöne dokunun." },
-            trailA: { title: "5. Trail Making Test A", text: "Önce 2 Deneme turu yapılır. Ardından 1'den 20'ye kadar olan sayıları en hızlı sırayla takip edin." },
-            trailB: { title: "6. Trail Making Test B", text: "Önce 2 Deneme turu yapılır. Ardından 1-A-2-B... sırasını en hızlı şekilde tamamlayın." },
-            memory: { title: "7. Görsel Dizilim Bellek Testi (Corsi)", text: "Yanan mavi blok sırasını takip edin. 2 kez ardışık hata yapana kadar zorlaşır." },
-            sprint_ball: { title: "8. Saha Depar ( Top Getirme )", text: "Sesli İngilizce renk komutu verilince depar atıp nesneyi getirin (Toplam 10 Deneme)." },
-            agility_run: { title: "9. Renk Koni Çeviklik Deparı", text: "Açılan koniye depar atın ve dönüşte renge dokunun." },
-            complex_agility: { title: "10. Karmaşık Çift Komut Deparı", text: "Sesli renk ve ekran rengi eşleştiğinde depar atın." }
+            simon: { title: "3. Simon Effect Testi", text: "Konum çelişkisine aldanmayın; ekranda beliren renk kelimesine uygun renkteki butona reaksiyon verin." },
+            flanker: { title: "4. Flanker Testi", text: "Yanlardaki oklara aldanmayın; sadece ortadaki okun gösterdiği yöne odaklanın." },
+            antisaccade: { title: "5. Anti-Saccade Testi", text: "Ekranda ışık yandığında tam zıt yöndeki hedef noktaya odaklanıp dokunun." },
+            trailA: { title: "6. Trail Making Test A", text: "Önce 2 Deneme turu yapılır. Ardından 1'den 20'ye kadar olan sayıları en hızlı sırayla takip edin." },
+            trailB: { title: "7. Trail Making Test B", text: "Önce 2 Deneme turu yapılır. Ardından 1-A-2-B... sırasını en hızlı şekilde tamamlayın." },
+            memory: { title: "8. Görsel Dizilim Bellek Testi (Corsi)", text: "Yanan mavi blok sırasını takip edin. 2 kez ardışık hata yapana kadar zorlaşır." },
+            nback: { title: "9. Spatial N-Back Bellek", text: "Mevcut konum bir önceki adımla aynı konumda yandığında hemen dokunun." },
+            digit_span: { title: "10. Görsel Sayı Dizilimi Belleği", text: "Ekranda sırayla gösterilen sayıları hafızanızda tutun ve sırayla seçin." },
+            sprint_ball: { title: "11. Saha Depar (Top Getirme)", text: "Sesli İngilizce renk komutu verilince depar atıp nesneyi getirin (10 Deneme)." },
+            agility_run: { title: "12. Renk Koni Çeviklik Deparı", text: "Açılan koniye depar atın ve dönüşte renge dokunun." },
+            complex_agility: { title: "13. Karmaşık Çift Komut Deparı", text: "Sesli verilen renk komutu ile ekrandaki koni rengi eşleştiğinde depar atın." },
+            choice_react: { title: "14. Çoklu Seçenek Reaksiyon Deparı", text: "4 farklı yön/renk seçeneği arasından doğru renge en hızlı deparı atın." },
+            visual_search: { title: "15. Görsel Arama & Depar", text: "Karışık şekiller arasından hedef rengi bulun ve reaksiyon verin." }
         };
 
         const colorMap = {
@@ -207,7 +218,7 @@
                 osc.start();
                 osc.stop(audioCtx.currentTime + duration);
             } catch (e) {
-                console.log("Audio Error: ", e);
+                console.log("Audio error: ", e);
             }
         }
 
@@ -221,7 +232,7 @@
                     window.speechSynthesis.speak(msg);
                 }
             } catch (e) {
-                console.log("Speech Error: ", e);
+                console.log("Speech error: ", e);
             }
         }
 
@@ -305,10 +316,10 @@
             instrText.textContent = instructions[mod] ? instructions[mod].text : "Açıklama mevcut değil.";
 
             targetCircle.style.display = 'none';
-            spatialGrid.style.display = (mod === 'agility_run' || mod === 'complex_agility') ? 'grid' : 'none';
-            memoryGrid.style.display = (mod === 'memory') ? 'grid' : 'none';
+            spatialGrid.style.display = (mod === 'agility_run' || mod === 'complex_agility' || mod === 'choice_react') ? 'grid' : 'none';
+            memoryGrid.style.display = (mod === 'memory' || mod === 'nback' || mod === 'digit_span') ? 'grid' : 'none';
             trailArea.style.display = (mod === 'trailA' || mod === 'trailB') ? 'block' : 'none';
-            colorPickerBar.style.display = (mod === 'sprint_ball' || mod === 'agility_run' || mod === 'complex_agility') ? 'block' : 'none';
+            colorPickerBar.style.display = (mod === 'sprint_ball' || mod === 'agility_run' || mod === 'complex_agility' || mod === 'choice_react' || mod === 'visual_search') ? 'block' : 'none';
             
             stopClock();
             statTimer.textContent = '00:00';
@@ -381,17 +392,17 @@
             statTrials.textContent = `${currentTrial}/${totalTrials}`;
             isWaiting = false;
 
-            if (mod === 'gonogo' || mod === 'stroop' || mod === 'sprint_ball' || mod === 'simon' || mod === 'flanker') {
+            if (mod === 'gonogo' || mod === 'stroop' || mod === 'sprint_ball' || mod === 'simon' || mod === 'flanker' || mod === 'antisaccade' || mod === 'visual_search') {
                 targetCircle.style.display = 'none';
                 const delay = Math.floor(Math.random() * 2000) + 1000;
                 timerTimeout = setTimeout(() => triggerSingleTarget(mod), delay);
-            } else if (mod === 'agility_run' || mod === 'complex_agility') {
+            } else if (mod === 'agility_run' || mod === 'complex_agility' || mod === 'choice_react') {
                 document.querySelectorAll('.spatial-btn').forEach(b => b.classList.remove('active'));
                 const delay = Math.floor(Math.random() * 2000) + 1000;
                 timerTimeout = setTimeout(() => triggerSpatialRun(mod), delay);
             } else if (mod === 'trailA' || mod === 'trailB') {
                 setupTrailNodes(mod);
-            } else if (mod === 'memory') {
+            } else if (mod === 'memory' || mod === 'nback' || mod === 'digit_span') {
                 setupMemoryTask();
             }
         }
@@ -402,7 +413,7 @@
             isWaiting = true;
             startTime = performance.now();
 
-            if (mod === 'sprint_ball') {
+            if (mod === 'sprint_ball' || mod === 'visual_search') {
                 const selectedColors = getSelectedColors();
                 const randomColorKey = selectedColors[Math.floor(Math.random() * selectedColors.length)];
                 const colObj = colorMap[randomColorKey];
@@ -439,7 +450,7 @@
                 targetCircle.style.color = colorMap[colorKey].hex;
                 targetCircle.textContent = textKey;
                 playSound(600);
-            } else if (mod === 'flanker') {
+            } else if (mod === 'simon' || mod === 'flanker' || mod === 'antisaccade') {
                 const flankers = ["<<><<", ">><>>", "<<<<<", ">>>>>"];
                 const chosen = flankers[Math.floor(Math.random() * flankers.length)];
                 targetCircle.style.backgroundColor = '#222';
