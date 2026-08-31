@@ -4,42 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#0a0a0a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>SPPLab - Kinetic & Cognitive Athletic Trainer</title>
     <style>
         * { box-sizing: border-box; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
         body { margin: 0; padding: 0; background: #0a0a0a; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         header { background: #151515; padding: 8px 12px; text-align: center; border-bottom: 1px solid #333; flex-shrink: 0; }
-        h1 { margin: 0 0 6px 0; font-size: 1.05rem; color: #00e5ff; letter-spacing: 0.5px; }
+        h1 { margin: 0 0 6px 0; font-size: 1.05rem; color: #00e5ff; }
         
-        .panel-row { display: flex; gap: 6px; justify-content: center; align-items: center; }
+        .panel-row { display: flex; gap: 6px; justify-content: center; align-items: center; flex-wrap: wrap; }
         select, input { background: #222; color: #fff; border: 1px solid #00e5ff; padding: 5px 8px; border-radius: 4px; font-size: 0.75rem; outline: none; }
-        select:focus, input:focus { border-color: #00e676; }
         
         #stats-bar { display: flex; justify-content: space-around; background: #1a1a1a; padding: 8px; font-size: 0.75rem; font-weight: bold; border-bottom: 1px solid #333; flex-shrink: 0; }
         .stat-item span { color: #00e676; }
 
+        #color-picker-bar { display: none; background: #111; padding: 6px; border-bottom: 1px solid #333; text-align: center; font-size: 0.75rem; }
+        .color-checkbox { margin: 0 4px; cursor: pointer; display: inline-flex; align-items: center; gap: 2px; }
+
         #game-area { flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; background: #0e0e0e; display: flex; justify-content: center; align-items: center; }
 
+        /* Instructions Overlay */
+        #instruction-card { position: absolute; max-width: 90%; background: rgba(20,20,20,0.95); border: 2px solid #00e5ff; padding: 20px; border-radius: 12px; text-align: center; z-index: 100; box-shadow: 0 0 20px rgba(0,229,255,0.2); }
+        #instruction-card h3 { margin-top: 0; color: #00e5ff; font-size: 1.1rem; }
+        #instruction-card p { font-size: 0.85rem; line-height: 1.4; color: #ddd; margin-bottom: 0; }
+
         /* Dynamic Target Circle */
-        #target-circle { position: absolute; width: 150px; height: 150px; border-radius: 50%; background: #222; display: none; justify-content: center; align-items: center; font-size: 1.1rem; font-weight: bold; box-shadow: 0 0 20px rgba(0,229,255,0.3); text-align: center; padding: 10px; cursor: pointer; }
+        #target-circle { position: absolute; width: 160px; height: 160px; border-radius: 50%; background: #000; border: 4px solid #fff; display: none; justify-content: center; align-items: center; font-size: 1.4rem; font-weight: 900; box-shadow: 0 0 25px rgba(255,255,255,0.4); text-align: center; padding: 10px; cursor: pointer; }
         #target-circle:active { transform: scale(0.92); }
 
-        /* Spatial Grid */
-        #spatial-grid { display: none; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; width: 95%; height: 95%; }
-        .spatial-btn { border-radius: 12px; opacity: 0.25; transition: opacity 0.1s, transform 0.1s; display: flex; justify-content: center; align-items: center; font-size: 1.4rem; font-weight: bold; color: #000; cursor: pointer; }
-        .spatial-btn.active { opacity: 1; box-shadow: 0 0 30px #fff; transform: scale(0.98); }
+        /* Spatial Grid & Memory Blocks */
+        #spatial-grid { display: none; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 12px; width: 90%; height: 90%; }
+        .spatial-btn { border-radius: 16px; opacity: 0.3; transition: opacity 0.1s; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; font-weight: 900; color: #000; cursor: pointer; border: 2px solid #fff; }
+        .spatial-btn.active { opacity: 1; box-shadow: 0 0 35px #fff; transform: scale(0.98); }
+
+        #memory-grid { display: none; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 10px; width: 280px; height: 280px; }
+        .memory-block { background: #222; border: 2px solid #00e5ff; border-radius: 8px; cursor: pointer; }
+        .memory-block.lit { background: #00e5ff; box-shadow: 0 0 20px #00e5ff; }
 
         /* Trail Area */
         #trail-area { display: none; position: relative; width: 100%; height: 100%; }
-        .trail-node { position: absolute; width: 50px; height: 50px; border-radius: 50%; background: #00e5ff; color: #000; font-weight: bold; font-size: 1.1rem; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 10px rgba(0,0,0,0.5); cursor: pointer; }
+        .trail-node { position: absolute; width: 44px; height: 44px; border-radius: 50%; background: #00e5ff; color: #000; font-weight: 900; font-size: 1rem; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 10px rgba(0,0,0,0.5); cursor: pointer; border: 2px solid #fff; }
         .trail-node:active { transform: scale(0.9); }
 
-        #instruction { position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 0.8rem; color: #aaa; pointer-events: none; padding: 0 10px; font-weight: 500; }
-
         #controls { padding: 10px; background: #151515; display: flex; gap: 8px; justify-content: center; flex-shrink: 0; border-top: 1px solid #333; }
-        button { flex: 1; max-width: 120px; padding: 12px 0; font-size: 0.85rem; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
+        button { flex: 1; max-width: 120px; padding: 12px 0; font-size: 0.85rem; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; }
         .btn-start { background: #00c853; color: white; }
         .btn-stop { background: #d50000; color: white; }
         .btn-export { background: #0288d1; color: white; }
@@ -51,42 +58,64 @@
     <header>
         <h1>SPPLab - Kinetik & Bilişsel Performans Stüdyosu</h1>
         <div class="panel-row">
-            <select id="athlete-select" style="max-width: 160px;"></select>
-            <select id="module-select" style="max-width: 200px;">
+            <select id="athlete-select" style="max-width: 150px;"></select>
+            <select id="module-select" style="max-width: 220px;">
                 <optgroup label="A. Dokunmatik & Bilişsel">
                     <option value="gonogo">1. Go/No-Go (Baskılama)</option>
                     <option value="stroop">2. Stroop (Renk-Kelime Çelişkisi)</option>
-                    <option value="trailA">3. Trail Making A (1-8 Sayı)</option>
-                    <option value="trailB">4. Trail Making B (1-A-2-B Esneklik)</option>
+                    <option value="trailA">3. Trail Making A (1-20 Sayı)</option>
+                    <option value="trailB">4. Trail Making B (1-A-2-B...)</option>
+                    <option value="memory">5. Görsel Dizilim Bellek Testi</option>
                 </optgroup>
                 <optgroup label="B. Saha & Kinetik Depar">
-                    <option value="sprint_ball">5. Saha Depar: Nesne/Top Getirme</option>
-                    <option value="agility_run">6. 4 Renk Koni Çeviklik Deparı</option>
+                    <option value="sprint_ball">6. Saha Depar: Top/Nesne Getirme</option>
+                    <option value="agility_run">7. Renk Koni Çeviklik Deparı</option>
+                    <option value="audio_react">8. İşitsel Reaksiyon & Yön Becerisi</option>
                 </optgroup>
             </select>
         </div>
     </header>
 
+    <div id="color-picker-bar">
+        <span style="color:#00e5ff; font-weight:bold;">Saha Ekipman Renkleri (En az 4 renk seçin):</span><br>
+        <label class="color-checkbox"><input type="checkbox" value="RED" checked> Red</label>
+        <label class="color-checkbox"><input type="checkbox" value="BLUE" checked> Blue</label>
+        <label class="color-checkbox"><input type="checkbox" value="GREEN" checked> Green</label>
+        <label class="color-checkbox"><input type="checkbox" value="YELLOW" checked> Yellow</label>
+        <label class="color-checkbox"><input type="checkbox" value="WHITE"> White</label>
+        <label class="color-checkbox"><input type="checkbox" value="BLACK"> Black</label>
+        <label class="color-checkbox"><input type="checkbox" value="ORANGE"> Orange</label>
+        <label class="color-checkbox"><input type="checkbox" value="PURPLE"> Purple</label>
+        <label class="color-checkbox"><input type="checkbox" value="PINK"> Pink</label>
+        <label class="color-checkbox"><input type="checkbox" value="BROWN"> Brown</label>
+    </div>
+
     <div id="stats-bar">
-        <div class="stat-item">Deneme: <span id="stat-trials">0/10</span></div>
+        <div class="stat-item">Aşama/Deneme: <span id="stat-trials">0/10</span></div>
+        <div class="stat-item">Süre/Sayaç: <span id="stat-timer">00:00</span></div>
         <div class="stat-item">Son RT: <span id="stat-last-rt">0 ms</span></div>
-        <div class="stat-item">Ort. RT: <span id="stat-avg-rt">0 ms</span></div>
         <div class="stat-item">Hata: <span id="stat-errors">0</span></div>
     </div>
 
     <div id="game-area">
-        <div id="target-circle">HAZIR</div>
-
-        <div id="spatial-grid">
-            <div class="spatial-btn" id="s-red" style="background:#ff1744;">KIRMIZI</div>
-            <div class="spatial-btn" id="s-blue" style="background:#29b6f6;">MAVİ</div>
-            <div class="spatial-btn" id="s-green" style="background:#00e676;">YEŞİL</div>
-            <div class="spatial-btn" id="s-yellow" style="background:#ffea00;">SARI</div>
+        <!-- Yönerge Kartı -->
+        <div id="instruction-card">
+            <h3 id="instr-title">Test Yönergesi</h3>
+            <p id="instr-text">Test detayları yükleniyor...</p>
         </div>
 
-        <div id="trail-area"></div>
+        <div id="target-circle"></div>
 
-        <div id="instruction">Test seçip "Başlat" butonuna basın.</div>
+        <div id="spatial-grid">
+            <div class="spatial-btn" id="s-red" style="background:#ff1744;">RED</div>
+            <div class="spatial-btn" id="s-blue" style="background:#29b6f6;">BLUE</div>
+            <div class="spatial-btn" id="s-green" style="background:#00e676;">GREEN</div>
+            <div class="spatial-btn" id="s-yellow" style="background:#ffea00;">YELLOW</div>
+        </div>
+
+        <div id="memory-grid"></div>
+
+        <div id="trail-area"></div>
     </div>
 
     <div id="controls">
@@ -96,9 +125,7 @@
     </div>
 
     <script>
-        // -------------------------------------------------------------
-        // 1. SPORCU VERİTABANI (Demografik Bilgiler)
-        // -------------------------------------------------------------
+        // SPORCU VERİTABANI
         const athleteDatabase = [
             { id: "SP-101", name: "Sporcu_1",  age: 21, gender: "Erkek", sport: "Futbol",      level: "Profesyonel", dominantSide: "Sağ", experienceYears: 8 },
             { id: "SP-102", name: "Sporcu_2",  age: 19, gender: "Kadın", sport: "Basketbol",   level: "Amatör",       dominantSide: "Sağ", experienceYears: 5 },
@@ -117,67 +144,106 @@
             { id: "SP-115", name: "Sporcu_15", age: 19, gender: "Erkek", sport: "Karate",      level: "Amatör",       dominantSide: "Sağ", experienceYears: 5 }
         ];
 
-        // -------------------------------------------------------------
-        // 2. SES MOTORU & DEĞİŞKENLER
-        // -------------------------------------------------------------
+        // MODÜL YÖNERGELERİ
+        const instructions = {
+            gonogo: { title: "Go/No-Go Testi", text: "Yeşil 'DOKUN!' mesajı çıkınca olabildiğince hızlı dokunun. Kırmızı 'DUR!' mesajı çıktığında dokunmayarak kendinizi baskılayın." },
+            stroop: { title: "Stroop Renk-Kelime Testi", text: "Ekranda beliren kelimenin YAZI RENGİ ile KELİME ANLAMI eşleşiyorsa dokunun! Eşleşmiyorsa dokunmayın (Hata verir)." },
+            trailA: { title: "Trail Making Test A", text: "Önce 2 adet Deneme turu yapılacaktır. Ardından ekrandaki 1'den 20'ye kadar olan sayıları sırasıyla en hızlı şekilde takip edip dokunun." },
+            trailB: { title: "Trail Making Test B", text: "Önce 2 adet Deneme turu yapılacaktır. Ardından sayı ve harfleri sırasıyla (1-A-2-B-3-C...10-J) en hızlı şekilde takip edin." },
+            memory: { title: "Görsel Dizilim Bellek Testi", text: "Ekranda sırayla yanan mavi blokların sırasını hafızanızda tutun ve aynı sırayla bloklara dokunun." },
+            sprint_ball: { title: "Saha Depar: Top Getirme", text: "Sesli verilen İngilizce renk komutuna göre depar atıp ilgili renkteki topu getirin ve ekrana dokunarak süreyi durdurun." },
+            agility_run: { title: "4 Renk Koni Çeviklik Deparı", text: "Ekran veya sesli komutla aktif olan koniye depar atın. Dönüşte ilgili renge dokunun." },
+            audio_react: { title: "İşitsel Reaksiyon & Yön Becerisi", text: "Sadece işitsel İngilizce yön/renk komutunu dinleyin. Komut verilen renkteki butona en hızlı şekilde dokunun." }
+        };
+
+        // RENK KÜTÜPHANESİ (10 Renk)
+        const colorMap = {
+            RED: { hex: '#ff1744', soundFreq: 400 },
+            BLUE: { hex: '#29b6f6', soundFreq: 500 },
+            GREEN: { hex: '#00e676', soundFreq: 600 },
+            YELLOW: { hex: '#ffea00', soundFreq: 700 },
+            WHITE: { hex: '#ffffff', soundFreq: 800 },
+            BLACK: { hex: '#555555', soundFreq: 300 },
+            ORANGE: { hex: '#ff9100', soundFreq: 650 },
+            PURPLE: { hex: '#d500f9', soundFreq: 750 },
+            PINK: { hex: '#f50057', soundFreq: 850 },
+            BROWN: { hex: '#8d6e63', soundFreq: 350 }
+        };
+
+        // SES MOTORU
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
 
         function playSound(freq, type = 'sine', duration = 0.15) {
             if (!audioCtx) audioCtx = new AudioContext();
             if (audioCtx.state === 'suspended') audioCtx.resume();
-            
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = type;
             osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
             gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-            
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start();
             osc.stop(audioCtx.currentTime + duration);
         }
 
-        function speakText(text) {
+        // İNGİLİZCE SESLİ KOMUT MOTORU
+        function speakEnglish(text) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const msg = new SpeechSynthesisUtterance(text);
-                msg.lang = 'tr-TR';
-                msg.rate = 1.2;
+                msg.lang = 'en-US';
+                msg.rate = 1.1;
                 window.speechSynthesis.speak(msg);
             }
         }
 
-        const totalTrials = 10;
+        // DEĞİŞKENLER
+        let totalTrials = 10;
         let currentTrial = 0;
         let startTime = 0;
         let timerTimeout = null;
+        let clockInterval = null;
+        let clockSeconds = 0;
         let isWaiting = false;
         let trialData = [];
+        let currentStroopMatch = false;
         let currentTargetColor = null;
+        
+        // Trail Test Değişkenleri
+        let trailStage = "DEMO1"; // DEMO1, DEMO2, REAL
         let nextTrailIndex = 0;
         let trailSequence = [];
+
+        // Memory Test Değişkenleri
+        let memorySequence = [];
+        let playerMemorySequence = [];
+        let memoryLevel = 3;
 
         // DOM Elemanları
         const athleteSelect = document.getElementById('athlete-select');
         const moduleSelect = document.getElementById('module-select');
+        const colorPickerBar = document.getElementById('color-picker-bar');
         const gameArea = document.getElementById('game-area');
         const targetCircle = document.getElementById('target-circle');
         const spatialGrid = document.getElementById('spatial-grid');
+        const memoryGrid = document.getElementById('memory-grid');
         const trailArea = document.getElementById('trail-area');
-        const instruction = document.getElementById('instruction');
+        const instructionCard = document.getElementById('instruction-card');
+        const instrTitle = document.getElementById('instr-title');
+        const instrText = document.getElementById('instr-text');
+
         const startBtn = document.getElementById('start-btn');
         const stopBtn = document.getElementById('stop-btn');
         const exportBtn = document.getElementById('export-btn');
 
         const statTrials = document.getElementById('stat-trials');
+        const statTimer = document.getElementById('stat-timer');
         const statLastRt = document.getElementById('stat-last-rt');
-        const statAvgRt = document.getElementById('stat-avg-rt');
         const statErrors = document.getElementById('stat-errors');
 
-        // Event Listener'lar
         moduleSelect.addEventListener('change', resetLayout);
         startBtn.addEventListener('click', startTest);
         stopBtn.addEventListener('click', stopTest);
@@ -189,7 +255,6 @@
             btn.addEventListener('pointerdown', (e) => handleSpatialTap(e, btn.id));
         });
 
-        // Sporcu listesini dropdown'a yükleme
         function initAthleteSelect() {
             athleteSelect.innerHTML = '';
             athleteDatabase.forEach(a => {
@@ -204,31 +269,63 @@
             return athleteDatabase.find(a => a.id === athleteSelect.value) || athleteDatabase[0];
         }
 
+        function getSelectedColors() {
+            const checked = document.querySelectorAll('#color-picker-bar input:checked');
+            let colors = Array.from(checked).map(c => c.value);
+            if (colors.length < 4) {
+                colors = ['RED', 'BLUE', 'GREEN', 'YELLOW'];
+            }
+            return colors;
+        }
+
         function resetLayout() {
             const mod = moduleSelect.value;
+            instructionCard.style.display = 'block';
+            instrTitle.textContent = instructions[mod].title;
+            instrText.textContent = instructions[mod].text;
+
             targetCircle.style.display = 'none';
-            spatialGrid.style.display = (mod === 'agility_run') ? 'grid' : 'none';
+            spatialGrid.style.display = (mod === 'agility_run' || mod === 'audio_react') ? 'grid' : 'none';
+            memoryGrid.style.display = (mod === 'memory') ? 'grid' : 'none';
             trailArea.style.display = (mod === 'trailA' || mod === 'trailB') ? 'block' : 'none';
-            instruction.textContent = 'Test başlatılmaya hazır.';
+            colorPickerBar.style.display = (mod === 'sprint_ball' || mod === 'agility_run' || mod === 'audio_react') ? 'block' : 'none';
+            
+            stopClock();
+            statTimer.textContent = '00:00';
+        }
+
+        function startClock() {
+            stopClock();
+            clockSeconds = 0;
+            clockInterval = setInterval(() => {
+                clockSeconds++;
+                const m = String(Math.floor(clockSeconds / 60)).padStart(2, '0');
+                const s = String(clockSeconds % 60).padStart(2, '0');
+                statTimer.textContent = `${m}:${s}`;
+            }, 1000);
+        }
+
+        function stopClock() {
+            if (clockInterval) clearInterval(clockInterval);
         }
 
         function setRandomPosition(element) {
-            const areaW = gameArea.clientWidth - 160;
+            const areaW = gameArea.clientWidth - 180;
             const areaH = gameArea.clientHeight - 180;
             element.style.left = Math.max(10, Math.floor(Math.random() * areaW)) + 'px';
             element.style.top = Math.max(10, Math.floor(Math.random() * areaH)) + 'px';
         }
 
-        // -------------------------------------------------------------
-        // 3. TEST AKIŞ MANTIĞI
-        // -------------------------------------------------------------
+        // TEST BAŞLATMA
         function startTest() {
             if (!audioCtx) audioCtx = new AudioContext();
+            instructionCard.style.display = 'none';
             trialData = [];
             currentTrial = 0;
+            trailStage = "DEMO1";
+            memoryLevel = 3;
             statErrors.textContent = '0';
             statLastRt.textContent = '0 ms';
-            statAvgRt.textContent = '0 ms';
             
             startBtn.disabled = true;
             stopBtn.disabled = false;
@@ -236,14 +333,15 @@
             moduleSelect.disabled = true;
             athleteSelect.disabled = true;
 
+            startClock();
             nextTrial();
         }
 
         function stopTest() {
             clearTimeout(timerTimeout);
+            stopClock();
             isWaiting = false;
             resetLayout();
-            instruction.textContent = 'Test durduruldu.';
             startBtn.disabled = false;
             stopBtn.disabled = true;
             moduleSelect.disabled = false;
@@ -252,7 +350,9 @@
         }
 
         function nextTrial() {
-            if (currentTrial >= totalTrials) {
+            const mod = moduleSelect.value;
+            
+            if (mod !== 'trailA' && mod !== 'trailB' && currentTrial >= totalTrials) {
                 finishTest();
                 return;
             }
@@ -261,24 +361,22 @@
             statTrials.textContent = `${currentTrial}/${totalTrials}`;
             isWaiting = false;
 
-            const mod = moduleSelect.value;
-
             if (mod === 'gonogo' || mod === 'stroop' || mod === 'sprint_ball') {
                 targetCircle.style.display = 'none';
-                instruction.textContent = (mod === 'sprint_ball') ? 'Işık yanınca depar atıp nesneyi alın ve ekrana dokunun!' : 'Hazır olun...';
-                
                 const delay = Math.floor(Math.random() * 2000) + 1000;
                 timerTimeout = setTimeout(() => triggerSingleTarget(mod), delay);
-            } else if (mod === 'agility_run') {
+            } else if (mod === 'agility_run' || mod === 'audio_react') {
                 document.querySelectorAll('.spatial-btn').forEach(b => b.classList.remove('active'));
-                instruction.textContent = 'Açılan koniye depar atın ve dönüşte renge dokunun!';
                 const delay = Math.floor(Math.random() * 2000) + 1000;
-                timerTimeout = setTimeout(triggerSpatialRun, delay);
+                timerTimeout = setTimeout(() => triggerSpatialRun(mod), delay);
             } else if (mod === 'trailA' || mod === 'trailB') {
                 setupTrailNodes(mod);
+            } else if (mod === 'memory') {
+                setupMemoryTask();
             }
         }
 
+        // STROOP / GONOGO / SPRINT TARGET
         function triggerSingleTarget(mod) {
             setRandomPosition(targetCircle);
             targetCircle.style.display = 'flex';
@@ -286,18 +384,16 @@
             startTime = performance.now();
 
             if (mod === 'sprint_ball') {
-                const colors = [
-                    { name: 'KIRMIZI TOP', hex: '#ff1744' },
-                    { name: 'MAVİ TOP', hex: '#29b6f6' },
-                    { name: 'YEŞİL TOP', hex: '#00e676' }
-                ];
-                const selected = colors[Math.floor(Math.random() * colors.length)];
-                targetCircle.style.backgroundColor = selected.hex;
-                targetCircle.style.color = '#000';
-                targetCircle.textContent = selected.name;
+                const selectedColors = getSelectedColors();
+                const randomColorKey = selectedColors[Math.floor(Math.random() * selectedColors.length)];
+                const colObj = colorMap[randomColorKey];
+
+                targetCircle.style.backgroundColor = colObj.hex;
+                targetCircle.style.color = (randomColorKey === 'WHITE' || randomColorKey === 'YELLOW') ? '#000' : '#fff';
+                targetCircle.textContent = randomColorKey;
                 
-                speakText(selected.name);
-                playSound(900);
+                speakEnglish(randomColorKey);
+                playSound(colObj.soundFreq);
             } else if (mod === 'gonogo') {
                 const isGo = Math.random() < 0.7;
                 currentTargetColor = isGo ? 'GO' : 'NOGO';
@@ -309,23 +405,21 @@
                 if (!isGo) {
                     timerTimeout = setTimeout(() => {
                         if (isWaiting && currentTargetColor === 'NOGO') {
-                            recordResult('NOGO', 0, true, 'Doğru Baskılama');
+                            recordResult('GONOGO', 0, true, 'Doğru Baskılama');
                             nextTrial();
                         }
                     }, 1200);
                 }
             } else if (mod === 'stroop') {
-                const colors = [
-                    { name: 'KIRMIZI', hex: '#ff1744' },
-                    { name: 'YEŞİL', hex: '#00e676' },
-                    { name: 'MAVİ', hex: '#29b6f6' }
-                ];
-                const textObj = colors[Math.floor(Math.random() * colors.length)];
-                const colorObj = colors[Math.floor(Math.random() * colors.length)];
+                const keys = ['RED', 'GREEN', 'BLUE', 'YELLOW'];
+                const textKey = keys[Math.floor(Math.random() * keys.length)];
+                const colorKey = keys[Math.floor(Math.random() * keys.length)];
                 
-                targetCircle.style.backgroundColor = '#222';
-                targetCircle.style.color = colorObj.hex;
-                targetCircle.textContent = textObj.name;
+                currentStroopMatch = (textKey === colorKey);
+
+                targetCircle.style.backgroundColor = '#000';
+                targetCircle.style.color = colorMap[colorKey].hex;
+                targetCircle.textContent = textKey;
                 playSound(600);
             }
         }
@@ -339,9 +433,16 @@
             clearTimeout(timerTimeout);
 
             const mod = moduleSelect.value;
-            if (mod === 'gonogo' && currentTargetColor === 'NOGO') {
+            if (mod === 'stroop') {
+                if (currentStroopMatch) {
+                    recordResult('STROOP', rt, true, 'Doğru Eşleşme Tespiti');
+                } else {
+                    recordResult('STROOP', rt, false, 'Hatalı Dokunma (Çelişki İhlali)');
+                    playSound(120, 'sawtooth');
+                }
+            } else if (mod === 'gonogo' && currentTargetColor === 'NOGO') {
                 recordResult('GONOGO', rt, false, 'Hatalı Dokunma (Baskılama Başarısız)');
-                playSound(150, 'sawtooth');
+                playSound(120, 'sawtooth');
             } else {
                 recordResult(mod.toUpperCase(), rt, true, 'Tamamlandı');
             }
@@ -352,15 +453,25 @@
             setTimeout(nextTrial, 800);
         }
 
-        function triggerSpatialRun() {
+        // AGILITY & AUDIO REACT
+        function triggerSpatialRun(mod) {
             isWaiting = true;
-            const ids = ['s-red', 's-blue', 's-green', 's-yellow'];
-            currentTargetColor = ids[Math.floor(Math.random() * ids.length)];
+            const selectedColors = getSelectedColors();
+            const btnIds = ['s-red', 's-blue', 's-green', 's-yellow'];
             
-            const activeBtn = document.getElementById(currentTargetColor);
-            activeBtn.classList.add('active');
+            // Rastgele buton seçimi
+            const chosenId = btnIds[Math.floor(Math.random() * btnIds.length)];
+            currentTargetColor = chosenId;
+            const activeBtn = document.getElementById(chosenId);
+
+            if (mod === 'agility_run') {
+                activeBtn.classList.add('active');
+                speakEnglish(activeBtn.textContent);
+            } else if (mod === 'audio_react') {
+                // Görsel uyaran yok, sadece İngilizce ses
+                speakEnglish(activeBtn.textContent);
+            }
             
-            speakText(activeBtn.textContent + ' KONİSİ');
             playSound(750);
             startTime = performance.now();
         }
@@ -373,11 +484,11 @@
             isWaiting = false;
 
             if (id === currentTargetColor) {
-                recordResult('AGILITY', rt, true, 'Doğru Koni Deparı');
+                recordResult(moduleSelect.value.toUpperCase(), rt, true, 'Doğru Reaksiyon');
                 statLastRt.textContent = rt + ' ms';
             } else {
-                recordResult('AGILITY', rt, false, 'Yanlış Koni');
-                playSound(100, 'sawtooth');
+                recordResult(moduleSelect.value.toUpperCase(), rt, false, 'Yanlış Koni/Yön');
+                playSound(120, 'sawtooth');
             }
 
             document.querySelectorAll('.spatial-btn').forEach(b => b.classList.remove('active'));
@@ -385,16 +496,24 @@
             setTimeout(nextTrial, 800);
         }
 
+        // TRAIL MAKING TEST (TMT-A & TMT-B)
         function setupTrailNodes(mod) {
             trailArea.innerHTML = '';
             nextTrailIndex = 0;
-            
-            trailSequence = (mod === 'trailA') 
-                ? ['1', '2', '3', '4', '5', '6', '7', '8'] 
-                : ['1', 'A', '2', 'B', '3', 'C', '4', 'D'];
 
-            instruction.textContent = `Sırayla takip edin: ${trailSequence.join(' -> ')}`;
-            
+            if (trailStage === "DEMO1") {
+                statTrials.textContent = "Deneme 1";
+                trailSequence = (mod === 'trailA') ? ['1', '2', '3', '4'] : ['1', 'A', '2', 'B'];
+            } else if (trailStage === "DEMO2") {
+                statTrials.textContent = "Deneme 2";
+                trailSequence = (mod === 'trailA') ? ['1', '2', '3', '4', '5'] : ['1', 'A', '2', 'B', '3'];
+            } else {
+                statTrials.textContent = "GERÇEK TEST (1-20)";
+                trailSequence = (mod === 'trailA') 
+                    ? Array.from({length: 20}, (_, i) => String(i + 1))
+                    : ['1','A','2','B','3','C','4','D','5','E','6','F','7','G','8','H','9','I','10','J'];
+            }
+
             const areaW = trailArea.clientWidth - 60;
             const areaH = trailArea.clientHeight - 80;
 
@@ -408,20 +527,25 @@
                 node.addEventListener('pointerdown', (e) => {
                     e.preventDefault();
                     if (val === trailSequence[nextTrailIndex]) {
-                        playSound(400 + nextTrailIndex * 80);
+                        playSound(400 + nextTrailIndex * 30);
                         node.style.background = '#00e676';
-                        node.style.opacity = '0.25';
+                        node.style.opacity = '0.2';
                         nextTrailIndex++;
                         
                         if (nextTrailIndex >= trailSequence.length) {
-                            const rt = Math.round(performance.now() - startTime);
-                            recordResult(mod.toUpperCase(), rt, true, 'Trail Tamamlandı');
-                            statLastRt.textContent = rt + ' ms';
-                            updateStats();
-                            setTimeout(nextTrial, 800);
+                            const totalTimeMs = clockSeconds * 1000;
+                            recordResult(mod.toUpperCase(), totalTimeMs, true, `Aşama: ${trailStage}`);
+                            
+                            if (trailStage === "DEMO1") trailStage = "DEMO2";
+                            else if (trailStage === "DEMO2") trailStage = "REAL";
+                            else { finishTest(); return; }
+
+                            setTimeout(() => setupTrailNodes(mod), 1000);
                         }
                     } else {
-                        playSound(100, 'sawtooth');
+                        recordResult(mod.toUpperCase(), 0, false, 'Sıra Hatası');
+                        playSound(120, 'sawtooth');
+                        updateStats();
                     }
                 });
 
@@ -432,9 +556,70 @@
             isWaiting = true;
         }
 
-        // -------------------------------------------------------------
-        // 4. VERİ KAYDI VE SPSS/EXCEL EXPORT (Demografik Entegrasyonlu)
-        // -------------------------------------------------------------
+        // GÖRSEL DİZİLİM BELLEK TESTİ (Corsi Block)
+        function setupMemoryTask() {
+            memoryGrid.innerHTML = '';
+            memorySequence = [];
+            playerMemorySequence = [];
+
+            for (let i = 0; i < 9; i++) {
+                const block = document.createElement('div');
+                block.className = 'memory-block';
+                block.dataset.index = i;
+                block.addEventListener('pointerdown', (e) => handleMemoryBlockTap(e, i));
+                memoryGrid.appendChild(block);
+            }
+
+            // Rastgele dizilim oluştur
+            for (let i = 0; i < memoryLevel; i++) {
+                memorySequence.push(Math.floor(Math.random() * 9));
+            }
+
+            // Dizilimi yakma (Show sequence)
+            let seqIndex = 0;
+            isWaiting = false;
+            const blocks = memoryGrid.children;
+
+            const interval = setInterval(() => {
+                if (seqIndex > 0) blocks[memorySequence[seqIndex - 1]].classList.remove('lit');
+                if (seqIndex < memorySequence.length) {
+                    blocks[memorySequence[seqIndex]].classList.add('lit');
+                    playSound(500 + seqIndex * 100);
+                    seqIndex++;
+                } else {
+                    clearInterval(interval);
+                    isWaiting = true;
+                    startTime = performance.now();
+                }
+            }, 800);
+        }
+
+        function handleMemoryBlockTap(e, index) {
+            e.preventDefault();
+            if (!isWaiting) return;
+
+            playerMemorySequence.push(index);
+            const currentStep = playerMemorySequence.length - 1;
+
+            if (playerMemorySequence[currentStep] === memorySequence[currentStep]) {
+                playSound(600);
+                if (playerMemorySequence.length === memorySequence.length) {
+                    const rt = Math.round(performance.now() - startTime);
+                    recordResult('MEMORY', rt, true, `Seviye ${memoryLevel} Başarılı`);
+                    memoryLevel++;
+                    statLastRt.textContent = rt + ' ms';
+                    updateStats();
+                    setTimeout(nextTrial, 1000);
+                }
+            } else {
+                playSound(120, 'sawtooth');
+                recordResult('MEMORY', 0, false, `Seviye ${memoryLevel} Başarısız`);
+                updateStats();
+                setTimeout(nextTrial, 1000);
+            }
+        }
+
+        // VERİ KAYDI VE EXPORT
         function recordResult(type, rt, isCorrect, note) {
             const currentAthlete = getSelectedAthlete();
             trialData.push({
@@ -455,19 +640,17 @@
         }
 
         function updateStats() {
-            const valid = trialData.filter(d => d.isCorrect && d.reactionTimeMs > 0);
             const errors = trialData.filter(d => !d.isCorrect).length;
             statErrors.textContent = errors;
-
-            if (valid.length > 0) {
-                const avg = Math.round(valid.reduce((acc, curr) => acc + curr.reactionTimeMs, 0) / valid.length);
-                statAvgRt.textContent = avg + ' ms';
-            }
         }
 
         function finishTest() {
+            stopClock();
             resetLayout();
-            instruction.textContent = 'Test bitti! Verileri CSV indirerek analiz edebilirsiniz.';
+            instrTitle.textContent = "Test Tamamlandı!";
+            instrText.textContent = `Toplam Süre: ${statTimer.textContent} | Verileri CSV indirerek SPSS veya Excel ortamına alabilirsiniz.`;
+            instructionCard.style.display = 'block';
+
             startBtn.disabled = false;
             stopBtn.disabled = true;
             exportBtn.disabled = false;
@@ -477,14 +660,10 @@
 
         function exportCSV() {
             if (trialData.length === 0) return;
-            
-            // SPSS & R doğrudan aktarımı için Türkçe karakter/boşluk uyumlu başlıklar
-            let csv = "data:text/csv;charset=utf-8,Sporcu_ID,Sporcu_Adi,Yas,Cinsiyet,Brans,Seviye,Baskin_Taraf,Deneyim_Yili,Deneme,Modul,Reaksiyon_Depar_Zamani_ms,Dogru_Mu,Aciklama\n";
-            
+            let csv = "data:text/csv;charset=utf-8,Sporcu_ID,Sporcu_Adi,Yas,Cinsiyet,Brans,Seviye,Baskin_Taraf,Deneyim_Yili,Deneme,Modul,Reaksiyon_Zamani_ms,Dogru_Mu,Aciklama\n";
             trialData.forEach(r => {
                 csv += `${r.athleteId},${r.athleteName},${r.age},${r.gender},${r.sport},${r.level},${r.dominantSide},${r.experienceYears},${r.trial},${r.type},${r.reactionTimeMs},${r.isCorrect ? 1 : 0},${r.note}\n`;
             });
-
             const selectedAthlete = getSelectedAthlete();
             const link = document.createElement("a");
             link.setAttribute("href", encodeURI(csv));
@@ -494,7 +673,6 @@
             document.body.removeChild(link);
         }
 
-        // Başlatma
         initAthleteSelect();
         resetLayout();
     </script>
