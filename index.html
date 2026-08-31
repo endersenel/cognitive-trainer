@@ -2,112 +2,66 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>SPPLab - Cognitive Motor Trainer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SPPLab - Kinetic & Cognitive Athletic Trainer</title>
     <style>
-        * {
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: manipulation;
-        }
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #121212;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
-        header {
-            background-color: #1f1f1f;
-            padding: 15px;
-            text-align: center;
-            border-bottom: 2px solid #333;
-        }
-        h1 {
-            margin: 0;
-            font-size: 1.4rem;
-            color: #00bcd4;
-        }
-        p.subtitle {
-            margin: 5px 0 0;
-            font-size: 0.85rem;
-            color: #aaa;
-        }
-        #stats-bar {
-            display: flex;
-            justify-content: space-around;
-            background-color: #2a2a2a;
-            padding: 10px;
-            font-size: 0.95rem;
-            font-weight: bold;
-        }
-        .stat-item span {
-            color: #00e676;
-        }
-        #game-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            cursor: pointer;
-        }
-        #target-circle {
-            width: 220px;
-            height: 220px;
-            border-radius: 50%;
-            background-color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            transition: transform 0.05s ease;
-        }
-        #target-circle:active {
-            transform: scale(0.95);
-        }
-        #instruction {
-            margin-top: 25px;
-            font-size: 1.1rem;
-            color: #ccc;
-            text-align: center;
-            padding: 0 20px;
-        }
-        #controls {
-            padding: 20px;
-            background-color: #1f1f1f;
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-        button {
-            padding: 12px 24px;
-            font-size: 1rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .btn-start { background-color: #00c853; color: white; }
-        .btn-stop { background-color: #d50000; color: white; }
-        .btn-export { background-color: #0288d1; color: white; }
-        button:disabled { background-color: #555; color: #888; cursor: not-allowed; }
+        * { box-sizing: border-box; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+        body { margin: 0; padding: 0; background: #0a0a0a; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        header { background: #151515; padding: 6px 12px; text-align: center; border-bottom: 1px solid #333; flex-shrink: 0; }
+        h1 { margin: 0; font-size: 1rem; color: #00e5ff; }
+        
+        .panel-row { display: flex; gap: 6px; margin-top: 4px; justify-content: center; }
+        select, input { background: #222; color: #fff; border: 1px solid #00e5ff; padding: 4px 6px; border-radius: 4px; font-size: 0.75rem; }
+        
+        #stats-bar { display: flex; justify-content: space-around; background: #1a1a1a; padding: 6px; font-size: 0.75rem; font-weight: bold; border-bottom: 1px solid #333; flex-shrink: 0; }
+        .stat-item span { color: #00e676; }
+
+        #game-area { flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; background: #0e0e0e; display: flex; justify-content: center; align-items: center; }
+
+        /* Dynamic Target Circle */
+        #target-circle { position: absolute; width: 150px; height: 150px; border-radius: 50%; background: #222; display: none; justify-content: center; align-items: center; font-size: 1.1rem; font-weight: bold; box-shadow: 0 0 20px rgba(0,229,255,0.3); text-align: center; padding: 10px; cursor: pointer; }
+        #target-circle:active { transform: scale(0.92); }
+
+        /* Spatial Grid */
+        #spatial-grid { display: none; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; width: 95%; height: 95%; }
+        .spatial-btn { border-radius: 12px; opacity: 0.2; transition: opacity 0.1s; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; font-weight: bold; }
+        .spatial-btn.active { opacity: 1; box-shadow: 0 0 30px #fff; }
+
+        /* Trail Area */
+        #trail-area { display: none; position: relative; width: 100%; height: 100%; }
+        .trail-node { position: absolute; width: 48px; height: 48px; border-radius: 50%; background: #00e5ff; color: #000; font-weight: bold; font-size: 1.1rem; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+
+        #instruction { position: absolute; bottom: 8px; width: 100%; text-align: center; font-size: 0.8rem; color: #888; pointer-events: none; padding: 0 10px; }
+
+        #controls { padding: 8px; background: #151515; display: flex; gap: 6px; justify-content: center; flex-shrink: 0; border-top: 1px solid #333; }
+        button { flex: 1; max-width: 110px; padding: 10px 0; font-size: 0.8rem; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; }
+        .btn-start { background: #00c853; color: white; }
+        .btn-stop { background: #d50000; color: white; }
+        .btn-export { background: #0288d1; color: white; }
+        button:disabled { background: #333; color: #666; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>SPPLab - Kinetik Bilişsel Trainer</h1>
-        <p class="subtitle">Modül 1: Seçici Reaksiyon & Go / No-Go Baskılama Testi</p>
+        <h1>SPPLab - Kinetik & Bilişsel Performans Stüdyosu</h1>
+        <div class="panel-row">
+            <input type="text" id="athlete-name" placeholder="Sporcu Adı/ID" value="Sporcu_1" style="width: 100px;">
+            <select id="module-select" style="max-width: 220px;">
+                <optgroup label="A. Dokunmatik & Bilişsel">
+                    <option value="gonogo">1. Go/No-Go (Baskılama)</option>
+                    <option value="stroop">2. Stroop (Renk-Kelime Çelişkisi)</option>
+                    <option value="trailA">3. Trail Making A (1-10 Sayı)</option>
+                    <option value="trailB">4. Trail Making B (1-A-2-B Esneklik)</option>
+                    <option value="memory">5. Görsel Dizilim Bellek Testi</option>
+                </optgroup>
+                <optgroup label="B. Saha & Kinetik Depar">
+                    <option value="sprint_ball">6. Saha Depar: Nesne/Top Getirme</option>
+                    <option value="agility_run">7. 4 Renk Koni Çeviklik Deparı</option>
+                    <option value="audio_react">8. İşitsel Reaksiyon & Yön Becerisi</option>
+                </optgroup>
+            </select>
+        </div>
     </header>
 
     <div id="stats-bar">
@@ -119,17 +73,26 @@
 
     <div id="game-area">
         <div id="target-circle">HAZIR</div>
-        <div id="instruction">Başlamak için aşağıdan "Testi Başlat" butonuna basın.</div>
+
+        <div id="spatial-grid">
+            <div class="spatial-btn" id="s-red" style="background:#ff1744;">KIRMIZI</div>
+            <div class="spatial-btn" id="s-blue" style="background:#29b6f6;">MAVİ</div>
+            <div class="spatial-btn" id="s-green" style="background:#00e676;">YEŞİL</div>
+            <div class="spatial-btn" id="s-yellow" style="background:#ffea00; color:#000;">SARI</div>
+        </div>
+
+        <div id="trail-area"></div>
+
+        <div id="instruction">Test seçip "Başlat" butonuna basın.</div>
     </div>
 
     <div id="controls">
-        <button id="start-btn" class="btn-start">Testi Başlat</button>
+        <button id="start-btn" class="btn-start">Başlat</button>
         <button id="stop-btn" class="btn-stop" disabled>Durdur</button>
         <button id="export-btn" class="btn-export" disabled>CSV İndir</button>
     </div>
 
     <script>
-        // Web Audio API Kurulumu (Düşük gecikmeli ses üretimi)
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
 
@@ -150,40 +113,67 @@
             osc.stop(audioCtx.currentTime + duration);
         }
 
-        function playGoSound() { playSound(880, 'sine', 0.15); }      // Yüksek Do sesi (GO)
-        function playNoGoSound() { playSound(150, 'sawtooth', 0.3); } // Düşük Cızz sesi (NO-GO)
+        // Metinden Ses Üretme (Saha Sesli Komutları İçin)
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                const msg = new SpeechSynthesisUtterance(text);
+                msg.lang = 'tr-TR';
+                msg.rate = 1.2;
+                window.speechSynthesis.speak(msg);
+            }
+        }
 
-        // Test Değişkenleri
         const totalTrials = 10;
         let currentTrial = 0;
         let startTime = 0;
         let timerTimeout = null;
-        let isWaitingForResponse = false;
-        let currentType = null; // 'GO' veya 'NOGO'
+        let isWaiting = false;
         let trialData = [];
+        let currentTargetColor = null;
+        let nextTrailIndex = 0;
+        let trailSequence = [];
 
-        // DOM Elemanları
+        const athleteInput = document.getElementById('athlete-name');
+        const moduleSelect = document.getElementById('module-select');
+        const gameArea = document.getElementById('game-area');
         const targetCircle = document.getElementById('target-circle');
+        const spatialGrid = document.getElementById('spatial-grid');
+        const trailArea = document.getElementById('trail-area');
         const instruction = document.getElementById('instruction');
         const startBtn = document.getElementById('start-btn');
         const stopBtn = document.getElementById('stop-btn');
         const exportBtn = document.getElementById('export-btn');
-        
+
         const statTrials = document.getElementById('stat-trials');
         const statLastRt = document.getElementById('stat-last-rt');
         const statAvgRt = document.getElementById('stat-avg-rt');
         const statErrors = document.getElementById('stat-errors');
 
-        // Renk Kodları
-        const COLOR_IDLE = '#333333';
-        const COLOR_GO = '#00e676';     // Yeşil
-        const COLOR_NOGO = '#ff1744';   // Kırmızı
-
+        moduleSelect.addEventListener('change', resetLayout);
         startBtn.addEventListener('click', startTest);
         stopBtn.addEventListener('click', stopTest);
         exportBtn.addEventListener('click', exportCSV);
 
-        targetCircle.addEventListener('pointerdown', handleTap);
+        targetCircle.addEventListener('pointerdown', handleCircleTap);
+
+        document.querySelectorAll('.spatial-btn').forEach(btn => {
+            btn.addEventListener('pointerdown', (e) => handleSpatialTap(e, btn.id));
+        });
+
+        function resetLayout() {
+            const mod = moduleSelect.value;
+            targetCircle.style.display = 'none';
+            spatialGrid.style.display = (mod === 'agility_run') ? 'grid' : 'none';
+            trailArea.style.display = (mod === 'trailA' || mod === 'trailB') ? 'block' : 'none';
+            instruction.textContent = 'Test başlatılmaya hazır.';
+        }
+
+        function setRandomPosition(element) {
+            const areaW = gameArea.clientWidth - 160;
+            const areaH = gameArea.clientHeight - 180;
+            element.style.left = Math.max(10, Math.floor(Math.random() * areaW)) + 'px';
+            element.style.top = Math.max(10, Math.floor(Math.random() * areaH)) + 'px';
+        }
 
         function startTest() {
             if (!audioCtx) audioCtx = new AudioContext();
@@ -196,19 +186,19 @@
             startBtn.disabled = true;
             stopBtn.disabled = false;
             exportBtn.disabled = true;
+            moduleSelect.disabled = true;
 
             nextTrial();
         }
 
         function stopTest() {
             clearTimeout(timerTimeout);
-            isWaitingForResponse = false;
-            targetCircle.style.backgroundColor = COLOR_IDLE;
-            targetCircle.textContent = 'DURDURULDU';
-            instruction.textContent = 'Test durduruldu. Yeniden başlamak için butona basın.';
-            
+            isWaiting = false;
+            resetLayout();
+            instruction.textContent = 'Test durduruldu.';
             startBtn.disabled = false;
             stopBtn.disabled = true;
+            moduleSelect.disabled = false;
             if (trialData.length > 0) exportBtn.disabled = false;
         }
 
@@ -220,87 +210,178 @@
 
             currentTrial++;
             statTrials.textContent = `${currentTrial}/${totalTrials}`;
-            
-            targetCircle.style.backgroundColor = COLOR_IDLE;
-            targetCircle.textContent = 'BEKLEYİN...';
-            instruction.textContent = 'Yeşil yanarsa DOKUNUN! Kırmızı yanarsa BEKLEYİN!';
-            isWaitingForResponse = false;
+            isWaiting = false;
 
-            // Rastgele Bekleme Süresi (1.5 - 3.5 saniye arası)
-            const randomDelay = Math.floor(Math.random() * 2000) + 1500;
+            const mod = moduleSelect.value;
 
-            timerTimeout = setTimeout(() => {
-                triggerStimulus();
-            }, randomDelay);
+            if (mod === 'gonogo' || mod === 'stroop' || mod === 'sprint_ball') {
+                targetCircle.style.display = 'none';
+                instruction.textContent = (mod === 'sprint_ball') ? 'Işık yanınca depar atıp nesneyi alın ve ekrana dokunun!' : 'Hazır olun...';
+                
+                const delay = Math.floor(Math.random() * 2000) + 1000;
+                timerTimeout = setTimeout(() => triggerSingleTarget(mod), delay);
+            } else if (mod === 'agility_run') {
+                document.querySelectorAll('.spatial-btn').forEach(b => b.classList.remove('active'));
+                instruction.textContent = 'Açılan koniye depar atın ve dönüşte renge dokunun!';
+                const delay = Math.floor(Math.random() * 2000) + 1000;
+                timerTimeout = setTimeout(triggerSpatialRun, delay);
+            } else if (mod === 'trailA' || mod === 'trailB') {
+                setupTrailNodes(mod);
+            }
         }
 
-        function triggerStimulus() {
-            // %70 GO (Yeşil), %30 NO-GO (Kırmızı) olasılığı
-            const isGo = Math.random() < 0.7;
-            currentType = isGo ? 'GO' : 'NOGO';
-
-            if (isGo) {
-                targetCircle.style.backgroundColor = COLOR_GO;
-                targetCircle.textContent = 'DOKUN!';
-                playGoSound();
-            } else {
-                targetCircle.style.backgroundColor = COLOR_NOGO;
-                targetCircle.textContent = 'DUR!';
-                playNoGoSound();
-            }
-
+        function triggerSingleTarget(mod) {
+            setRandomPosition(targetCircle);
+            targetCircle.style.display = 'flex';
+            isWaiting = true;
             startTime = performance.now();
-            isWaitingForResponse = true;
 
-            // No-Go durumunda sporcu basmazsa 1.2 saniye sonra otomatik başarılı say ve geç
-            if (!isGo) {
-                timerTimeout = setTimeout(() => {
-                    if (isWaitingForResponse && currentType === 'NOGO') {
-                        // Başarılı Baskılama (Inhibition Success)
-                        recordResult('NOGO', 0, true, 'Doğru Baskılama');
-                        nextTrial();
-                    }
-                }, 1200);
+            if (mod === 'sprint_ball') {
+                // Saha Depar Modu: Renk görünür, sesli komut verir, depar süresini ölçer
+                const colors = [
+                    { name: 'KIRMIZI TOP', hex: '#ff1744' },
+                    { name: 'MAVİ TOP', hex: '#29b6f6' },
+                    { name: 'YEŞİL TOP', hex: '#00e676' }
+                ];
+                const selected = colors[Math.floor(Math.random() * colors.length)];
+                targetCircle.style.backgroundColor = selected.hex;
+                targetCircle.style.color = '#000';
+                targetCircle.textContent = selected.name;
+                
+                speakText(selected.name); // Sesli yönlendirme
+                playSound(900);
+            } else if (mod === 'gonogo') {
+                const isGo = Math.random() < 0.7;
+                currentTargetColor = isGo ? 'GO' : 'NOGO';
+                targetCircle.style.backgroundColor = isGo ? '#00e676' : '#ff1744';
+                targetCircle.style.color = '#000';
+                targetCircle.textContent = isGo ? 'DOKUN!' : 'DUR!';
+                playSound(isGo ? 880 : 150, isGo ? 'sine' : 'sawtooth');
+
+                if (!isGo) {
+                    timerTimeout = setTimeout(() => {
+                        if (isWaiting && currentTargetColor === 'NOGO') {
+                            recordResult('NOGO', 0, true, 'Doğru Baskılama');
+                            nextTrial();
+                        }
+                    }, 1200);
+                }
+            } else if (mod === 'stroop') {
+                const colors = [
+                    { name: 'KIRMIZI', hex: '#ff1744' },
+                    { name: 'YEŞİL', hex: '#00e676' },
+                    { name: 'MAVİ', hex: '#29b6f6' }
+                ];
+                const textObj = colors[Math.floor(Math.random() * colors.length)];
+                const colorObj = colors[Math.floor(Math.random() * colors.length)];
+                
+                targetCircle.style.backgroundColor = '#222';
+                targetCircle.style.color = colorObj.hex;
+                targetCircle.textContent = textObj.name;
+                playSound(600);
             }
         }
 
-        function handleTap(e) {
+        function handleCircleTap(e) {
             e.preventDefault();
-            if (!isWaitingForResponse) {
-                // Erken dokunma (False Start)
-                if (startBtn.disabled && targetCircle.textContent === 'BEKLEYİN...') {
-                    clearTimeout(timerTimeout);
-                    recordResult('EARLY', 0, false, 'Erken Dokunma');
-                    targetCircle.textContent = 'ERKEN!';
-                    playSound(100, 'sawtooth', 0.2);
-                    setTimeout(nextTrial, 1000);
-                }
-                return;
-            }
+            if (!isWaiting) return;
 
-            const endTime = performance.now();
-            const reactionTime = Math.round(endTime - startTime);
-            isWaitingForResponse = false;
+            const rt = Math.round(performance.now() - startTime);
+            isWaiting = false;
             clearTimeout(timerTimeout);
 
-            if (currentType === 'GO') {
-                // Doğru Reaksiyon
-                recordResult('GO', reactionTime, true, 'Doğru Dokunma');
-                statLastRt.textContent = reactionTime + ' ms';
-                targetCircle.textContent = reactionTime + ' ms';
-            } else if (currentType === 'NOGO') {
-                // Hatalı Dokunma (Baskılama Hatası / Commission Error)
-                recordResult('NOGO', reactionTime, false, 'Hatalı Dokunma (No-Go)');
-                targetCircle.textContent = 'HATA!';
-                playSound(100, 'sawtooth', 0.3);
+            const mod = moduleSelect.value;
+            recordResult(mod.toUpperCase(), rt, true, 'Tamamlandı');
+            statLastRt.textContent = rt + ' ms';
+
+            targetCircle.style.display = 'none';
+            updateStats();
+            setTimeout(nextTrial, 800);
+        }
+
+        function triggerSpatialRun() {
+            isWaiting = true;
+            const ids = ['s-red', 's-blue', 's-green', 's-yellow'];
+            currentTargetColor = ids[Math.floor(Math.random() * ids.length)];
+            
+            const activeBtn = document.getElementById(currentTargetColor);
+            activeBtn.classList.add('active');
+            
+            speakText(activeBtn.textContent + ' KONİSİ'); // Sahadaki koni adını bağırır
+            playSound(750);
+            startTime = performance.now();
+        }
+
+        function handleSpatialTap(e, id) {
+            e.preventDefault();
+            if (!isWaiting) return;
+
+            const rt = Math.round(performance.now() - startTime);
+            isWaiting = false;
+
+            if (id === currentTargetColor) {
+                recordResult('AGILITY', rt, true, 'Doğru Koni Deparı');
+                statLastRt.textContent = rt + ' ms';
+            } else {
+                recordResult('AGILITY', rt, false, 'Yanlış Koni');
+                playSound(100, 'sawtooth');
             }
 
+            document.querySelectorAll('.spatial-btn').forEach(b => b.classList.remove('active'));
             updateStats();
-            setTimeout(nextTrial, 1000);
+            setTimeout(nextTrial, 800);
+        }
+
+        function setupTrailNodes(mod) {
+            trailArea.innerHTML = '';
+            nextTrailIndex = 0;
+            
+            trailSequence = (mod === 'trailA') 
+                ? ['1', '2', '3', '4', '5', '6', '7', '8'] 
+                : ['1', 'A', '2', 'B', '3', 'C', '4', 'D'];
+
+            instruction.textContent = `Sırayla takip edin: ${trailSequence.join(' -> ')}`;
+            
+            const areaW = trailArea.clientWidth - 60;
+            const areaH = trailArea.clientHeight - 80;
+
+            trailSequence.forEach((val) => {
+                const node = document.createElement('div');
+                node.className = 'trail-node';
+                node.textContent = val;
+                node.style.left = Math.max(10, Math.floor(Math.random() * areaW)) + 'px';
+                node.style.top = Math.max(10, Math.floor(Math.random() * areaH)) + 'px';
+                
+                node.addEventListener('pointerdown', (e) => {
+                    e.preventDefault();
+                    if (val === trailSequence[nextTrailIndex]) {
+                        playSound(400 + nextTrailIndex * 80);
+                        node.style.background = '#00e676';
+                        node.style.opacity = '0.25';
+                        nextTrailIndex++;
+                        
+                        if (nextTrailIndex >= trailSequence.length) {
+                            const rt = Math.round(performance.now() - startTime);
+                            recordResult(mod.toUpperCase(), rt, true, 'Trail Tamamlandı');
+                            statLastRt.textContent = rt + ' ms';
+                            updateStats();
+                            setTimeout(nextTrial, 800);
+                        }
+                    } else {
+                        playSound(100, 'sawtooth');
+                    }
+                });
+
+                trailArea.appendChild(node);
+            });
+
+            startTime = performance.now();
+            isWaiting = true;
         }
 
         function recordResult(type, rt, isCorrect, note) {
             trialData.push({
+                athlete: athleteInput.value || 'Unassigned',
                 trial: currentTrial,
                 type: type,
                 reactionTimeMs: rt,
@@ -310,43 +391,40 @@
         }
 
         function updateStats() {
-            const validGoTrials = trialData.filter(d => d.type === 'GO' && d.isCorrect);
+            const valid = trialData.filter(d => d.isCorrect && d.reactionTimeMs > 0);
             const errors = trialData.filter(d => !d.isCorrect).length;
-
             statErrors.textContent = errors;
 
-            if (validGoTrials.length > 0) {
-                const avg = Math.round(validGoTrials.reduce((acc, curr) => acc + curr.reactionTimeMs, 0) / validGoTrials.length);
+            if (valid.length > 0) {
+                const avg = Math.round(valid.reduce((acc, curr) => acc + curr.reactionTimeMs, 0) / valid.length);
                 statAvgRt.textContent = avg + ' ms';
             }
         }
 
         function finishTest() {
-            targetCircle.style.backgroundColor = COLOR_IDLE;
-            targetCircle.textContent = 'TAMAMLANDI';
-            instruction.textContent = 'Test bitti! Verileri indirmek için "CSV İndir" butonuna basabilirsiniz.';
-            
+            resetLayout();
+            instruction.textContent = 'Test seti bitti! Verileri CSV indirerek SPSS/Excel ortamına alabilirsiniz.';
             startBtn.disabled = false;
             stopBtn.disabled = true;
             exportBtn.disabled = false;
+            moduleSelect.disabled = false;
         }
 
         function exportCSV() {
             if (trialData.length === 0) return;
-
-            let csvContent = "data:text/csv;charset=utf-8,Deneme,Tip,Reaksiyon_Zamani_ms,Dogru_Mu,Aciklama\n";
-            trialData.forEach(row => {
-                csvContent += `${row.trial},${row.type},${row.reactionTimeMs},${row.isCorrect ? 1 : 0},${row.note}\n`;
+            let csv = "data:text/csv;charset=utf-8,Sporcu_ID,Deneme,Modul,Reaksiyon_Depar_Zamani_ms,Dogru_Mu,Aciklama\n";
+            trialData.forEach(r => {
+                csv += `${r.athlete},${r.trial},${r.type},${r.reactionTimeMs},${r.isCorrect ? 1 : 0},${r.note}\n`;
             });
-
-            const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `SPPLab_Cognitive_Data_${new Date().toISOString().slice(0,10)}.csv`);
+            link.setAttribute("href", encodeURI(csv));
+            link.setAttribute("download", `${athleteInput.value}_Cognitive_Data_${new Date().toISOString().slice(0,10)}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
+
+        resetLayout();
     </script>
 </body>
 </html>
