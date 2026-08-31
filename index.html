@@ -437,7 +437,10 @@
                 if (!isGo) {
                     timerTimeout = setTimeout(() => {
                         if (isWaiting && currentCorrectAnswer === 'NOGO') {
+                            isWaiting = false;
                             recordResult('GONOGO', 0, true, 'Doğru Baskılama');
+                            targetCircle.style.display = 'none';
+                            updateStats();
                             nextTrial();
                         }
                     }, 1200);
@@ -738,7 +741,6 @@
         }
 
         function finishTest() {
-            // Süre sıfırlanmadan önce toplam süreyi güvenle al
             const totalElapsed = ((performance.now() - testOverallStartTime) / 1000).toFixed(2);
             stopClock(); 
             
