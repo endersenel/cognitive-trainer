@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#0a0a0a">
-    <title>SPPLab - Kinetic & Cognitive Athletic Trainer</title>
+    <title>SPPLab - Performance Studio</title>
     <style>
         * { box-sizing: border-box; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
         html, body { width: 100%; height: 100%; margin: 0; padding: 0; background: #0a0a0a; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; overflow: hidden; }
@@ -12,7 +12,6 @@
         header { background: #151515; padding: 6px 10px; text-align: center; border-bottom: 1px solid #333; flex-shrink: 0; }
         h1 { margin: 0 0 6px 0; font-size: clamp(0.85rem, 3vw, 1.1rem); color: #00e5ff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         
-        /* Demografik Input Alanı Formu */
         .demo-bar { display: flex; gap: 4px; justify-content: center; align-items: center; width: 100%; flex-wrap: wrap; margin-bottom: 6px; }
         .demo-field { display: flex; flex-direction: column; align-items: flex-start; }
         .demo-field label { font-size: 0.6rem; color: #00e5ff; margin-bottom: 1px; font-weight: bold; }
@@ -30,26 +29,21 @@
 
         #game-area { flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; background: #0e0e0e; display: flex; justify-content: center; align-items: center; padding: 10px; }
 
-        /* Yönerge Kartı */
         #instruction-card { position: absolute; width: min(90%, 420px); background: rgba(20,20,20,0.95); border: 2px solid #00e5ff; padding: 16px; border-radius: 12px; text-align: center; z-index: 100; box-shadow: 0 0 20px rgba(0,229,255,0.2); }
         #instruction-card h3 { margin-top: 0; color: #00e5ff; font-size: clamp(0.95rem, 3.5vw, 1.2rem); }
         #instruction-card p { font-size: clamp(0.75rem, 2.8vw, 0.9rem); line-height: 1.4; color: #ddd; margin-bottom: 0; }
 
-        /* Target Circle */
         #target-circle { position: absolute; width: clamp(110px, 30vw, 160px); height: clamp(110px, 30vw, 160px); border-radius: 50%; background: #000; border: 3px solid #fff; display: none; justify-content: center; align-items: center; font-size: clamp(1rem, 4vw, 1.4rem); font-weight: 900; box-shadow: 0 0 25px rgba(255,255,255,0.4); text-align: center; padding: 8px; cursor: pointer; }
         #target-circle:active { transform: scale(0.92); }
 
-        /* Spatial Grid */
         #spatial-grid { display: none; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 8px; width: 100%; height: 100%; max-width: 600px; max-height: 600px; margin: auto; }
         .spatial-btn { border-radius: 12px; opacity: 0.3; transition: opacity 0.1s; display: flex; justify-content: center; align-items: center; font-size: clamp(1.1rem, 4vw, 1.6rem); font-weight: 900; color: #000; cursor: pointer; border: 2px solid #fff; width: 100%; height: 100%; }
         .spatial-btn.active { opacity: 1; box-shadow: 0 0 35px #fff; transform: scale(0.98); }
 
-        /* Corsi Block Grid */
         #memory-grid { display: none; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 8px; width: min(80vw, 80vh, 320px); height: min(80vw, 80vh, 320px); margin: auto; }
         .memory-block { background: #222; border: 2px solid #00e5ff; border-radius: 8px; cursor: pointer; width: 100%; height: 100%; transition: background 0.2s, box-shadow 0.2s; }
         .memory-block.lit { background: #00e5ff !important; box-shadow: 0 0 25px #00e5ff !important; }
 
-        /* Trail Area */
         #trail-area { display: none; position: relative; width: 100%; height: 100%; }
         .trail-node { position: absolute; width: clamp(38px, 10vw, 48px); height: clamp(38px, 10vw, 48px); border-radius: 50%; background: #00e5ff; color: #000; font-weight: 900; font-size: clamp(0.85rem, 2.5vw, 1.1rem); display: flex; justify-content: center; align-items: center; box-shadow: 0 0 10px rgba(0,0,0,0.5); cursor: pointer; border: 2px solid #fff; }
         .trail-node:active { transform: scale(0.9); }
@@ -67,7 +61,6 @@
     <header>
         <h1>SPPLab - Performance Studio</h1>
         
-        <!-- DEMOGRAFİK VERİ FORMU -->
         <div class="demo-bar">
             <div class="demo-field">
                 <label>Sporcu ID</label>
@@ -108,21 +101,16 @@
                     <option value="stroop">2. Stroop (Renk-Kelime Çelişkisi)</option>
                     <option value="simon">3. Simon Effect (Mekânsal Çatışma)</option>
                     <option value="flanker">4. Flanker Testi (Dikkat Dağınıklığı)</option>
-                    <option value="antisaccade">5. Anti-Saccade (Göz Baskılama)</option>
                 </optgroup>
                 <optgroup label="B. Nöropsikolojik Testler">
-                    <option value="trailA">6. Trail Making A (1-20 Sayı)</option>
-                    <option value="trailB">7. Trail Making B (1-A-2-B...)</option>
-                    <option value="memory">8. Görsel Dizilim Bellek Testi (Corsi)</option>
-                    <option value="nback">9. Dual-Task N-Back Bellek</option>
+                    <option value="trailA">5. Trail Making A (1-20 Sayı)</option>
+                    <option value="trailB">6. Trail Making B (1-A-2-B...)</option>
+                    <option value="memory">7. Görsel Dizilim Bellek Testi (Corsi)</option>
                 </optgroup>
                 <optgroup label="C. Saha & Kinetik Depar">
-                    <option value="sprint_ball">10. Saha Depar: Top/Nesne Getirme (10 Deneme)</option>
-                    <option value="agility_run">11. Renk Koni Çeviklik Deparı</option>
-                    <option value="complex_agility">12. Karmaşık Çift Komut Deparı</option>
-                    <option value="choice_react">13. Çoklu Seçenek Reaksiyon Deparı</option>
-                    <option value="visual_search">14. Görsel Arama & Depar</option>
-                    <option value="rhythm_react">15. Ritme Bağlı Motor Reaksiyon</option>
+                    <option value="sprint_ball">8. Saha Depar: Top/Nesne Getirme (10 Deneme)</option>
+                    <option value="agility_run">9. Renk Koni Çeviklik Deparı</option>
+                    <option value="complex_agility">10. Karmaşık Çift Komut Deparı</option>
                 </optgroup>
             </select>
         </div>
@@ -179,18 +167,13 @@
             gonogo: { title: "1. Go/No-Go Testi", text: "Yeşil 'DOKUN!' çıkınca hızlı dokunun. Kırmızı 'DUR!' çıktığında durarak kendinizi baskılayın." },
             stroop: { title: "2. Stroop Renk-Kelime Testi", text: "Kelimenin YAZI RENGİ ile KELİME ANLAMI eşleşiyorsa dokunun! Eşleşmiyorsa dokunmayın." },
             simon: { title: "3. Simon Effect Testi", text: "Ekranın solunda veya sağında beliren komuta göre sadece doğru renkli butona dokunun." },
-            flanker: { title: "4. Flanker Testi", text: "Yanlardaki oklara aldanmayın ($<<><<$), sadece ortadaki okun gösterdiği yöne dokunun." },
-            antisaccade: { title: "5. Anti-Saccade Testi", text: "Hedef daire belirdiğinde onun TAM ZIT yönündeki alana dokunun." },
-            trailA: { title: "6. Trail Making Test A", text: "Önce 2 Deneme turu yapılır. Ardından 1'den 20'ye kadar olan sayıları en hızlı sırayla takip edin." },
-            trailB: { title: "7. Trail Making Test B", text: "Önce 2 Deneme turu yapılır. Ardından 1-A-2-B... sırasını en hızlı şekilde tamamlayın." },
-            memory: { title: "8. Görsel Dizilim Bellek Testi (Corsi)", text: "Yanan mavi blok sırasını takip edin. 2 kez ardışık hata yapana kadar zorlaşır." },
-            nback: { title: "9. Dual-Task N-Back", text: "Bir önceki adımdaki konum veya renk aynıysa dokunarak hatırlama bellek reaksiyonu verin." },
-            sprint_ball: { title: "10. Saha Depar ( Top Getirme )", text: "Sesli İngilizce renk komutu verilince depar atıp nesneyi getirin (Toplam 10 Deneme)." },
-            agility_run: { title: "11. Renk Koni Çeviklik Deparı", text: "Açılan koniye depar atın ve dönüşte renge dokunun." },
-            complex_agility: { title: "12. Karmaşık Çift Komut Deparı", text: "Sesli renk ve ekran rengi eşleştiğinde depar atın." },
-            choice_react: { title: "13. Çoklu Seçenek Reaksiyon Deparı", text: "4 rastgele seçenek arasından belirlenen renge en hızlı reaksiyonu verin." },
-            visual_search: { title: "14. Görsel Arama & Depar", text: "Farklı şekiller arasından hedef rengi bulun ve depar atın." },
-            rhythm_react: { title: "15. Ritme Bağlı Motor Reaksiyon", text: "Verilen ritmik ses sinyalini takip edip son vuruşta ekrana dokunun." }
+            flanker: { title: "4. Flanker Testi", text: "Yanlardaki oklara aldanmayın, sadece ortadaki okun gösterdiği yöne dokunun." },
+            trailA: { title: "5. Trail Making Test A", text: "Önce 2 Deneme turu yapılır. Ardından 1'den 20'ye kadar olan sayıları en hızlı sırayla takip edin." },
+            trailB: { title: "6. Trail Making Test B", text: "Önce 2 Deneme turu yapılır. Ardından 1-A-2-B... sırasını en hızlı şekilde tamamlayın." },
+            memory: { title: "7. Görsel Dizilim Bellek Testi (Corsi)", text: "Yanan mavi blok sırasını takip edin. 2 kez ardışık hata yapana kadar zorlaşır." },
+            sprint_ball: { title: "8. Saha Depar ( Top Getirme )", text: "Sesli İngilizce renk komutu verilince depar atıp nesneyi getirin (Toplam 10 Deneme)." },
+            agility_run: { title: "9. Renk Koni Çeviklik Deparı", text: "Açılan koniye depar atın ve dönüşte renge dokunun." },
+            complex_agility: { title: "10. Karmaşık Çift Komut Deparı", text: "Sesli renk ve ekran rengi eşleştiğinde depar atın." }
         };
 
         const colorMap = {
@@ -210,27 +193,35 @@
         let audioCtx = null;
 
         function playSound(freq, type = 'sine', duration = 0.15) {
-            if (!audioCtx) audioCtx = new AudioContext();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = type;
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + duration);
+            try {
+                if (!audioCtx) audioCtx = new AudioContext();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                console.log("Audio Error: ", e);
+            }
         }
 
         function speakEnglish(text) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const msg = new SpeechSynthesisUtterance(text);
-                msg.lang = 'en-US';
-                msg.rate = 1.0;
-                window.speechSynthesis.speak(msg);
+            try {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const msg = new SpeechSynthesisUtterance(text);
+                    msg.lang = 'en-US';
+                    msg.rate = 1.0;
+                    window.speechSynthesis.speak(msg);
+                }
+            } catch (e) {
+                console.log("Speech Error: ", e);
             }
         }
 
@@ -238,6 +229,7 @@
         let currentTrial = 0;
         let startTime = 0;
         let timerTimeout = null;
+        let memoryInterval = null;
         let clockInterval = null;
         let clockSeconds = 0;
         let isWaiting = false;
@@ -305,14 +297,16 @@
         }
 
         function resetLayout() {
+            clearTimeout(timerTimeout);
+            clearTimeout(memoryInterval);
             const mod = moduleSelect.value;
             instructionCard.style.display = 'block';
-            instrTitle.textContent = instructions[mod].title;
-            instrText.textContent = instructions[mod].text;
+            instrTitle.textContent = instructions[mod] ? instructions[mod].title : "Test Yönergesi";
+            instrText.textContent = instructions[mod] ? instructions[mod].text : "Açıklama mevcut değil.";
 
             targetCircle.style.display = 'none';
-            spatialGrid.style.display = (mod === 'agility_run' || mod === 'complex_agility' || mod === 'choice_react') ? 'grid' : 'none';
-            memoryGrid.style.display = (mod === 'memory' || mod === 'nback') ? 'grid' : 'none';
+            spatialGrid.style.display = (mod === 'agility_run' || mod === 'complex_agility') ? 'grid' : 'none';
+            memoryGrid.style.display = (mod === 'memory') ? 'grid' : 'none';
             trailArea.style.display = (mod === 'trailA' || mod === 'trailB') ? 'block' : 'none';
             colorPickerBar.style.display = (mod === 'sprint_ball' || mod === 'agility_run' || mod === 'complex_agility') ? 'block' : 'none';
             
@@ -366,6 +360,7 @@
 
         function stopTest() {
             clearTimeout(timerTimeout);
+            clearTimeout(memoryInterval);
             stopClock();
             isWaiting = false;
             resetLayout();
@@ -390,7 +385,7 @@
                 targetCircle.style.display = 'none';
                 const delay = Math.floor(Math.random() * 2000) + 1000;
                 timerTimeout = setTimeout(() => triggerSingleTarget(mod), delay);
-            } else if (mod === 'agility_run' || mod === 'complex_agility' || mod === 'choice_react') {
+            } else if (mod === 'agility_run' || mod === 'complex_agility') {
                 document.querySelectorAll('.spatial-btn').forEach(b => b.classList.remove('active'));
                 const delay = Math.floor(Math.random() * 2000) + 1000;
                 timerTimeout = setTimeout(() => triggerSpatialRun(mod), delay);
@@ -516,7 +511,6 @@
             setTimeout(nextTrial, 800);
         }
 
-        // TRAIL MAKING TEST (TMT A & B)
         function setupTrailNodes(mod) {
             trailArea.innerHTML = '';
             nextTrailIndex = 0;
@@ -577,7 +571,6 @@
             isWaiting = true;
         }
 
-        // CORSI BLOCK BELLEK TESTİ
         function setupMemoryTask() {
             memoryGrid.innerHTML = '';
             memorySequence = [];
@@ -603,21 +596,23 @@
             function flashNextBlock() {
                 if (seqIndex < memorySequence.length) {
                     const blockIdx = memorySequence[seqIndex];
-                    blocks[blockIdx].classList.add('lit');
-                    playSound(500 + seqIndex * 80);
+                    if (blocks[blockIdx]) {
+                        blocks[blockIdx].classList.add('lit');
+                        playSound(500 + seqIndex * 80);
+                    }
                     
-                    setTimeout(() => {
-                        blocks[blockIdx].classList.remove('lit');
+                    memoryInterval = setTimeout(() => {
+                        if (blocks[blockIdx]) blocks[blockIdx].classList.remove('lit');
                         seqIndex++;
-                        setTimeout(flashNextBlock, 400); // Bloklar arası boşluk
-                    }, 600); // Yanma süresi
+                        memoryInterval = setTimeout(flashNextBlock, 400);
+                    }, 600);
                 } else {
                     isWaiting = true;
                     startTime = performance.now();
                 }
             }
 
-            setTimeout(flashNextBlock, 500);
+            memoryInterval = setTimeout(flashNextBlock, 500);
         }
 
         function handleMemoryBlockTap(e, index) {
@@ -691,7 +686,7 @@
 
         function exportCSV() {
             if (trialData.length === 0) return;
-            let csv = "data:text/csv;charset=utf-8,Sporcu_ID,Yas,Cinsiyet,Brans,Baskin_Taraf,Deneyim_Yili,Deneme,Modul,Reaksiyon_Zamani_ms,Dogru_Mu,Aciklama\n";
+            let csv = "data:text/csv;charset=utf-8,\uFEFFSporcu_ID,Yas,Cinsiyet,Brans,Baskin_Taraf,Deneyim_Yili,Deneme,Modul,Reaksiyon_Zamani_ms,Dogru_Mu,Aciklama\n";
             trialData.forEach(r => {
                 csv += `${r.athleteId},${r.age},${r.gender},${r.sport},${r.dominantSide},${r.experienceYears},${r.trial},${r.type},${r.reactionTimeMs},${r.isCorrect ? 1 : 0},${r.note}\n`;
             });
