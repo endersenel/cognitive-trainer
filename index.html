@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#0a0a0a">
     <title>SPPLab - Performance Studio</title>
     <style>
@@ -19,9 +19,6 @@
         
         .panel-row { display: flex; gap: 6px; justify-content: center; align-items: center; width: 100%; }
         #module-select { background: #222; color: #fff; border: 1px solid #00e5ff; padding: 6px 8px; border-radius: 6px; font-size: clamp(0.7rem, 2.5vw, 0.85rem); outline: none; width: 100%; max-width: 450px; text-overflow: ellipsis; }
-        
-        #color-picker-bar { display: none; background: #111; padding: 4px 8px; border-bottom: 1px solid #333; text-align: center; font-size: clamp(0.65rem, 2vw, 0.75rem); max-height: 20vh; overflow-y: auto; flex-shrink: 0; }
-        .color-checkbox { margin: 2px 4px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; }
 
         #stats-bar { display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; padding: 6px 12px; font-size: clamp(0.65rem, 2.2vw, 0.8rem); font-weight: bold; border-bottom: 1px solid #333; flex-shrink: 0; }
         .stat-item { text-align: center; }
@@ -29,37 +26,36 @@
 
         #game-area { flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; background: #0e0e0e; display: flex; justify-content: center; align-items: center; padding: 10px; }
 
-        #instruction-card { position: absolute; width: min(92%, 480px); max-height: 85%; overflow-y: auto; background: rgba(20,20,20,0.95); border: 2px solid #00e5ff; padding: 16px; border-radius: 12px; text-align: left; z-index: 100; box-shadow: 0 0 20px rgba(0,229,255,0.2); }
+        #instruction-card { position: absolute; width: min(92%, 480px); max-height: 85%; overflow-y: auto; background: rgba(20,20,20,0.98); border: 2px solid #00e5ff; padding: 16px; border-radius: 12px; text-align: left; z-index: 1000; box-shadow: 0 0 20px rgba(0,229,255,0.2); }
         #instruction-card h3 { margin-top: 0; color: #00e5ff; font-size: clamp(0.95rem, 3.5vw, 1.2rem); text-align: center; }
         #instruction-card p { font-size: clamp(0.72rem, 2.6vw, 0.85rem); line-height: 1.4; color: #ddd; margin-bottom: 6px; }
         .eval-info { background: #181818; border-left: 3px solid #00e5ff; padding: 6px 8px; font-size: 0.72rem; color: #bbb; margin-top: 6px; border-radius: 0 4px 4px 0; }
         .score-info { background: #111; border-left: 3px solid #00e676; padding: 6px 8px; font-size: 0.72rem; color: #aaa; margin-top: 6px; border-radius: 0 4px 4px 0; }
 
-        #antisaccade-touch-zone { display: none; position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 5; }
+        #antisaccade-touch-zone { display: none; position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 50; }
         .antisaccade-half { position: absolute; width: 50%; height: 100%; top: 0; cursor: pointer; }
         #antisaccade-left-zone { left: 0; border-right: 1px dashed rgba(255,255,255,0.1); }
         #antisaccade-right-zone { right: 0; }
 
-        #dual-buttons { display: none; width: 100%; max-width: 400px; gap: 20px; justify-content: center; z-index: 10; position: absolute; bottom: 15px; }
+        #dual-buttons { display: none; width: 100%; max-width: 400px; gap: 20px; justify-content: center; z-index: 100; position: absolute; bottom: 15px; }
         .choice-btn { flex: 1; padding: 16px 0; font-size: 1rem; font-weight: bold; border-radius: 10px; border: 2px solid #fff; cursor: pointer; text-align: center; color: #fff; }
         .btn-left { background: #ff1744; }
         .btn-right { background: #29b6f6; }
 
-        #target-circle { position: absolute; width: clamp(100px, 25vw, 140px); height: clamp(100px, 25vw, 140px); border-radius: 50%; background: #000; border: 3px solid #fff; display: none; justify-content: center; align-items: center; font-size: clamp(1.2rem, 4vw, 1.8rem); font-weight: 900; box-shadow: 0 0 25px rgba(255,255,255,0.4); text-align: center; padding: 8px; cursor: pointer; z-index: 20; }
+        #target-circle { position: absolute; width: clamp(100px, 25vw, 140px); height: clamp(100px, 25vw, 140px); border-radius: 50%; background: #000; border: 3px solid #fff; display: none; justify-content: center; align-items: center; font-size: clamp(1.2rem, 4vw, 1.8rem); font-weight: 900; box-shadow: 0 0 25px rgba(255,255,255,0.4); text-align: center; padding: 8px; cursor: pointer; z-index: 200; }
 
-        #spatial-grid { display: none; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 8px; width: 100%; height: 100%; max-width: 500px; max-height: 500px; margin: auto; }
+        #spatial-grid { display: none; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 8px; width: 100%; height: 100%; max-width: 500px; max-height: 500px; margin: auto; z-index: 100; }
         .spatial-btn { border-radius: 12px; opacity: 0.3; transition: opacity 0.1s; display: flex; justify-content: center; align-items: center; font-size: clamp(1.1rem, 4vw, 1.6rem); font-weight: 900; color: #000; cursor: pointer; border: 2px solid #fff; width: 100%; height: 100%; }
         .spatial-btn.active { opacity: 1; box-shadow: 0 0 35px #fff; transform: scale(0.98); }
 
-        #memory-grid { display: none; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 8px; width: min(70vw, 70vh, 280px); height: min(70vw, 70vh, 280px); margin: auto; }
+        #memory-grid { display: none; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 8px; width: min(70vw, 70vh, 280px); height: min(70vw, 70vh, 280px); margin: auto; z-index: 100; }
         .memory-block { background: #222; border: 2px solid #00e5ff; border-radius: 8px; cursor: pointer; width: 100%; height: 100%; }
         .memory-block.lit { background: #00e5ff !important; box-shadow: 0 0 25px #00e5ff !important; }
 
-        #numpad-grid { display: none; grid-template-columns: repeat(3, 1fr); gap: 8px; width: min(75vw, 260px); margin: auto; }
+        #numpad-grid { display: none; grid-template-columns: repeat(3, 1fr); gap: 8px; width: min(75vw, 260px); margin: auto; z-index: 100; }
         .num-btn { background: #222; border: 1px solid #00e5ff; color: #fff; font-size: 1.2rem; font-weight: bold; padding: 12px 0; border-radius: 6px; text-align: center; cursor: pointer; }
-        .num-btn:active { background: #00e5ff; color: #000; }
 
-        #trail-area { display: none; position: relative; width: 100%; height: 100%; }
+        #trail-area { display: none; position: relative; width: 100%; height: 100%; z-index: 100; }
         .trail-node { position: absolute; width: clamp(38px, 9vw, 46px); height: clamp(38px, 9vw, 46px); border-radius: 50%; background: #00e5ff; color: #000; font-weight: 900; font-size: clamp(0.85rem, 2.5vw, 1.1rem); display: flex; justify-content: center; align-items: center; box-shadow: 0 0 10px rgba(0,0,0,0.5); cursor: pointer; border: 2px solid #fff; }
 
         #controls { padding: 8px 12px; background: #151515; display: flex; gap: 8px; justify-content: center; flex-shrink: 0; border-top: 1px solid #333; width: 100%; }
@@ -74,38 +70,13 @@
 
     <header>
         <h1>SPPLab - Performance Studio</h1>
-        
         <div class="demo-bar">
-            <div class="demo-field">
-                <label>Sporcu ID</label>
-                <input type="text" id="athlete-id" value="SP-101" style="width: 75px;">
-            </div>
-            <div class="demo-field">
-                <label>Yaş</label>
-                <input type="number" id="athlete-age" value="22" style="width: 45px;">
-            </div>
-            <div class="demo-field">
-                <label>Cinsiyet</label>
-                <select id="athlete-gender" style="width: 65px;">
-                    <option value="Erkek">Erkek</option>
-                    <option value="Kadin">Kadın</option>
-                </select>
-            </div>
-            <div class="demo-field">
-                <label>Branş</label>
-                <input type="text" id="athlete-sport" value="Futbol" style="width: 70px;">
-            </div>
-            <div class="demo-field">
-                <label>Baskın El/Ayak</label>
-                <select id="athlete-dominant" style="width: 55px;">
-                    <option value="Sag">Sağ</option>
-                    <option value="Sol">Sol</option>
-                </select>
-            </div>
-            <div class="demo-field">
-                <label>Spor Yılı</label>
-                <input type="number" id="athlete-exp" value="5" style="width: 55px;">
-            </div>
+            <div class="demo-field"><label>Sporcu ID</label><input type="text" id="athlete-id" value="SP-101" style="width: 75px;"></div>
+            <div class="demo-field"><label>Yaş</label><input type="number" id="athlete-age" value="22" style="width: 45px;"></div>
+            <div class="demo-field"><label>Cinsiyet</label><select id="athlete-gender" style="width: 65px;"><option value="Erkek">Erkek</option><option value="Kadin">Kadın</option></select></div>
+            <div class="demo-field"><label>Branş</label><input type="text" id="athlete-sport" value="Futbol" style="width: 70px;"></div>
+            <div class="demo-field"><label>Baskın El</label><select id="athlete-dominant" style="width: 55px;"><option value="Sag">Sağ</option><option value="Sol">Sol</option></select></div>
+            <div class="demo-field"><label>Spor Yılı</label><input type="number" id="athlete-exp" value="5" style="width: 55px;"></div>
         </div>
 
         <div class="panel-row">
@@ -135,24 +106,9 @@
         </div>
     </header>
 
-    <div id="color-picker-bar">
-        <span style="color:#00e5ff; font-weight:bold;">Saha Renkleri (En az 4 seçin):</span><br>
-        <label class="color-checkbox"><input type="checkbox" value="RED" checked> Red</label>
-        <label class="color-checkbox"><input type="checkbox" value="BLUE" checked> Blue</label>
-        <label class="color-checkbox"><input type="checkbox" value="GREEN" checked> Green</label>
-        <label class="color-checkbox"><input type="checkbox" value="YELLOW" checked> Yellow</label>
-        <label class="color-checkbox"><input type="checkbox" value="WHITE"> White</label>
-        <label class="color-checkbox"><input type="checkbox" value="BLACK"> Black</label>
-        <label class="color-checkbox"><input type="checkbox" value="ORANGE"> Orange</label>
-        <label class="color-checkbox"><input type="checkbox" value="PURPLE"> Purple</label>
-        <label class="color-checkbox"><input type="checkbox" value="PINK"> Pink</label>
-        <label class="color-checkbox"><input type="checkbox" value="BROWN"> Brown</label>
-    </div>
-
     <div id="stats-bar">
         <div class="stat-item">Deneme: <span id="stat-trials">0/10</span></div>
         <div class="stat-item">Sayaç: <span id="stat-timer">0.00 s</span></div>
-        <div class="stat-item">Son RT: <span id="stat-last-rt">0 ms</span></div>
         <div class="stat-item">Puan: <span id="stat-score">0</span></div>
         <div class="stat-item">Hata: <span id="stat-errors">0</span></div>
     </div>
@@ -160,9 +116,9 @@
     <div id="game-area">
         <div id="instruction-card">
             <h3 id="instr-title">Test Yönergesi</h3>
-            <p id="instr-text">Test detayları yükleniyor...</p>
-            <div id="instr-eval" class="eval-info">Değerlendirme Ölçütleri Yükleniyor...</div>
-            <div id="instr-score-formula" class="score-info">Puanlama Formülü Yükleniyor...</div>
+            <p id="instr-text">Test yükleniyor...</p>
+            <div id="instr-eval" class="eval-info">Değerlendirme...</div>
+            <div id="instr-score-formula" class="score-info">Formül...</div>
         </div>
 
         <div id="antisaccade-touch-zone">
@@ -199,123 +155,46 @@
         const API_URL = "YOUR_GOOGLE_SCRIPT_WEB_APP_URL";
 
         const instructions = {
-            gonogo: { 
-                title: "1. Go/No-Go Testi", 
-                text: "Yeşil 'DOKUN!' uyarısında (%70 olasılık) olabildiğince hızlı dokunun. Kırmızı 'DUR!' uyarısında (%30 olasılık) dokunmayarak motor tepkinizi baskılayın.", 
-                eval: "Ölçülen Bilişsel Yetenek: Prefrontal Korteks Baskılama (Inhibition) & İmpuls Kontrolü.",
-                scoreFormula: "Puan = (Doğru Go% * 50) + (Doğru NoGo% * 50) - (Ort. RT / 20)" 
-            },
-            stroop: { 
-                title: "2. Stroop Testi", 
-                text: "Kelimenin yazı rengi ile anlamı aynı olduğunda dokunun. Kelime ve renk çeliştiğinde dokunmayarak kendinizi frenleyin.", 
-                eval: "Ölçülen Bilişsel Yetenek: Bilişsel Çatışma Yönetimi & Otomatik Yanıt Baskılama.",
-                scoreFormula: "Puan = Doğru * 10 - (Ort. RT / 15) - (Hata * 15)" 
-            },
-            simon: { 
-                title: "3. Simon Effect Testi", 
-                text: "Dairenin ekrandaki konumuna aldanmayın. Kırmızı görünürse SOL, Mavi görünürse SAĞ butona basın.", 
-                eval: "Ölçülen Bilişsel Yetenek: Mekânsal Çatışma ve Uyaran-Tepki Uyumluluğu.",
-                scoreFormula: "Puan = 100 - (Gecikme ms * 0.2) - (Hata * 20)" 
-            },
-            flanker: { 
-                title: "4. Flanker Testi", 
-                text: "Yanlardaki çeldirici oklara bakmayın (<<><<). Sadece ortadaki 3. okun yönündeki butona dokunun.", 
-                eval: "Ölçülen Bilişsel Yetenek: Seçici Görsel Dikkat & Odaklanma Kalitesi.",
-                scoreFormula: "Puan = (Doğru % * 100) - (Gecikme / 10)" 
-            },
-            antisaccade: { 
-                title: "5. Anti-Saccade Testi", 
-                text: "Sarı ışık yandığında ışığa DOKUNMAYIN! Doğal refleksinizi baskılayarak ekranın TAM ZIT tarafındaki boş alana dokunun.", 
-                eval: "Ölçülen Bilişsel Yetenek: Okülomotor Kontrol & Görsel Refleks İnhibisyonu.",
-                scoreFormula: "Puan = (Başarılı Zıt Tepki * 20) - (Reaksiyon ms / 25)" 
-            },
-            trailA: { 
-                title: "6. Trail Making Test A", 
-                text: "1'den 20'ye kadar olan sayı dizilimini en hızlı şekilde sırayla birleştirin.", 
-                eval: "Ölçülen Bilişsel Yetenek: Görsel Tarama Hızı ve Motor İşlem Hızı.",
-                scoreFormula: "Puan = Max(0, 1000 - [Süre sn * 10 + Hata * 50])" 
-            },
-            trailB: { 
-                title: "7. Trail Making Test B", 
-                text: "1-A-2-B-3-C... şeklinde ardışık sayı ve harf dizilimini sırasıyla tamamlayın.", 
-                eval: "Ölçülen Bilişsel Yetenek: Zihinsel Esneklik, Görev Değiştirme ve Çalışma Belleği.",
-                scoreFormula: "Puan = Max(0, 1000 - [Süre sn * 10 + Hata * 50])" 
-            },
-            memory: { 
-                title: "8. Görsel Dizilim Bellek (Corsi)", 
-                text: "Mavi karelerin yanma sırasını takip edip aynı sırayla dokunun. 2 hatada test tamamlanır.", 
-                eval: "Ölçülen Bilişsel Yetenek: Görsel-Uzamsal Çalışma Belleği Kapasitesi.",
-                scoreFormula: "Puan = (Seviye * 100) + (Başarılı Blok * 10) - (Hata * 25)" 
-            },
-            nback: { 
-                title: "9. Spatial N-Back Bellek", 
-                text: "Yanan kare BİR ÖNCEKİ yanan kare ile AYNI konumdaysa 'EŞLEŞTİ (AYNI)' butonuna, farklıysa 'FARKLI' butonuna basın.", 
-                eval: "Ölçülen Bilişsel Yetenek: Çalışma Belleği Güncelleme ve Sürekli Dikkat.",
-                scoreFormula: "Puan = (Doğru % * 80) + (1000 / Ort. RT * 200)" 
-            },
-            digit_span: { 
-                title: "10. Görsel Sayı Dizilimi Belleği", 
-                text: "Ekranda sırayla gösterilen sayı dizisini aklınızda tutun. Gösterim bitince klavyeden sırayla girin.", 
-                eval: "Ölçülen Bilişsel Yetenek: Kısa Süreli Dizi Belleği (Digit Span Forward).",
-                scoreFormula: "Puan = (Dizi Uzunluğu * 150) - (Hata * 30)" 
-            },
-            sprint_ball: { 
-                title: "11. Saha Depar (Top Getirme)", 
-                text: "Sesli verilen İngilizce renk komutuna göre depar atıp nesneyi getirin ve ekrana dokunun (10 Deneme).", 
-                eval: "Ölçülen Kinetik Yetenek: İşitsel Reaksiyon Hızı ve Patlayıcı İvmelenme.",
-                scoreFormula: "Puan = Max(0, 100 - [Ort. Depar Süresi ms / 100])" 
-            },
-            agility_run: { 
-                title: "12. Renk Koni Çeviklik Deparı", 
-                text: "Aktif olan koniye depar atın ve dönüşte dokunarak süreyi durdurun.", 
-                eval: "Ölçülen Kinetik Yetenek: Çevre Algısı ve Görsel Reaksiyon Çevikliği.",
-                scoreFormula: "Puan = (Doğru % * 60) + Max(0, 40 - [Ort. Süre ms / 200])" 
-            },
-            complex_agility: { 
-                title: "13. Karmaşık Çift Komut Deparı", 
-                text: "Ses ve Ekran Rengi EŞLEŞTİĞİNDE depar atın. Çelişki varsa yerinizde sabit kalın!", 
-                eval: "Ölçülen Kinetik Yetenek: Saha İçi Karar Verme ve Hızlı Motor İnhibisyon.",
-                scoreFormula: "Puan = (Doğru Depar * 10) + (Doğru Frenleme * 15) - (Hatalı Depar * 20)" 
-            },
-            choice_react: { 
-                title: "14. Çoklu Seçenek Reaksiyon Deparı", 
-                text: "4 koni arasından belirtilen hedef renge en hızlı deparı atın.", 
-                eval: "Ölçülen Kinetik Yetenek: Karmaşık Uyaran Seçimi ve Yönsel Motor Reaksiyon.",
-                scoreFormula: "Puan = Max(0, 100 - [Reaksiyon ms / 50] - [Yanlış Yön * 15])" 
-            },
-            visual_search: { 
-                title: "15. Görsel Arama & Depar", 
-                text: "Karmaşık semboller arasından hedef renkli objeyi bulun ve o koniye depar atın.", 
-                eval: "Ölçülen Kinetik Yetenek: Karmaşık Görsel Taraması ve Depar İvmelenmesi.",
-                scoreFormula: "Puan = (1000 / Arama Depar Süresi ms * 500) - (Hata * 25)" 
-            }
+            gonogo: { title: "1. Go/No-Go Testi", text: "Yeşil 'DOKUN!' uyarısında hızlıca dokunun. Kırmızı 'DUR!' uyarısında dokunmayın.", eval: "Ölçülen Yetenek: Motor İnhibisyon.", scoreFormula: "Puan = (Doğru Go% * 50) + (Doğru NoGo% * 50) - (Ort. RT / 20)" },
+            stroop: { title: "2. Stroop Testi", text: "Kelimenin rengi ile anlamı aynı olduğunda dokunun.", eval: "Ölçülen Yetenek: Bilişsel Çatışma.", scoreFormula: "Puan = Doğru * 10 - (Ort. RT / 15) - (Hata * 15)" },
+            simon: { title: "3. Simon Effect Testi", text: "Konuma aldanmayın. Kırmızı=SOL, Mavi=SAĞ butonuna basın.", eval: "Ölçülen Yetenek: Mekânsal Uyum.", scoreFormula: "Puan = 100 - (Gecikme ms * 0.2) - (Hata * 20)" },
+            flanker: { title: "4. Flanker Testi", text: "Sadece ortadaki 3. okun gösterdiği yöndeki butona dokunun.", eval: "Ölçülen Yetenek: Seçici Dikkat.", scoreFormula: "Puan = (Doğru % * 100) - (Gecikme / 10)" },
+            antisaccade: { title: "5. Anti-Saccade Testi", text: "Sarı ışığa DOKUNMAYIN! Ekranın ZIT tarafındaki alana dokunun.", eval: "Ölçülen Yetenek: Görsel Refleks İnhibisyonu.", scoreFormula: "Puan = (Başarılı Zıt Tepki * 20) - (Reaksiyon ms / 25)" },
+            trailA: { title: "6. Trail Making Test A", text: "1'den 20'ye kadar olan sayıları sırasıyla birleştirin.", eval: "Ölçülen Yetenek: Görsel Tarama.", scoreFormula: "Puan = Max(0, 1000 - [Süre sn * 10 + Hata * 50])" },
+            trailB: { title: "7. Trail Making Test B", text: "1-A-2-B-3-C... dizilimini tamamlayın.", eval: "Ölçülen Yetenek: Görev Değiştirme.", scoreFormula: "Puan = Max(0, 1000 - [Süre sn * 10 + Hata * 50])" },
+            memory: { title: "8. Görsel Dizilim Bellek (Corsi)", text: "Yanan karelerin sırasını takip edip dokunun.", eval: "Ölçülen Yetenek: Görsel Çalışma Belleği.", scoreFormula: "Puan = (Seviye * 100) + (Başarılı Blok * 10) - (Hata * 25)" },
+            nback: { title: "9. Spatial N-Back Bellek", text: "Yanan kare BİR ÖNCEKİ ile AYNI ise 'EŞLEŞTİ', değilse 'FARKLI' butonuna basın.", eval: "Ölçülen Yetenek: Bellek Güncelleme.", scoreFormula: "Puan = (Doğru % * 80) + (1000 / Ort. RT * 200)" },
+            digit_span: { title: "10. Görsel Sayı Dizilimi Belleği", text: "Gösterilen sayı dizisini aklınızda tutun ve klavyeden girin.", eval: "Ölçülen Yetenek: Kısa Süreli Sayı Belleği.", scoreFormula: "Puan = (Dizi Uzunluğu * 150) - (Hata * 30)" },
+            sprint_ball: { title: "11. Saha Depar (Top Getirme)", text: "Sesli renk komutuna göre depar atın ve ekrana dokunun.", eval: "Ölçülen Yetenek: İşitsel Reaksiyon.", scoreFormula: "Puan = Max(0, 100 - [Ort. Depar Süresi ms / 100])" },
+            agility_run: { title: "12. Renk Koni Çeviklik Deparı", text: "Aktif koniye depar atın ve dokunarak durdurun.", eval: "Ölçülen Yetenek: Çeviklik.", scoreFormula: "Puan = (Doğru % * 60) + Max(0, 40 - [Ort. Süre ms / 200])" },
+            complex_agility: { title: "13. Karmaşık Çift Komut Deparı", text: "Ses ve Renk EŞLEŞTİĞİNDE depar atın, çelişirse durun.", eval: "Ölçülen Yetenek: Saha İçi Karar Verme.", scoreFormula: "Puan = (Doğru Depar * 10) - (Hatalı Depar * 20)" },
+            choice_react: { title: "14. Çoklu Seçenek Reaksiyon Deparı", text: "4 koni arasından hedef renge depar atın.", eval: "Ölçülen Yetenek: Çoklu Reaksiyon.", scoreFormula: "Puan = Max(0, 100 - [Reaksiyon ms / 50])" },
+            visual_search: { title: "15. Görsel Arama & Depar", text: "Hedef objeyi bulun ve o koniye depar atın.", eval: "Ölçülen Yetenek: Görsel Arama.", scoreFormula: "Puan = (1000 / Arama Süresi ms * 500)" }
         };
 
         const colorMap = {
-            RED: { hex: '#ff1744', soundFreq: 400 },
-            BLUE: { hex: '#29b6f6', soundFreq: 500 },
-            GREEN: { hex: '#00e676', soundFreq: 600 },
-            YELLOW: { hex: '#ffea00', soundFreq: 700 },
-            WHITE: { hex: '#ffffff', soundFreq: 800 },
-            BLACK: { hex: '#555555', soundFreq: 300 },
-            ORANGE: { hex: '#ff9100', soundFreq: 650 },
-            PURPLE: { hex: '#d500f9', soundFreq: 750 },
-            PINK: { hex: '#f50057', soundFreq: 850 },
-            BROWN: { hex: '#8d6e63', soundFreq: 350 }
+            RED: { hex: '#ff1744', freq: 400 },
+            BLUE: { hex: '#29b6f6', freq: 500 },
+            GREEN: { hex: '#00e676', freq: 600 },
+            YELLOW: { hex: '#ffea00', freq: 700 }
         };
 
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
 
-        function playSound(freq, type = 'sine', duration = 0.15) {
+        function playSound(freq, duration = 0.15) {
             try {
-                if (!audioCtx) audioCtx = new AudioContext();
-                if (audioCtx.state === 'suspended') audioCtx.resume();
+                initAudio();
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
-                osc.type = type;
                 osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
@@ -330,35 +209,17 @@
                     window.speechSynthesis.cancel();
                     const msg = new SpeechSynthesisUtterance(text);
                     msg.lang = 'en-US';
-                    msg.rate = 1.0;
                     window.speechSynthesis.speak(msg);
                 }
             } catch (e) {}
         }
 
-        let totalTrials = 10;
-        let currentTrial = 0;
-        let trialStartTime = 0;
-        let testOverallStartTime = 0;
-        let timerTimeout = null;
-        let clockInterval = null;
-        let isWaiting = false;
-        let trialData = [];
-        
-        let currentCorrectAnswer = null;
-        let trailStage = "DEMO1";
-        let nextTrailIndex = 0;
-        let trailSequence = [];
-
-        let memorySequence = [];
-        let playerMemorySequence = [];
-        let memoryLevel = 3;
-        let memoryConsecutiveErrors = 0;
-        let lastNBackPos = null;
+        let totalTrials = 10, currentTrial = 0, trialStartTime = 0, testOverallStartTime = 0;
+        let timerTimeout = null, clockInterval = null, isWaiting = false, trialData = [];
+        let currentCorrectAnswer = null, trailStage = "DEMO1", nextTrailIndex = 0, trailSequence = [];
+        let memorySequence = [], playerMemorySequence = [], memoryLevel = 3, memoryConsecutiveErrors = 0, lastNBackPos = null;
 
         const moduleSelect = document.getElementById('module-select');
-        const colorPickerBar = document.getElementById('color-picker-bar');
-        const gameArea = document.getElementById('game-area');
         const targetCircle = document.getElementById('target-circle');
         const antisaccadeTouchZone = document.getElementById('antisaccade-touch-zone');
         const antisaccadeLeftZone = document.getElementById('antisaccade-left-zone');
@@ -371,10 +232,6 @@
         const numpadGrid = document.getElementById('numpad-grid');
         const trailArea = document.getElementById('trail-area');
         const instructionCard = document.getElementById('instruction-card');
-        const instrTitle = document.getElementById('instr-title');
-        const instrText = document.getElementById('instr-text');
-        const instrEval = document.getElementById('instr-eval');
-        const instrScoreFormula = document.getElementById('instr-score-formula');
 
         const startBtn = document.getElementById('start-btn');
         const stopBtn = document.getElementById('stop-btn');
@@ -383,86 +240,59 @@
         const statTrials = document.getElementById('stat-trials');
         const statTimer = document.getElementById('stat-timer');
         const statScore = document.getElementById('stat-score');
-        const statLastRt = document.getElementById('stat-last-rt');
         const statErrors = document.getElementById('stat-errors');
 
         moduleSelect.addEventListener('change', resetLayout);
-        startBtn.addEventListener('click', startTest);
+        startBtn.addEventListener('click', () => { initAudio(); startTest(); });
         stopBtn.addEventListener('click', stopTest);
         exportBtn.addEventListener('click', exportCSV);
 
-        targetCircle.addEventListener('pointerdown', handleCircleTap);
-        antisaccadeLeftZone.addEventListener('pointerdown', (e) => handleAntiSaccadeZoneTap(e, 'LEFT'));
-        antisaccadeRightZone.addEventListener('pointerdown', (e) => handleAntiSaccadeZoneTap(e, 'RIGHT'));
-
-        btnLeftOpt.addEventListener('pointerdown', (e) => handleDualChoiceTap(e, 'LEFT'));
-        btnRightOpt.addEventListener('pointerdown', (e) => handleDualChoiceTap(e, 'RIGHT'));
+        targetCircle.addEventListener('click', handleCircleTap);
+        antisaccadeLeftZone.addEventListener('click', (e) => handleAntiSaccadeZoneTap(e, 'LEFT'));
+        antisaccadeRightZone.addEventListener('click', (e) => handleAntiSaccadeZoneTap(e, 'RIGHT'));
+        btnLeftOpt.addEventListener('click', (e) => handleDualChoiceTap(e, 'LEFT'));
+        btnRightOpt.addEventListener('click', (e) => handleDualChoiceTap(e, 'RIGHT'));
 
         document.querySelectorAll('.spatial-btn').forEach(btn => {
-            btn.addEventListener('pointerdown', (e) => handleSpatialTap(e, btn.id));
+            btn.addEventListener('click', (e) => handleSpatialTap(e, btn.id));
         });
-
-        function getAthleteDataFromForm() {
-            return {
-                id: document.getElementById('athlete-id').value || 'SP-101',
-                age: document.getElementById('athlete-age').value || '22',
-                gender: document.getElementById('athlete-gender').value,
-                sport: document.getElementById('athlete-sport').value || 'Genel',
-                dominantSide: document.getElementById('athlete-dominant').value,
-                experienceYears: document.getElementById('athlete-exp').value || '1'
-            };
-        }
-
-        function getSelectedColors() {
-            const checked = document.querySelectorAll('#color-picker-bar input:checked');
-            let colors = Array.from(checked).map(c => c.value);
-            if (colors.length < 4) colors = ['RED', 'BLUE', 'GREEN', 'YELLOW'];
-            return colors;
-        }
 
         function resetLayout() {
             clearTimeout(timerTimeout);
             stopClock();
             const mod = moduleSelect.value;
             instructionCard.style.display = 'block';
-            instrTitle.textContent = instructions[mod] ? instructions[mod].title : "Test Yönergesi";
-            instrText.textContent = instructions[mod] ? instructions[mod].text : "Açıklama mevcut değil.";
-            instrEval.textContent = instructions[mod] ? instructions[mod].eval : "";
-            instrScoreFormula.textContent = instructions[mod] ? instructions[mod].scoreFormula : "";
+            document.getElementById('instr-title').textContent = instructions[mod] ? instructions[mod].title : "";
+            document.getElementById('instr-text').textContent = instructions[mod] ? instructions[mod].text : "";
+            document.getElementById('instr-eval').textContent = instructions[mod] ? instructions[mod].eval : "";
+            document.getElementById('instr-score-formula').textContent = instructions[mod] ? instructions[mod].scoreFormula : "";
 
             targetCircle.style.display = 'none';
             antisaccadeTouchZone.style.display = 'none';
-            dualButtons.style.display = (mod === 'simon' || mod === 'flanker' || mod === 'nback') ? 'flex' : 'none';
-            spatialGrid.style.display = (mod === 'agility_run' || mod === 'complex_agility' || mod === 'choice_react') ? 'grid' : 'none';
-            memoryGrid.style.display = (mod === 'memory' || mod === 'nback') ? 'grid' : 'none';
-            numpadGrid.style.display = (mod === 'digit_span') ? 'grid' : 'none';
-            trailArea.style.display = (mod === 'trailA' || mod === 'trailB') ? 'block' : 'none';
-            colorPickerBar.style.display = (mod === 'sprint_ball' || mod === 'agility_run' || mod === 'complex_agility' || mod === 'choice_react' || mod === 'visual_search') ? 'block' : 'none';
-            
+            dualButtons.style.display = 'none';
+            spatialGrid.style.display = 'none';
+            memoryGrid.style.display = 'none';
+            numpadGrid.style.display = 'none';
+            trailArea.style.display = 'none';
+
             btnLeftOpt.textContent = "SOL";
             btnRightOpt.textContent = "SAĞ";
-
             statTimer.textContent = '0.00 s';
             statScore.textContent = '0';
-            if (statLastRt) statLastRt.textContent = '0 ms';
         }
 
         function startClock() {
             stopClock();
             testOverallStartTime = performance.now();
             clockInterval = setInterval(() => {
-                const elapsedSec = ((performance.now() - testOverallStartTime) / 1000).toFixed(2);
-                statTimer.textContent = `${elapsedSec} s`;
+                statTimer.textContent = `${((performance.now() - testOverallStartTime) / 1000).toFixed(2)} s`;
             }, 50);
         }
 
-        function stopClock() {
-            if (clockInterval) clearInterval(clockInterval);
-        }
+        function stopClock() { if (clockInterval) clearInterval(clockInterval); }
 
         function startTest() {
-            if (!audioCtx) audioCtx = new AudioContext();
-            instructionCard.style.display = 'none';
+            instructionCard.style.display = 'none'; // KARTI KESİN OLARAK KAPAT
             trialData = [];
             currentTrial = 0;
             trailStage = "DEMO1";
@@ -470,7 +300,6 @@
             memoryConsecutiveErrors = 0;
             lastNBackPos = null;
             statErrors.textContent = '0';
-            if (statLastRt) statLastRt.textContent = '0 ms';
             statScore.textContent = '0';
             
             startBtn.disabled = true;
@@ -487,3 +316,414 @@
             stopClock();
             isWaiting = false;
             resetLayout();
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            moduleSelect.disabled = false;
+            if (trialData.length > 0) exportBtn.disabled = false;
+        }
+
+        function nextTrial() {
+            const mod = moduleSelect.value;
+            if (mod !== 'trailA' && mod !== 'trailB' && mod !== 'memory' && mod !== 'digit_span' && currentTrial >= totalTrials) {
+                finishTest();
+                return;
+            }
+
+            currentTrial++;
+            statTrials.textContent = `${currentTrial}/${totalTrials}`;
+            isWaiting = false;
+
+            // İLGİLİ MOD BİLEŞENLERİNİ AÇ
+            if (mod === 'simon' || mod === 'flanker') dualButtons.style.display = 'flex';
+            if (mod === 'agility_run' || mod === 'complex_agility' || mod === 'choice_react') spatialGrid.style.display = 'grid';
+
+            if (['gonogo','stroop','sprint_ball','simon','flanker','antisaccade','visual_search'].includes(mod)) {
+                targetCircle.style.display = 'none';
+                antisaccadeTouchZone.style.display = 'none';
+                timerTimeout = setTimeout(() => triggerSingleTarget(mod), Math.floor(Math.random() * 800) + 500);
+            } else if (['agility_run','complex_agility','choice_react'].includes(mod)) {
+                document.querySelectorAll('.spatial-btn').forEach(b => b.classList.remove('active'));
+                timerTimeout = setTimeout(() => triggerSpatialRun(mod), Math.floor(Math.random() * 800) + 500);
+            } else if (mod === 'trailA' || mod === 'trailB') { trailArea.style.display = 'block'; setupTrailNodes(mod); }
+            else if (mod === 'memory') { memoryGrid.style.display = 'grid'; setupMemoryTask(); }
+            else if (mod === 'digit_span') { setupDigitSpanTask(); }
+            else if (mod === 'nback') { memoryGrid.style.display = 'grid'; dualButtons.style.display = 'flex'; setupNBackTask(); }
+        }
+
+        function triggerSingleTarget(mod) {
+            targetCircle.style.display = 'flex';
+            isWaiting = true;
+            trialStartTime = performance.now();
+
+            if (mod === 'simon') {
+                const isLeftPos = Math.random() < 0.5, isRedColor = Math.random() < 0.5;
+                targetCircle.style.left = isLeftPos ? '10%' : '70%';
+                targetCircle.style.top = '35%';
+                targetCircle.style.backgroundColor = isRedColor ? '#ff1744' : '#29b6f6';
+                targetCircle.textContent = '';
+                currentCorrectAnswer = isRedColor ? 'LEFT' : 'RIGHT';
+                playSound(isRedColor ? 400 : 700);
+            } else if (mod === 'flanker') {
+                targetCircle.style.left = '35%'; targetCircle.style.top = '30%';
+                targetCircle.style.backgroundColor = '#222';
+                const flankerList = [{ text: "<<><<", correct: "RIGHT" }, { text: ">><>>", correct: "LEFT" }];
+                const selected = flankerList[Math.floor(Math.random() * flankerList.length)];
+                targetCircle.textContent = selected.text;
+                targetCircle.style.color = '#00e5ff';
+                currentCorrectAnswer = selected.correct;
+                playSound(500);
+            } else if (mod === 'antisaccade') {
+                antisaccadeTouchZone.style.display = 'block';
+                const isLeftPos = Math.random() < 0.5;
+                targetCircle.style.left = isLeftPos ? '10%' : '75%';
+                targetCircle.style.top = '35%';
+                targetCircle.style.backgroundColor = '#ffea00';
+                targetCircle.textContent = 'IŞIK';
+                targetCircle.style.color = '#000';
+                currentCorrectAnswer = isLeftPos ? 'RIGHT' : 'LEFT';
+                playSound(800);
+            } else if (mod === 'stroop') {
+                targetCircle.style.left = '35%'; targetCircle.style.top = '30%';
+                const keys = ['RED', 'BLUE', 'GREEN', 'YELLOW'];
+                const textKey = keys[Math.floor(Math.random() * keys.length)];
+                const colorKey = keys[Math.floor(Math.random() * keys.length)];
+                currentCorrectAnswer = (textKey === colorKey) ? 'MATCH' : 'MISMATCH';
+                targetCircle.style.backgroundColor = '#000';
+                targetCircle.style.color = colorMap[colorKey].hex;
+                targetCircle.textContent = textKey;
+                playSound(600);
+            } else if (mod === 'gonogo') {
+                targetCircle.style.left = '35%'; targetCircle.style.top = '30%';
+                const isGo = Math.random() < 0.7;
+                currentCorrectAnswer = isGo ? 'GO' : 'NOGO';
+                targetCircle.style.backgroundColor = isGo ? '#00e676' : '#ff1744';
+                targetCircle.style.color = '#000';
+                targetCircle.textContent = isGo ? 'DOKUN!' : 'DUR!';
+                playSound(isGo ? 880 : 200);
+
+                if (!isGo) {
+                    timerTimeout = setTimeout(() => {
+                        if (isWaiting && currentCorrectAnswer === 'NOGO') {
+                            recordResult('GONOGO', 0, true, 'Doğru Baskılama');
+                            nextTrial();
+                        }
+                    }, 1200);
+                }
+            } else if (mod === 'sprint_ball' || mod === 'visual_search') {
+                targetCircle.style.left = '35%'; targetCircle.style.top = '30%';
+                const keys = ['RED', 'BLUE', 'GREEN', 'YELLOW'];
+                const randomColorKey = keys[Math.floor(Math.random() * keys.length)];
+                targetCircle.style.backgroundColor = colorMap[randomColorKey].hex;
+                targetCircle.style.color = '#fff';
+                targetCircle.textContent = randomColorKey;
+                speakEnglish(randomColorKey);
+                playSound(colorMap[randomColorKey].freq);
+            }
+        }
+
+        function handleAntiSaccadeZoneTap(e, tappedZone) {
+            e.preventDefault(); if (!isWaiting) return;
+            const rt = Math.round(performance.now() - trialStartTime);
+            isWaiting = false;
+            antisaccadeTouchZone.style.display = 'none';
+            const isCorrect = (tappedZone === currentCorrectAnswer);
+            recordResult('ANTISACCADE', rt, isCorrect, isCorrect ? 'Doğru Zıt Dokunma' : 'Hatalı Taraf');
+            if (!isCorrect) playSound(150);
+            targetCircle.style.display = 'none';
+            updateStats();
+            setTimeout(nextTrial, 600);
+        }
+
+        function handleDualChoiceTap(e, choice) {
+            e.preventDefault(); if (!isWaiting) return;
+            const rt = Math.round(performance.now() - trialStartTime);
+            isWaiting = false;
+            const isCorrect = (choice === currentCorrectAnswer);
+            recordResult(moduleSelect.value.toUpperCase(), rt, isCorrect, isCorrect ? 'Doğru Reaksiyon' : 'Çatışma Hatası');
+            if (!isCorrect) playSound(150);
+            targetCircle.style.display = 'none';
+            updateStats();
+            setTimeout(nextTrial, 600);
+        }
+
+        function handleCircleTap(e) {
+            e.preventDefault(); if (!isWaiting) return;
+            const rt = Math.round(performance.now() - trialStartTime);
+            isWaiting = false;
+            clearTimeout(timerTimeout);
+            const mod = moduleSelect.value;
+            if (mod === 'antisaccade') {
+                recordResult('ANTISACCADE', rt, false, 'Refleks İhlali (Işığa Dokundu)');
+                playSound(150); antisaccadeTouchZone.style.display = 'none';
+            } else if (mod === 'stroop') {
+                const isCorrect = (currentCorrectAnswer === 'MATCH');
+                recordResult('STROOP', rt, isCorrect, isCorrect ? 'Doğru Eşleşme' : 'Çelişki Hatası');
+                if (!isCorrect) playSound(150);
+            } else if (mod === 'gonogo' && currentCorrectAnswer === 'NOGO') {
+                recordResult('GONOGO', rt, false, 'Baskılama Hatası'); playSound(150);
+            } else {
+                recordResult(mod.toUpperCase(), rt, true, 'Tamamlandı');
+            }
+            targetCircle.style.display = 'none';
+            updateStats();
+            setTimeout(nextTrial, 600);
+        }
+
+        function triggerSpatialRun(mod) {
+            isWaiting = true;
+            const btnIds = ['s-red', 's-blue', 's-green', 's-yellow'];
+            const chosenId = btnIds[Math.floor(Math.random() * btnIds.length)];
+            currentCorrectAnswer = chosenId;
+            const activeBtn = document.getElementById(chosenId);
+
+            if (mod === 'complex_agility') {
+                const selectedColors = ['RED', 'BLUE', 'GREEN', 'YELLOW'];
+                const spokenColor = selectedColors[Math.floor(Math.random() * selectedColors.length)];
+                activeBtn.classList.add('active');
+                speakEnglish(spokenColor);
+                const colorMatch = (activeBtn.textContent === spokenColor);
+                currentCorrectAnswer = colorMatch ? chosenId : 'NO_RUN';
+
+                if (!colorMatch) {
+                    timerTimeout = setTimeout(() => {
+                        if (isWaiting) {
+                            recordResult('COMPLEX_AGILITY', 0, true, 'Doğru Frenleme');
+                            document.querySelectorAll('.spatial-btn').forEach(b => b.classList.remove('active'));
+                            nextTrial();
+                        }
+                    }, 1500);
+                }
+            } else {
+                activeBtn.classList.add('active');
+                speakEnglish(activeBtn.textContent);
+                playSound(600);
+            }
+            trialStartTime = performance.now();
+        }
+
+        function handleSpatialTap(e, id) {
+            e.preventDefault(); if (!isWaiting) return;
+            const rt = Math.round(performance.now() - trialStartTime);
+            isWaiting = false; clearTimeout(timerTimeout);
+
+            const mod = moduleSelect.value;
+            if (mod === 'complex_agility' && currentCorrectAnswer === 'NO_RUN') {
+                recordResult('COMPLEX_AGILITY', rt, false, 'Hatalı Depar'); playSound(150);
+            } else if (id === currentCorrectAnswer) {
+                recordResult(mod.toUpperCase(), rt, true, 'Doğru Reaksiyon');
+            } else {
+                recordResult(mod.toUpperCase(), rt, false, 'Yanlış Koni'); playSound(150);
+            }
+
+            document.querySelectorAll('.spatial-btn').forEach(b => b.classList.remove('active'));
+            updateStats();
+            setTimeout(nextTrial, 600);
+        }
+
+        function setupTrailNodes(mod) {
+            trailArea.innerHTML = ''; nextTrailIndex = 0;
+            if (trailStage === "DEMO1") { statTrials.textContent = "Deneme 1"; trailSequence = (mod === 'trailA') ? ['1', '2', '3', '4'] : ['1', 'A', '2', 'B']; }
+            else if (trailStage === "DEMO2") { statTrials.textContent = "Deneme 2"; trailSequence = (mod === 'trailA') ? ['1', '2', '3', '4', '5'] : ['1', 'A', '2', 'B', '3']; }
+            else { statTrials.textContent = "GERÇEK TEST"; trailSequence = (mod === 'trailA') ? Array.from({length: 20}, (_, i) => String(i + 1)) : ['1','A','2','B','3','C','4','D','5','E','6','F','7','G','8','H','9','I','10','J']; }
+
+            const areaW = Math.max(10, trailArea.clientWidth - 50);
+            const areaH = Math.max(10, trailArea.clientHeight - 50);
+
+            trailSequence.forEach((val) => {
+                const node = document.createElement('div');
+                node.className = 'trail-node'; node.textContent = val;
+                node.style.left = Math.floor(Math.random() * areaW) + 'px';
+                node.style.top = Math.floor(Math.random() * areaH) + 'px';
+                
+                node.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (val === trailSequence[nextTrailIndex]) {
+                        playSound(400 + nextTrailIndex * 30);
+                        node.style.background = '#00e676'; node.style.opacity = '0.2';
+                        nextTrailIndex++;
+                        if (nextTrailIndex >= trailSequence.length) {
+                            const durationMs = Math.round(performance.now() - trialStartTime);
+                            recordResult(mod.toUpperCase(), durationMs, true, `Aşama: ${trailStage}`);
+                            if (trailStage === "DEMO1") trailStage = "DEMO2";
+                            else if (trailStage === "DEMO2") { trailStage = "REAL"; }
+                            else { finishTest(); return; }
+                            setTimeout(() => setupTrailNodes(mod), 1000);
+                        }
+                    } else {
+                        recordResult(mod.toUpperCase(), 0, false, 'Sıra Hatası'); playSound(150); updateStats();
+                    }
+                });
+                trailArea.appendChild(node);
+            });
+            trialStartTime = performance.now(); isWaiting = true;
+        }
+
+        function setupMemoryTask() {
+            memoryGrid.innerHTML = ''; memorySequence = []; playerMemorySequence = [];
+            statTrials.textContent = `Seviye ${memoryLevel}`;
+            for (let i = 0; i < 9; i++) {
+                const block = document.createElement('div');
+                block.className = 'memory-block';
+                block.addEventListener('click', (e) => handleMemoryBlockTap(e, i));
+                memoryGrid.appendChild(block);
+            }
+            for (let i = 0; i < memoryLevel; i++) { memorySequence.push(Math.floor(Math.random() * 9)); }
+            let seqIndex = 0; isWaiting = false; const blocks = memoryGrid.children;
+
+            function flashNextBlock() {
+                if (seqIndex < memorySequence.length) {
+                    const blockIdx = memorySequence[seqIndex];
+                    if (blocks[blockIdx]) { blocks[blockIdx].classList.add('lit'); playSound(500 + seqIndex * 80); }
+                    timerTimeout = setTimeout(() => {
+                        if (blocks[blockIdx]) blocks[blockIdx].classList.remove('lit');
+                        seqIndex++; timerTimeout = setTimeout(flashNextBlock, 300);
+                    }, 500);
+                } else { isWaiting = true; trialStartTime = performance.now(); }
+            }
+            timerTimeout = setTimeout(flashNextBlock, 500);
+        }
+
+        function handleMemoryBlockTap(e, index) {
+            e.preventDefault(); if (!isWaiting) return;
+            playerMemorySequence.push(index);
+            const currentStep = playerMemorySequence.length - 1;
+            if (playerMemorySequence[currentStep] === memorySequence[currentStep]) {
+                playSound(600);
+                if (playerMemorySequence.length === memorySequence.length) {
+                    const rt = Math.round(performance.now() - trialStartTime);
+                    recordResult('MEMORY', rt, true, `Seviye ${memoryLevel} Başarılı`);
+                    memoryLevel++; memoryConsecutiveErrors = 0;
+                    updateStats();
+                    if (memoryLevel > 9) { finishTest(); } else { setTimeout(nextTrial, 1000); }
+                }
+            } else {
+                playSound(150); recordResult('MEMORY', 0, false, `Seviye ${memoryLevel} Başarısız`);
+                memoryConsecutiveErrors++; updateStats();
+                if (memoryConsecutiveErrors >= 2) { finishTest(); } else { setTimeout(nextTrial, 1000); }
+            }
+        }
+
+        function setupDigitSpanTask() {
+            numpadGrid.innerHTML = ''; memorySequence = []; playerMemorySequence = [];
+            numpadGrid.style.display = 'none';
+            for (let i = 1; i <= 9; i++) {
+                const btn = document.createElement('div');
+                btn.className = 'num-btn'; btn.textContent = i;
+                btn.addEventListener('click', (e) => handleDigitInput(e, i));
+                numpadGrid.appendChild(btn);
+            }
+            for (let i = 0; i < 4; i++) { memorySequence.push(Math.floor(Math.random() * 9) + 1); }
+            let idx = 0; isWaiting = false;
+            targetCircle.style.display = 'flex'; targetCircle.style.left = '35%'; targetCircle.style.top = '30%';
+            targetCircle.style.backgroundColor = '#222'; targetCircle.style.color = '#00e5ff';
+
+            const displayInterval = setInterval(() => {
+                if (idx < memorySequence.length) {
+                    targetCircle.textContent = memorySequence[idx]; playSound(600); idx++;
+                    setTimeout(() => { targetCircle.textContent = ''; }, 800);
+                } else {
+                    clearInterval(displayInterval); targetCircle.style.display = 'none';
+                    numpadGrid.style.display = 'grid'; isWaiting = true; trialStartTime = performance.now();
+                }
+            }, 1200);
+        }
+
+        function handleDigitInput(e, val) {
+            e.preventDefault(); if (!isWaiting) return;
+            playerMemorySequence.push(Number(val));
+            const step = playerMemorySequence.length - 1;
+            if (playerMemorySequence[step] === memorySequence[step]) {
+                playSound(700);
+                if (playerMemorySequence.length === memorySequence.length) {
+                    const rt = Math.round(performance.now() - trialStartTime);
+                    recordResult('DIGIT_SPAN', rt, true, `Doğru Dizi (${memorySequence.join('-')})`);
+                    updateStats();
+                    numpadGrid.style.display = 'none'; setTimeout(nextTrial, 1000);
+                }
+            } else {
+                playSound(150); recordResult('DIGIT_SPAN', 0, false, `Hatalı Dizi (${memorySequence.join('-')})`);
+                updateStats(); numpadGrid.style.display = 'none'; setTimeout(nextTrial, 1000);
+            }
+        }
+
+        function setupNBackTask() {
+            memoryGrid.innerHTML = '';
+            for (let i = 0; i < 9; i++) {
+                const block = document.createElement('div'); block.className = 'memory-block'; memoryGrid.appendChild(block);
+            }
+            btnLeftOpt.textContent = "EŞLEŞTİ"; btnRightOpt.textContent = "FARKLI";
+
+            let currentPos;
+            if (lastNBackPos !== null && Math.random() < 0.3) { currentPos = lastNBackPos; } 
+            else { do { currentPos = Math.floor(Math.random() * 9); } while (currentPos === lastNBackPos); }
+
+            const blocks = memoryGrid.children;
+            blocks[currentPos].classList.add('lit'); playSound(600);
+            currentCorrectAnswer = (lastNBackPos !== null && currentPos === lastNBackPos) ? 'LEFT' : 'RIGHT';
+            lastNBackPos = currentPos; trialStartTime = performance.now(); isWaiting = true;
+            setTimeout(() => { if (blocks[currentPos]) blocks[currentPos].classList.remove('lit'); }, 500);
+        }
+
+        function calculateOverallScore() {
+            const valid = trialData.filter(d => d.isCorrect);
+            const errors = trialData.filter(d => !d.isCorrect).length;
+            const total = trialData.length; if (total === 0) return 0;
+            const avgRt = valid.length > 0 ? (valid.reduce((acc, c) => acc + c.reactionTimeMs, 0) / valid.length) : 2000;
+            return Math.max(0, Math.round((valid.length / total * 1000) - (avgRt / 2) - (errors * 20)));
+        }
+
+        function recordResult(type, rt, isCorrect, note) {
+            const athlete = {
+                id: document.getElementById('athlete-id').value || 'SP-101',
+                age: document.getElementById('athlete-age').value || '22',
+                gender: document.getElementById('athlete-gender').value,
+                sport: document.getElementById('athlete-sport').value || 'Genel',
+                dominantSide: document.getElementById('athlete-dominant').value,
+                experienceYears: document.getElementById('athlete-exp').value || '1'
+            };
+            trialData.push({
+                athleteId: athlete.id, age: athlete.age, gender: athlete.gender, sport: athlete.sport,
+                dominantSide: athlete.dominantSide, experienceYears: athlete.experienceYears,
+                trial: currentTrial, type: type, reactionTimeMs: rt, isCorrect: isCorrect, note: note, score: calculateOverallScore()
+            });
+        }
+
+        function updateStats() {
+            statErrors.textContent = trialData.filter(d => !d.isCorrect).length;
+            statScore.textContent = calculateOverallScore();
+        }
+
+        function sendDataToDatabase(data) {
+            if (!API_URL || API_URL === "YOUR_GOOGLE_SCRIPT_WEB_APP_URL") return;
+            fetch(API_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }).catch(() => {});
+        }
+
+        function finishTest() {
+            stopClock(); resetLayout();
+            const totalElapsed = parseFloat(statTimer.textContent) || 0;
+            const finalScore = calculateOverallScore();
+            sendDataToDatabase(trialData);
+            document.getElementById('instr-title').textContent = "Test Tamamlandı!";
+            document.getElementById('instr-text').textContent = `Toplam Süre: ${totalElapsed} saniye | Bilişsel/Kinetik Puan: ${finalScore}`;
+            instructionCard.style.display = 'block';
+            startBtn.disabled = false; stopBtn.disabled = true; exportBtn.disabled = false; moduleSelect.disabled = false;
+        }
+
+        function exportCSV() {
+            if (trialData.length === 0) return;
+            let csv = "data:text/csv;charset=utf-8,\uFEFFSporcu_ID,Yas,Cinsiyet,Brans,Baskin_Taraf,Deneyim_Yili,Deneme,Modul,Reaksiyon_Zamani_ms,Dogru_Mu,Aciklama,Hesaplanan_Puan\n";
+            trialData.forEach(r => {
+                csv += `${r.athleteId},${r.age},${r.gender},${r.sport},${r.dominantSide},${r.experienceYears},${r.trial},${r.type},${r.reactionTimeMs},${r.isCorrect ? 1 : 0},${r.note},${r.score}\n`;
+            });
+            const link = document.createElement("a");
+            link.setAttribute("href", encodeURI(csv));
+            link.setAttribute("download", `SPPLab_Data_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        resetLayout();
+    </script>
+</body>
+</html>
