@@ -12,8 +12,12 @@
         header { background: #151515; padding: 6px 10px; text-align: center; border-bottom: 1px solid #333; flex-shrink: 0; }
         h1 { margin: 0 0 4px 0; font-size: clamp(0.85rem, 3vw, 1.1rem); color: #00e5ff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         
+        /* Demografik Input Alanı */
+        .demo-bar { display: flex; gap: 4px; justify-content: center; align-items: center; width: 100%; flex-wrap: wrap; margin-bottom: 4px; }
+        .demo-bar input, .demo-bar select { background: #222; color: #fff; border: 1px solid #00e5ff; padding: 4px 6px; border-radius: 4px; font-size: clamp(0.65rem, 2vw, 0.75rem); outline: none; }
+        
         .panel-row { display: flex; gap: 6px; justify-content: center; align-items: center; width: 100%; }
-        select { background: #222; color: #fff; border: 1px solid #00e5ff; padding: 6px 8px; border-radius: 6px; font-size: clamp(0.7rem, 2.5vw, 0.85rem); outline: none; flex: 1; max-width: 50%; text-overflow: ellipsis; }
+        #module-select { background: #222; color: #fff; border: 1px solid #00e5ff; padding: 6px 8px; border-radius: 6px; font-size: clamp(0.7rem, 2.5vw, 0.85rem); outline: none; width: 100%; max-width: 400px; text-overflow: ellipsis; }
         
         #color-picker-bar { display: none; background: #111; padding: 4px 8px; border-bottom: 1px solid #333; text-align: center; font-size: clamp(0.65rem, 2vw, 0.75rem); max-height: 20vh; overflow-y: auto; flex-shrink: 0; }
         .color-checkbox { margin: 2px 4px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; }
@@ -24,16 +28,16 @@
 
         #game-area { flex: 1; position: relative; width: 100%; height: 100%; overflow: hidden; background: #0e0e0e; display: flex; justify-content: center; align-items: center; padding: 10px; }
 
-        /* Instructions Overlay */
+        /* Yönerge Kartı */
         #instruction-card { position: absolute; width: min(90%, 400px); background: rgba(20,20,20,0.95); border: 2px solid #00e5ff; padding: 16px; border-radius: 12px; text-align: center; z-index: 100; box-shadow: 0 0 20px rgba(0,229,255,0.2); }
         #instruction-card h3 { margin-top: 0; color: #00e5ff; font-size: clamp(0.95rem, 3.5vw, 1.2rem); }
         #instruction-card p { font-size: clamp(0.75rem, 2.8vw, 0.9rem); line-height: 1.4; color: #ddd; margin-bottom: 0; }
 
-        /* Dynamic Target Circle */
+        /* Hedef Daire */
         #target-circle { position: absolute; width: clamp(110px, 30vw, 160px); height: clamp(110px, 30vw, 160px); border-radius: 50%; background: #000; border: 3px solid #fff; display: none; justify-content: center; align-items: center; font-size: clamp(1rem, 4vw, 1.4rem); font-weight: 900; box-shadow: 0 0 25px rgba(255,255,255,0.4); text-align: center; padding: 8px; cursor: pointer; }
         #target-circle:active { transform: scale(0.92); }
 
-        /* Spatial Grid & Memory Blocks */
+        /* Grid / Koni Alanları */
         #spatial-grid { display: none; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 8px; width: 100%; height: 100%; max-width: 600px; max-height: 600px; margin: auto; }
         .spatial-btn { border-radius: 12px; opacity: 0.3; transition: opacity 0.1s; display: flex; justify-content: center; align-items: center; font-size: clamp(1.1rem, 4vw, 1.6rem); font-weight: 900; color: #000; cursor: pointer; border: 2px solid #fff; width: 100%; height: 100%; }
         .spatial-btn.active { opacity: 1; box-shadow: 0 0 35px #fff; transform: scale(0.98); }
@@ -47,7 +51,7 @@
         .trail-node { position: absolute; width: clamp(38px, 10vw, 48px); height: clamp(38px, 10vw, 48px); border-radius: 50%; background: #00e5ff; color: #000; font-weight: 900; font-size: clamp(0.85rem, 2.5vw, 1.1rem); display: flex; justify-content: center; align-items: center; box-shadow: 0 0 10px rgba(0,0,0,0.5); cursor: pointer; border: 2px solid #fff; }
         .trail-node:active { transform: scale(0.9); }
 
-        /* Controls Panel */
+        /* Alt Butonlar */
         #controls { padding: 8px 12px; background: #151515; display: flex; gap: 8px; justify-content: center; flex-shrink: 0; border-top: 1px solid #333; width: 100%; }
         button { flex: 1; max-width: 140px; min-height: 44px; padding: 10px 0; font-size: clamp(0.75rem, 2.5vw, 0.9rem); font-weight: bold; border: none; border-radius: 6px; cursor: pointer; }
         .btn-start { background: #00c853; color: white; }
@@ -60,8 +64,24 @@
 
     <header>
         <h1>SPPLab - Performance Studio</h1>
+        
+        <!-- MANUEL SPORCU DEMOGRAFİK BİLGİ FORMU -->
+        <div class="demo-bar">
+            <input type="text" id="athlete-id" placeholder="ID / Ad" value="SP-101" style="width: 80px;">
+            <input type="number" id="athlete-age" placeholder="Yaş" value="22" style="width: 50px;">
+            <select id="athlete-gender" style="width: 70px;">
+                <option value="Erkek">Erkek</option>
+                <option value="Kadin">Kadın</option>
+            </select>
+            <input type="text" id="athlete-sport" placeholder="Branş" value="Futbol" style="width: 75px;">
+            <select id="athlete-dominant" style="width: 60px;">
+                <option value="Sag">Sağ</option>
+                <option value="Sol">Sol</option>
+            </select>
+            <input type="number" id="athlete-exp" placeholder="Spor Yılı" value="5" style="width: 65px;">
+        </div>
+
         <div class="panel-row">
-            <select id="athlete-select"></select>
             <select id="module-select">
                 <optgroup label="A. Dokunmatik & Bilişsel">
                     <option value="gonogo">1. Go/No-Go (Baskılama)</option>
@@ -80,7 +100,7 @@
     </header>
 
     <div id="color-picker-bar">
-        <span style="color:#00e5ff; font-weight:bold;">Saha Renkleri (En az 4):</span><br>
+        <span style="color:#00e5ff; font-weight:bold;">Saha Renkleri (En az 4 seçin):</span><br>
         <label class="color-checkbox"><input type="checkbox" value="RED" checked> Red</label>
         <label class="color-checkbox"><input type="checkbox" value="BLUE" checked> Blue</label>
         <label class="color-checkbox"><input type="checkbox" value="GREEN" checked> Green</label>
@@ -127,26 +147,8 @@
     </div>
 
     <script>
-        const athleteDatabase = [
-            { id: "SP-101", name: "Sporcu_1",  age: 21, gender: "Erkek", sport: "Futbol",      level: "Profesyonel", dominantSide: "Sağ", experienceYears: 8 },
-            { id: "SP-102", name: "Sporcu_2",  age: 19, gender: "Kadın", sport: "Basketbol",   level: "Amatör",       dominantSide: "Sağ", experienceYears: 5 },
-            { id: "SP-103", name: "Sporcu_3",  age: 24, gender: "Kadın", sport: "Voleybol",    level: "Profesyonel", dominantSide: "Sağ", experienceYears: 10 },
-            { id: "SP-104", name: "Sporcu_4",  age: 22, gender: "Erkek", sport: "Tenis",       level: "Yarı Profesyonel", dominantSide: "Sol", experienceYears: 7 },
-            { id: "SP-105", name: "Sporcu_5",  age: 18, gender: "Erkek", sport: "Hentbol",     level: "Genç Takım",  dominantSide: "Sağ", experienceYears: 4 },
-            { id: "SP-106", name: "Sporcu_6",  age: 26, gender: "Kadın", sport: "Atletizm",    level: "Milli Sporcu", dominantSide: "Sağ", experienceYears: 12 },
-            { id: "SP-107", name: "Sporcu_7",  age: 20, gender: "Erkek", sport: "Boks",        level: "Amatör",       dominantSide: "Sol", experienceYears: 3 },
-            { id: "SP-108", name: "Sporcu_8",  age: 23, gender: "Kadın", sport: "Yüzme",       level: "Yarı Profesyonel", dominantSide: "Sağ", experienceYears: 9 },
-            { id: "SP-109", name: "Sporcu_9",  age: 25, gender: "Erkek", sport: "Taekwondo",   level: "Milli Sporcu", dominantSide: "Sağ", experienceYears: 11 },
-            { id: "SP-110", name: "Sporcu_10", age: 17, gender: "Kadın", sport: "Gimnastik",  level: "Genç Takım",  dominantSide: "Sağ", experienceYears: 8 },
-            { id: "SP-111", name: "Sporcu_11", age: 28, gender: "Erkek", sport: "Badminton",   level: "Profesyonel", dominantSide: "Sol", experienceYears: 14 },
-            { id: "SP-112", name: "Sporcu_12", age: 22, gender: "Kadın", sport: "Futbol",      level: "Yarı Profesyonel", dominantSide: "Sağ", experienceYears: 6 },
-            { id: "SP-113", name: "Sporcu_13", age: 20, gender: "Erkek", sport: "Masa Tenisi", level: "Amatör",       dominantSide: "Sağ", experienceYears: 4 },
-            { id: "SP-114", name: "Sporcu_14", age: 27, gender: "Kadın", sport: "Basketbol",   level: "Profesyonel", dominantSide: "Sol", experienceYears: 13 },
-            { id: "SP-115", name: "Sporcu_15", age: 19, gender: "Erkek", sport: "Karate",      level: "Amatör",       dominantSide: "Sağ", experienceYears: 5 }
-        ];
-
         const instructions = {
-            gonogo: { title: "Go/No-Go Testi", text: "Yeşil 'DOKUN!' mesajı çıkınca olabildiğince hızlı dokunun. Kırmızı 'DUR!' mesajı çıktığında dokunmayarak kendinizi baskılayın." },
+            gonogo: { title: "Go/No-Go Testi", text: "Yeşil 'DOKUN!' mesajı çıkınca hızlı dokunun. Kırmızı 'DUR!' mesajı çıktığında dokunmayarak kendinizi baskılayın." },
             stroop: { title: "Stroop Renk-Kelime Testi", text: "Ekranda beliren kelimenin YAZI RENGİ ile KELİME ANLAMI eşleşiyorsa dokunun! Eşleşmiyorsa dokunmayın (Hata verir)." },
             trailA: { title: "Trail Making Test A", text: "Önce 2 adet Deneme turu yapılacaktır. Ardından ekrandaki 1'den 20'ye kadar olan sayıları sırasıyla en hızlı şekilde takip edip dokunun." },
             trailB: { title: "Trail Making Test B", text: "Önce 2 adet Deneme turu yapılacaktır. Ardından sayı ve harfleri sırasıyla (1-A-2-B-3-C...10-J) en hızlı şekilde takip edin." },
@@ -187,14 +189,30 @@
             osc.stop(audioCtx.currentTime + duration);
         }
 
+        // İNGİLİZCE SESLİ DİLE GETİRME MOTORU
         function speakEnglish(text) {
             if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
+                window.speechSynthesis.cancel(); // Önceki sesleri temizle
+                
                 const msg = new SpeechSynthesisUtterance(text);
                 msg.lang = 'en-US';
-                msg.rate = 1.1;
+                msg.rate = 1.0;
+                msg.pitch = 1.0;
+                
+                // Tarayıcının İngilizce ses paketini doğrudan bul ve ata
+                const voices = window.speechSynthesis.getVoices();
+                const enVoice = voices.find(v => v.lang.startsWith('en'));
+                if (enVoice) msg.voice = enVoice;
+                
                 window.speechSynthesis.speak(msg);
             }
+        }
+
+        // Sayfa yüklendiğinde İngilizce ses paketlerini önceden yükle
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                window.speechSynthesis.getVoices();
+            };
         }
 
         let totalTrials = 10;
@@ -216,7 +234,7 @@
         let playerMemorySequence = [];
         let memoryLevel = 3;
 
-        const athleteSelect = document.getElementById('athlete-select');
+        // DOM Elemanları
         const moduleSelect = document.getElementById('module-select');
         const colorPickerBar = document.getElementById('color-picker-bar');
         const gameArea = document.getElementById('game-area');
@@ -248,18 +266,16 @@
             btn.addEventListener('pointerdown', (e) => handleSpatialTap(e, btn.id));
         });
 
-        function initAthleteSelect() {
-            athleteSelect.innerHTML = '';
-            athleteDatabase.forEach(a => {
-                const opt = document.createElement('option');
-                opt.value = a.id;
-                opt.textContent = `${a.id} - ${a.name}`;
-                athleteSelect.appendChild(opt);
-            });
-        }
-
-        function getSelectedAthlete() {
-            return athleteDatabase.find(a => a.id === athleteSelect.value) || athleteDatabase[0];
+        // Formdan Anlık Demografik Verileri Alma
+        function getAthleteDataFromForm() {
+            return {
+                id: document.getElementById('athlete-id').value || 'SP-101',
+                age: document.getElementById('athlete-age').value || '20',
+                gender: document.getElementById('athlete-gender').value,
+                sport: document.getElementById('athlete-sport').value || 'Genel',
+                dominantSide: document.getElementById('athlete-dominant').value,
+                experienceYears: document.getElementById('athlete-exp').value || '1'
+            };
         }
 
         function getSelectedColors() {
@@ -300,7 +316,6 @@
             if (clockInterval) clearInterval(clockInterval);
         }
 
-        // Ekran boyutlarına tam sığacak dinamik pozisyonlandırma
         function setRandomPosition(element) {
             const nodeWidth = element.offsetWidth || 120;
             const nodeHeight = element.offsetHeight || 120;
@@ -325,7 +340,6 @@
             stopBtn.disabled = false;
             exportBtn.disabled = true;
             moduleSelect.disabled = true;
-            athleteSelect.disabled = true;
 
             startClock();
             nextTrial();
@@ -339,7 +353,6 @@
             startBtn.disabled = false;
             stopBtn.disabled = true;
             moduleSelect.disabled = false;
-            athleteSelect.disabled = false;
             if (trialData.length > 0) exportBtn.disabled = false;
         }
 
@@ -601,17 +614,16 @@
             }
         }
 
+        // VERİ KAYDI
         function recordResult(type, rt, isCorrect, note) {
-            const currentAthlete = getSelectedAthlete();
+            const athlete = getAthleteDataFromForm();
             trialData.push({
-                athleteId: currentAthlete.id,
-                athleteName: currentAthlete.name,
-                age: currentAthlete.age,
-                gender: currentAthlete.gender,
-                sport: currentAthlete.sport,
-                level: currentAthlete.level,
-                dominantSide: currentAthlete.dominantSide,
-                experienceYears: currentAthlete.experienceYears,
+                athleteId: athlete.id,
+                age: athlete.age,
+                gender: athlete.gender,
+                sport: athlete.sport,
+                dominantSide: athlete.dominantSide,
+                experienceYears: athlete.experienceYears,
                 trial: currentTrial,
                 type: type,
                 reactionTimeMs: rt,
@@ -636,32 +648,29 @@
             stopBtn.disabled = true;
             exportBtn.disabled = false;
             moduleSelect.disabled = false;
-            athleteSelect.disabled = false;
         }
 
         function exportCSV() {
             if (trialData.length === 0) return;
-            let csv = "data:text/csv;charset=utf-8,Sporcu_ID,Sporcu_Adi,Yas,Cinsiyet,Brans,Seviye,Baskin_Taraf,Deneyim_Yili,Deneme,Modul,Reaksiyon_Zamani_ms,Dogru_Mu,Aciklama\n";
+            let csv = "data:text/csv;charset=utf-8,Sporcu_ID,Yas,Cinsiyet,Brans,Baskin_Taraf,Deneyim_Yili,Deneme,Modul,Reaksiyon_Zamani_ms,Dogru_Mu,Aciklama\n";
             trialData.forEach(r => {
-                csv += `${r.athleteId},${r.athleteName},${r.age},${r.gender},${r.sport},${r.level},${r.dominantSide},${r.experienceYears},${r.trial},${r.type},${r.reactionTimeMs},${r.isCorrect ? 1 : 0},${r.note}\n`;
+                csv += `${r.athleteId},${r.age},${r.gender},${r.sport},${r.dominantSide},${r.experienceYears},${r.trial},${r.type},${r.reactionTimeMs},${r.isCorrect ? 1 : 0},${r.note}\n`;
             });
-            const selectedAthlete = getSelectedAthlete();
+            const athlete = getAthleteDataFromForm();
             const link = document.createElement("a");
             link.setAttribute("href", encodeURI(csv));
-            link.setAttribute("download", `${selectedAthlete.id}_${selectedAthlete.name}_CognitiveData_${new Date().toISOString().slice(0,10)}.csv`);
+            link.setAttribute("download", `${athlete.id}_CognitiveData_${new Date().toISOString().slice(0,10)}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
 
-        // Otomatik Başlatma
         window.addEventListener('resize', () => {
             if (moduleSelect.value === 'trailA' || moduleSelect.value === 'trailB') {
                 resetLayout();
             }
         });
 
-        initAthleteSelect();
         resetLayout();
     </script>
 </body>
