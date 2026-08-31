@@ -195,95 +195,98 @@
     </div>
 
     <script>
+        // GOOGLE SHEETS VEYA KENDİ WEB API URL ADRESİNİZİ BURAYA YAPIŞTIRIN
+        const API_URL = "YOUR_GOOGLE_SCRIPT_WEB_APP_URL";
+
         const instructions = {
             gonogo: { 
                 title: "1. Go/No-Go Testi", 
                 text: "Yeşil 'DOKUN!' uyarısında (%70 olasılık) olabildiğince hızlı dokunun. Kırmızı 'DUR!' uyarısında (%30 olasılık) dokunmayarak motor tepkinizi baskılayın.", 
-                eval: "Ölçülen Bilişsel Yetenek: Prefrontal Korteks Baskılama (Inhibition) & İmpuls Kontrolü. Yüksek Reaksiyon Hızı + Düşük Yanlış Dokunma İdealdir.",
+                eval: "Ölçülen Bilişsel Yetenek: Prefrontal Korteks Baskılama (Inhibition) & İmpuls Kontrolü.",
                 scoreFormula: "Puan = (Doğru Go% * 50) + (Doğru NoGo% * 50) - (Ort. RT / 20)" 
             },
             stroop: { 
                 title: "2. Stroop Testi", 
                 text: "Kelimenin yazı rengi ile anlamı aynı olduğunda dokunun. Kelime ve renk çeliştiğinde dokunmayarak kendinizi frenleyin.", 
-                eval: "Ölçülen Bilişsel Yetenek: Bilişsel Çatışma Yönetimi & Otomatik Yanıt Baskılama. Çelişkili Durumlardaki Tepki Gecikmesi (Stroop Etkisi) Ölçülür.",
+                eval: "Ölçülen Bilişsel Yetenek: Bilişsel Çatışma Yönetimi & Otomatik Yanıt Baskılama.",
                 scoreFormula: "Puan = Doğru * 10 - (Ort. RT / 15) - (Hata * 15)" 
             },
             simon: { 
                 title: "3. Simon Effect Testi", 
-                text: "Dairenin ekrandaki konumuna aldanmayın. Kırmızı görünürse SOL, Mavi görünürse SAĞ butona basın.", 
-                eval: "Ölçülen Bilişsel Yetenek: Mekânsal Çatışma ve Uyaran-Tepki Uyumluluğu. Uyaran Konumu ile Yanıt Butonu Çeliştiğindeki Performans Ölçülür.",
+                text: "Dairenin ekrandaki konumuna aldanmayın. Kırmızı görünürse SOL, Mavi görünürse SAĞ burona basın.", 
+                eval: "Ölçülen Bilişsel Yetenek: Mekânsal Çatışma ve Uyaran-Tepki Uyumluluğu.",
                 scoreFormula: "Puan = 100 - (Gecikme ms * 0.2) - (Hata * 20)" 
             },
             flanker: { 
                 title: "4. Flanker Testi", 
                 text: "Yanlardaki çeldirici oklara bakmayın (<<><<). Sadece ortadaki 3. okun yönündeki butona dokunun.", 
-                eval: "Ölçülen Bilişsel Yetenek: Seçici Görsel Dikkat & Odaklanma Kalitesi. Çeldirici Uyaranların Dikkati Dağıtma Derecesi Ölçülür.",
+                eval: "Ölçülen Bilişsel Yetenek: Seçici Görsel Dikkat & Odaklanma Kalitesi.",
                 scoreFormula: "Puan = (Doğru % * 100) - (Gecikme / 10)" 
             },
             antisaccade: { 
                 title: "5. Anti-Saccade Testi", 
                 text: "Sarı ışık yandığında ışığa DOKUNMAYIN! Doğal refleksinizi baskılayarak ekranın TAM ZIT tarafındaki boş alana dokunun.", 
-                eval: "Ölçülen Bilişsel Yetenek: Okülomotor Kontrol & Görsel Refleks İnhibisyonu. Işığa Bakma/Dokunma Eğilimini Frenleme Kapasitesi Ölçülür.",
+                eval: "Ölçülen Bilişsel Yetenek: Okülomotor Kontrol & Görsel Refleks İnhibisyonu.",
                 scoreFormula: "Puan = (Başarılı Zıt Tepki * 20) - (Reaksiyon ms / 25)" 
             },
             trailA: { 
                 title: "6. Trail Making Test A", 
                 text: "1'den 20'ye kadar olan sayı dizilimini en hızlı şekilde sırayla birleştirin.", 
-                eval: "Ölçülen Bilişsel Yetenek: Görsel Tarama Hızı, Motor İşlem Hızı ve Motor Koordinasyon.",
+                eval: "Ölçülen Bilişsel Yetenek: Görsel Tarama Hızı ve Motor İşlem Hızı.",
                 scoreFormula: "Puan = Max(0, 1000 - [Süre sn * 10 + Hata * 50])" 
             },
             trailB: { 
                 title: "7. Trail Making Test B", 
                 text: "1-A-2-B-3-C... şeklinde ardışık sayı ve harf dizilimini sırasıyla tamamlayın.", 
-                eval: "Ölçülen Bilişsel Yetenek: Zihinsel Esneklik, Görev Değiştirme (Task Switching) ve Çalışma Belleği.",
+                eval: "Ölçülen Bilişsel Yetenek: Zihinsel Esneklik, Görev Değiştirme ve Çalışma Belleği.",
                 scoreFormula: "Puan = Max(0, 1000 - [Süre sn * 10 + Hata * 50])" 
             },
             memory: { 
                 title: "8. Görsel Dizilim Bellek (Corsi)", 
                 text: "Mavi karelerin yanma sırasını takip edip aynı sırayla dokunun. 2 hatada test tamamlanır.", 
-                eval: "Ölçülen Bilişsel Yetenek: Görsel-Uzamsal Çalışma Belleği ve Dizi Hatırlama Kapasitesi (Corsi Span).",
+                eval: "Ölçülen Bilişsel Yetenek: Görsel-Uzamsal Çalışma Belleği Kapasitesi.",
                 scoreFormula: "Puan = (Seviye * 100) + (Başarılı Blok * 10) - (Hata * 25)" 
             },
             nback: { 
                 title: "9. Spatial N-Back Bellek", 
                 text: "Yanan kare BİR ÖNCEKİ yanan kare ile AYNI konumdaysa 'EŞLEŞTİ (AYNI)' butonuna, farklıysa 'FARKLI' butonuna basın.", 
-                eval: "Ölçülen Bilişsel Yetenek: Çalışma Belleği Güncelleme ve Sürekli Dikkat. Anlık Zihinsel Yük Yönetimi Ölçülür.",
+                eval: "Ölçülen Bilişsel Yetenek: Çalışma Belleği Güncelleme ve Sürekli Dikkat.",
                 scoreFormula: "Puan = (Doğru % * 80) + (1000 / Ort. RT * 200)" 
             },
             digit_span: { 
                 title: "10. Görsel Sayı Dizilimi Belleği", 
                 text: "Ekranda sırayla gösterilen sayı dizisini aklınızda tutun. Gösterim bitince klavyeden sırayla girin.", 
-                eval: "Ölçülen Bilişsel Yetenek: Kısa Süreli Sayısal Dizi Belleği (Digit Span Forward). Odaklanma ve Ardışık İşleme Kapasitesi Ölçülür.",
+                eval: "Ölçülen Bilişsel Yetenek: Kısa Süreli Dizi Belleği (Digit Span Forward).",
                 scoreFormula: "Puan = (Dizi Uzunluğu * 150) - (Hata * 30)" 
             },
             sprint_ball: { 
                 title: "11. Saha Depar (Top Getirme)", 
                 text: "Sesli verilen İngilizce renk komutuna göre depar atıp nesneyi getirin ve ekrana dokunun (10 Deneme).", 
-                eval: "Ölçülen Kinetik Yetenek: İşitsel Reaksiyon Hızı, Patlayıcı İvmelenme ve Yön Değiştirme Çevikliği.",
+                eval: "Ölçülen Kinetik Yetenek: İşitsel Reaksiyon Hızı ve Patlayıcı İvmelenme.",
                 scoreFormula: "Puan = Max(0, 100 - [Ort. Depar Süresi ms / 100])" 
             },
             agility_run: { 
                 title: "12. Renk Koni Çeviklik Deparı", 
                 text: "Aktif olan koniye depar atın ve dönüşte dokunarak süreyi durdurun.", 
-                eval: "Ölçülen Kinetik Yetenek: Çevre Algısı, Görsel Reaksiyon Hızı ve Kinetik Çeviklik.",
+                eval: "Ölçülen Kinetik Yetenek: Çevre Algısı ve Görsel Reaksiyon Çevikliği.",
                 scoreFormula: "Puan = (Doğru % * 60) + Max(0, 40 - [Ort. Süre ms / 200])" 
             },
             complex_agility: { 
                 title: "13. Karmaşık Çift Komut Deparı", 
                 text: "Ses ve Ekran Rengi EŞLEŞTİĞİNDE depar atın. Çelişki varsa yerinizde sabit kalın!", 
-                eval: "Ölçülen Kinetik Yetenek: Saha İçi Karar Verme, Hızlı Motor İnhibisyon ve Yalancı Depar Engelleme.",
+                eval: "Ölçülen Kinetik Yetenek: Saha İçi Karar Verme ve Hızlı Motor İnhibisyon.",
                 scoreFormula: "Puan = (Doğru Depar * 10) + (Doğru Frenleme * 15) - (Hatalı Depar * 20)" 
             },
             choice_react: { 
                 title: "14. Çoklu Seçenek Reaksiyon Deparı", 
                 text: "4 koni arasından belirtilen hedef renge en hızlı deparı atın.", 
-                eval: "Ölçülen Kinetik Yetenek: Karmaşık Uyaran Seçimi ve Yönsel Motor Reaksiyon Hızı.",
+                eval: "Ölçülen Kinetik Yetenek: Karmaşık Uyaran Seçimi ve Yönsel Motor Reaksiyon.",
                 scoreFormula: "Puan = Max(0, 100 - [Reaksiyon ms / 50] - [Yanlış Yön * 15])" 
             },
             visual_search: { 
                 title: "15. Görsel Arama & Depar", 
                 text: "Karmaşık semboller arasından hedef renkli objeyi bulun ve o koniye depar atın.", 
-                eval: "Ölçülen Kinetik Yetenek: Karmaşık Görsel Alan Taraması, Hedef Tespit Süresi ve Kinetik Depar.",
+                eval: "Ölçülen Kinetik Yetenek: Karmaşık Görsel Taraması ve Depar İvmelenmesi.",
                 scoreFormula: "Puan = (1000 / Arama Depar Süresi ms * 500) - (Hata * 25)" 
             }
         };
@@ -875,7 +878,6 @@
             }
         }
 
-        // GÖRSEL SAYI DİZİLİMİ BELLEĞİ (DÜZELTİLMİŞ HIZ VE KONTROL)
         function setupDigitSpanTask() {
             numpadGrid.innerHTML = '';
             memorySequence = [];
@@ -890,7 +892,6 @@
                 numpadGrid.appendChild(btn);
             }
 
-            // 4 elemanlı rastgele rakam dizisi
             for (let i = 0; i < 4; i++) {
                 memorySequence.push(Math.floor(Math.random() * 9) + 1);
             }
@@ -903,20 +904,18 @@
             targetCircle.style.backgroundColor = '#222';
             targetCircle.style.color = '#00e5ff';
 
-            // Dengeli Hız: 1200 ms aralıklarla sayı gösterimi
             const displayInterval = setInterval(() => {
                 if (idx < memorySequence.length) {
                     targetCircle.textContent = memorySequence[idx];
                     playSound(600);
                     idx++;
-                    // 800 ms sonra sayıyı silip temiz ekran göster (okuma kolaylığı için)
                     setTimeout(() => {
                         targetCircle.textContent = '';
                     }, 800);
                 } else {
                     clearInterval(displayInterval);
                     targetCircle.style.display = 'none';
-                    numpadGrid.style.display = 'grid'; // Numpad açılır
+                    numpadGrid.style.display = 'grid';
                     isWaiting = true;
                     trialStartTime = performance.now();
                 }
@@ -927,7 +926,6 @@
             e.preventDefault();
             if (!isWaiting) return;
 
-            // Sayısal tip dönüşüm kontrolü
             playerMemorySequence.push(Number(val));
             const step = playerMemorySequence.length - 1;
 
@@ -1053,7 +1051,8 @@
                 type: type,
                 reactionTimeMs: rt,
                 isCorrect: isCorrect,
-                note: note
+                note: note,
+                score: calculateOverallScore()
             });
         }
 
@@ -1063,13 +1062,36 @@
             statScore.textContent = calculateOverallScore();
         }
 
+        // VERİTABANINA / GOOGLE SHEETS TABLOSUNA OTOMATİK VERİ GÖNDERME
+        function sendDataToDatabase(data) {
+            if (!API_URL || API_URL === "YOUR_GOOGLE_SCRIPT_WEB_APP_URL") {
+                console.log("API URL henüz tanımlanmadı, veriler yerel indirilebilir.");
+                return;
+            }
+
+            fetch(API_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
+            .then(() => {
+                console.log("Test verileri başarıyla sunucuya aktarıldı.");
+            })
+            .catch(err => console.error("Veri iletim hatası:", err));
+        }
+
         function finishTest() {
             stopClock();
             resetLayout();
             const totalElapsed = parseFloat(statTimer.textContent) || 0;
             const finalScore = calculateOverallScore();
+            
+            // Verileri arka plana gönder
+            sendDataToDatabase(trialData);
+
             instrTitle.textContent = "Test Tamamlandı!";
-            instrText.textContent = `Toplam Süre: ${totalElapsed} saniye | Hesaplanan Bilişsel/Kinetik Puan: ${finalScore} | Verileri CSV olarak indirebilirsiniz.`;
+            instrText.textContent = `Toplam Süre: ${totalElapsed} saniye | Bilişsel/Kinetik Puan: ${finalScore} | Verileriniz veritabanına otomatik kaydedildi.`;
             instructionCard.style.display = 'block';
 
             startBtn.disabled = false;
