@@ -167,7 +167,7 @@
 
         const instructions = {
             gonogo: { title: "1. Go/No-Go Testi", text: "Yeşil 'DOKUN!' uyarısında hızlıca dokunun. Kırmızı 'DUR!' uyarısında dokunmayın.", eval: "Ölçülen Yetenek: Motor İnhibisyon.", scoreFormula: "Puan = Doğru / Süre" },
-            stroop: { title: "2. Stroop Testi", text: "Kelimenin RENGİ ile YAZAN ANLAMI aynıysa dokunun, çelişiyorsa ekrana DOKUNMAYIN (Süre dolunca otomatik geçer).", eval: "Ölçülen Yetenek: Bilişsel Çatışma & Renk-Kelime İnhibisyonu.", scoreFormula: "Puan = Doğru Sayısı * 10 - Hata * 15" },
+            stroop: { title: "2. Stroop Testi", text: "Kelimenin RENGİ ile YAZAN ANLAMI aynıysa dokunun, çelişiyorsa ekrana DOKUNMAYIN.", eval: "Ölçülen Yetenek: Bilişsel Çatışma & Renk-Kelime İnhibisyonu.", scoreFormula: "Puan = Doğru Sayısı * 10 - Hata * 15" },
             simon: { title: "3. Simon Effect Testi", text: "Konuma aldanmayın. Kırmızı=SOL, Mavi=SAĞ butonuna basın.", eval: "Ölçülen Yetenek: Mekânsal Uyum.", scoreFormula: "Puan = 100 - Gecikme" },
             flanker: { title: "4. Flanker Testi", text: "Sadece ortadaki 3. okun gösterdiği yöndeki butona dokunun.", eval: "Ölçülen Yetenek: Seçici Dikkat.", scoreFormula: "Puan = Doğru %" },
             antisaccade: { title: "5. Anti-Saccade Testi", text: "Sarı ışığa DOKUNMAYIN! Ekranın ZIT tarafındaki alana dokunun.", eval: "Ölçülen Yetenek: Görsel Refleks İnhibisyonu.", scoreFormula: "Puan = Doğru Zıt Tepki" },
@@ -343,7 +343,7 @@
 
         function nextTrial() {
             const mod = moduleSelect.value;
-            if (!['trailA', 'trailB', 'memory', 'digit_span'].includes(mod) && currentTrial >= totalTrials) {
+            if (!['trailA', 'trailB', 'memory'].includes(mod) && currentTrial >= totalTrials) {
                 finishTest();
                 return;
             }
@@ -406,7 +406,6 @@
                 const textKey = keys[Math.floor(Math.random() * keys.length)];
                 const colorKey = keys[Math.floor(Math.random() * keys.length)];
                 
-                // Çelişki kontrolü: Metin yazısı ile renk aynı mı?
                 const isMatch = (textKey === colorKey);
                 currentCorrectAnswer = isMatch ? 'MATCH' : 'MISMATCH';
 
@@ -415,11 +414,10 @@
                 targetCircle.textContent = textKey;
                 playSound(600);
 
-                // Stroop için Süreli Otomatik Yanıt (Çelişkiliyse dokunulmamalı, eşleşdiyse dokunulmalı)
                 timerTimeout = setTimeout(() => {
                     if (isWaiting) {
                         isWaiting = false;
-                        const isCorrect = !isMatch; // Çelişkiliyse dokunmamak doğru, eşleşdiyse dokunmamak yanlış
+                        const isCorrect = !isMatch; 
                         recordResult('STROOP', 1500, isCorrect, isCorrect ? 'Doğru İnhibisyon (Dokunmadı)' : 'İnhibisyon Hatası (Dokunmadı)');
                         targetCircle.style.display = 'none';
                         updateStats();
@@ -492,7 +490,7 @@
                 recordResult('ANTISACCADE', rt, false, 'Refleks İhlali (Işığa Dokundu)');
                 playSound(150); antisaccadeTouchZone.style.display = 'none';
             } else if (mod === 'stroop') {
-                const isCorrect = (currentCorrectAnswer === 'MATCH'); // Eşleşdiyse dokunmak doğru
+                const isCorrect = (currentCorrectAnswer === 'MATCH'); 
                 recordResult('STROOP', rt, isCorrect, isCorrect ? 'Doğru Eşleşme' : 'Yanlış Dokunma (Çelişki)');
                 if (!isCorrect) playSound(150);
             } else if (mod === 'gonogo' && currentCorrectAnswer === 'NOGO') {
@@ -635,7 +633,7 @@
             } else {
                 playSound(150); recordResult('MEMORY', 0, false, `Seviye ${memoryLevel} Başarısız`);
                 memoryConsecutiveErrors++; updateStats();
-                if (memoryConsecutiveErrors >= 3) { finishTest(); } else { setTimeout(nextTrial, 1000); } // Hata limiti 3 yapıldı
+                if (memoryConsecutiveErrors >= 3) { finishTest(); } else { setTimeout(nextTrial, 1000); }
             }
         }
 
@@ -740,14 +738,24 @@
         }
 
         function finishTest() {
-            stopClock(); resetLayout();
-            const totalElapsed = parseFloat(statTimer.textContent) || 0;
+            // Süre sıfırlanmadan önce toplam süreyi güvenle al
+            const totalElapsed = ((performance.now() - testOverallStartTime) / 1000).toFixed(2);
+            stopClock(); 
+            
             const finalScore = calculateOverallScore();
+            const totalErrors = trialData.filter(d => !d.isCorrect).length;
+            
             sendDataToDatabase(trialData);
+            resetLayout();
+
             document.getElementById('instr-title').textContent = "Test Tamamlandı!";
-            document.getElementById('instr-text').textContent = `Toplam Süre: ${totalElapsed} saniye | Bilişsel/Kinetik Puan: ${finalScore} | Hata Sayısı: ${statErrors.textContent}`;
+            document.getElementById('instr-text').textContent = `Toplam Süre: ${totalElapsed} saniye | Puan: ${finalScore} | Hata Sayısı: ${totalErrors}`;
             instructionCard.style.display = 'block';
-            startBtn.disabled = false; stopBtn.disabled = true; exportBtn.disabled = false; moduleSelect.disabled = false;
+            
+            startBtn.disabled = false; 
+            stopBtn.disabled = true; 
+            exportBtn.disabled = false; 
+            moduleSelect.disabled = false;
         }
 
         function exportCSV() {
