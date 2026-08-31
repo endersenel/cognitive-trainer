@@ -20,6 +20,9 @@
         .panel-row { display: flex; gap: 6px; justify-content: center; align-items: center; width: 100%; }
         #module-select { background: #222; color: #fff; border: 1px solid #00e5ff; padding: 6px 8px; border-radius: 6px; font-size: clamp(0.7rem, 2.5vw, 0.85rem); outline: none; width: 100%; max-width: 450px; text-overflow: ellipsis; }
 
+        .extra-options { display: flex; gap: 10px; justify-content: center; align-items: center; margin-top: 5px; font-size: 0.75rem; color: #00e5ff; }
+        .extra-options select { background: #222; color: #fff; border: 1px solid #00e5ff; padding: 2px 6px; border-radius: 4px; }
+
         #stats-bar { display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; padding: 6px 12px; font-size: clamp(0.65rem, 2.2vw, 0.8rem); font-weight: bold; border-bottom: 1px solid #333; flex-shrink: 0; }
         .stat-item { text-align: center; }
         .stat-item span { color: #00e676; display: inline-block; }
@@ -104,6 +107,14 @@
                 </optgroup>
             </select>
         </div>
+
+        <div class="extra-options" id="digit-difficulty-box" style="display:none;">
+            <label>Zorluk (Basamak): </label>
+            <select id="digit-length-select">
+                <option value="4">4 Basamak (Kolay)</option>
+                <option value="8">8 Basamak (Zor)</option>
+            </select>
+        </div>
     </header>
 
     <div id="stats-bar">
@@ -155,21 +166,21 @@
         const API_URL = "https://script.google.com/macros/s/AKfycbyyHTH0eGM30od8Gml4-ZpiNA_yFNDWZ0omVcxGtq-b10mtKUKgCdwlUlzdwAcdHH-B/exec";
 
         const instructions = {
-            gonogo: { title: "1. Go/No-Go Testi", text: "Yeşil 'DOKUN!' uyarısında hızlıca dokunun. Kırmızı 'DUR!' uyarısında dokunmayın.", eval: "Ölçülen Yetenek: Motor İnhibisyon.", scoreFormula: "Puan = (Doğru Go% * 50) + (Doğru NoGo% * 50) - (Ort. RT / 20)" },
-            stroop: { title: "2. Stroop Testi", text: "Kelimenin rengi ile anlamı aynı olduğunda dokunun.", eval: "Ölçülen Yetenek: Bilişsel Çatışma.", scoreFormula: "Puan = Doğru * 10 - (Ort. RT / 15) - (Hata * 15)" },
-            simon: { title: "3. Simon Effect Testi", text: "Konuma aldanmayın. Kırmızı=SOL, Mavi=SAĞ butonuna basın.", eval: "Ölçülen Yetenek: Mekânsal Uyum.", scoreFormula: "Puan = 100 - (Gecikme ms * 0.2) - (Hata * 20)" },
-            flanker: { title: "4. Flanker Testi", text: "Sadece ortadaki 3. okun gösterdiği yöndeki butona dokunun.", eval: "Ölçülen Yetenek: Seçici Dikkat.", scoreFormula: "Puan = (Doğru % * 100) - (Gecikme / 10)" },
-            antisaccade: { title: "5. Anti-Saccade Testi", text: "Sarı ışığa DOKUNMAYIN! Ekranın ZIT tarafındaki alana dokunun.", eval: "Ölçülen Yetenek: Görsel Refleks İnhibisyonu.", scoreFormula: "Puan = (Başarılı Zıt Tepki * 20) - (Reaksiyon ms / 25)" },
-            trailA: { title: "6. Trail Making Test A", text: "1'den 20'ye kadar olan sayıları sırasıyla birleştirin.", eval: "Ölçülen Yetenek: Görsel Tarama.", scoreFormula: "Puan = Max(0, 1000 - [Süre sn * 10 + Hata * 50])" },
-            trailB: { title: "7. Trail Making Test B", text: "1-A-2-B-3-C... dizilimini tamamlayın.", eval: "Ölçülen Yetenek: Görev Değiştirme.", scoreFormula: "Puan = Max(0, 1000 - [Süre sn * 10 + Hata * 50])" },
-            memory: { title: "8. Görsel Dizilim Bellek (Corsi)", text: "Yanan karelerin sırasını takip edip dokunun.", eval: "Ölçülen Yetenek: Görsel Çalışma Belleği.", scoreFormula: "Puan = (Seviye * 100) + (Başarılı Blok * 10) - (Hata * 25)" },
-            nback: { title: "9. Spatial N-Back Bellek", text: "Yanan kare BİR ÖNCEKİ ile AYNI ise 'EŞLEŞTİ', değilse 'FARKLI' butonuna basın.", eval: "Ölçülen Yetenek: Bellek Güncelleme.", scoreFormula: "Puan = (Doğru % * 80) + (1000 / Ort. RT * 200)" },
-            digit_span: { title: "10. Görsel Sayı Dizilimi Belleği", text: "Gösterilen sayı dizisini aklınızda tutun ve klavyeden girin.", eval: "Ölçülen Yetenek: Kısa Süreli Sayı Belleği.", scoreFormula: "Puan = (Dizi Uzunluğu * 150) - (Hata * 30)" },
-            sprint_ball: { title: "11. Saha Depar (Top Getirme)", text: "Sesli renk komutuna göre depar atın ve ekrana dokunun.", eval: "Ölçülen Yetenek: İşitsel Reaksiyon.", scoreFormula: "Puan = Max(0, 100 - [Ort. Depar Süresi ms / 100])" },
-            agility_run: { title: "12. Renk Koni Çeviklik Deparı", text: "Aktif koniye depar atın ve dokunarak durdurun.", eval: "Ölçülen Yetenek: Çeviklik.", scoreFormula: "Puan = (Doğru % * 60) + Max(0, 40 - [Ort. Süre ms / 200])" },
-            complex_agility: { title: "13. Karmaşık Çift Komut Deparı", text: "Ses ve Renk EŞLEŞTİĞİNDE depar atın, çelişirse durun.", eval: "Ölçülen Yetenek: Saha İçi Karar Verme.", scoreFormula: "Puan = (Doğru Depar * 10) - (Hatalı Depar * 20)" },
-            choice_react: { title: "14. Çoklu Seçenek Reaksiyon Deparı", text: "4 koni arasından hedef renge depar atın.", eval: "Ölçülen Yetenek: Çoklu Reaksiyon.", scoreFormula: "Puan = Max(0, 100 - [Reaksiyon ms / 50])" },
-            visual_search: { title: "15. Görsel Arama & Depar", text: "Hedef objeyi bulun ve o koniye depar atın.", eval: "Ölçülen Yetenek: Görsel Arama.", scoreFormula: "Puan = (1000 / Arama Süresi ms * 500)" }
+            gonogo: { title: "1. Go/No-Go Testi", text: "Yeşil 'DOKUN!' uyarısında hızlıca dokunun. Kırmızı 'DUR!' uyarısında dokunmayın.", eval: "Ölçülen Yetenek: Motor İnhibisyon.", scoreFormula: "Puan = Doğru / Süre" },
+            stroop: { title: "2. Stroop Testi", text: "Kelimenin RENGİ ile YAZAN ANLAMI aynıysa dokunun, çelişiyorsa ekrana DOKUNMAYIN (Süre dolunca otomatik geçer).", eval: "Ölçülen Yetenek: Bilişsel Çatışma & Renk-Kelime İnhibisyonu.", scoreFormula: "Puan = Doğru Sayısı * 10 - Hata * 15" },
+            simon: { title: "3. Simon Effect Testi", text: "Konuma aldanmayın. Kırmızı=SOL, Mavi=SAĞ butonuna basın.", eval: "Ölçülen Yetenek: Mekânsal Uyum.", scoreFormula: "Puan = 100 - Gecikme" },
+            flanker: { title: "4. Flanker Testi", text: "Sadece ortadaki 3. okun gösterdiği yöndeki butona dokunun.", eval: "Ölçülen Yetenek: Seçici Dikkat.", scoreFormula: "Puan = Doğru %" },
+            antisaccade: { title: "5. Anti-Saccade Testi", text: "Sarı ışığa DOKUNMAYIN! Ekranın ZIT tarafındaki alana dokunun.", eval: "Ölçülen Yetenek: Görsel Refleks İnhibisyonu.", scoreFormula: "Puan = Doğru Zıt Tepki" },
+            trailA: { title: "6. Trail Making Test A", text: "1'den 20'ye kadar olan sayıları sırasıyla birleştirin.", eval: "Ölçülen Yetenek: Görsel Tarama.", scoreFormula: "Puan = Süre ve Hata Bazlı" },
+            trailB: { title: "7. Trail Making Test B", text: "1-A-2-B-3-C... dizilimini tamamlayın.", eval: "Ölçülen Yetenek: Görev Değiştirme.", scoreFormula: "Puan = Süre ve Hata Bazlı" },
+            memory: { title: "8. Görsel Dizilim Bellek (Corsi)", text: "Yanan karelerin sırasını takip edip dokunun. 3 hatada test biter.", eval: "Ölçülen Yetenek: Görsel Çalışma Belleği.", scoreFormula: "Puan = Seviye Puanı" },
+            nback: { title: "9. Spatial N-Back Bellek", text: "Yanan kare BİR ÖNCEKİ ile AYNI ise 'EŞLEŞTİ', değilse 'FARKLI' butonuna basın (40 Deneme).", eval: "Ölçülen Yetenek: Bellek Güncelleme.", scoreFormula: "Puan = Doğru Oranı" },
+            digit_span: { title: "10. Görsel Sayı Dizilimi Belleği", text: "10 deneme boyunca gösterilen sayı dizisini aklınızda tutup girin.", eval: "Ölçülen Yetenek: Kısa Süreli Sayı Belleği.", scoreFormula: "Puan = Doğru Sayı Dizisi" },
+            sprint_ball: { title: "11. Saha Depar (Top Getirme)", text: "Sesli renk komutuna göre depar atın ve ekrana dokunun.", eval: "Ölçülen Yetenek: İşitsel Reaksiyon.", scoreFormula: "Puan = Depar Süresi" },
+            agility_run: { title: "12. Renk Koni Çeviklik Deparı", text: "Aktif koniye depar atın ve dokunarak durdurun.", eval: "Ölçülen Yetenek: Çeviklik.", scoreFormula: "Puan = Reaksiyon" },
+            complex_agility: { title: "13. Karmaşık Çift Komut Deparı", text: "Ses ve Renk EŞLEŞTİĞİNDE depar atın, çelişirse durun.", eval: "Ölçülen Yetenek: Saha İçi Karar Verme.", scoreFormula: "Puan = Doğru Depar/Fren" },
+            choice_react: { title: "14. Çoklu Seçenek Reaksiyon Deparı", text: "4 koni arasından hedef renge depar atın.", eval: "Ölçülen Yetenek: Çoklu Reaksiyon.", scoreFormula: "Puan = Reaksiyon" },
+            visual_search: { title: "15. Görsel Arama & Depar", text: "Hedef objeyi bulun ve o koniye depar atın.", eval: "Ölçülen Yetenek: Görsel Arama.", scoreFormula: "Puan = Arama Süresi" }
         };
 
         const colorMap = {
@@ -232,6 +243,7 @@
         const numpadGrid = document.getElementById('numpad-grid');
         const trailArea = document.getElementById('trail-area');
         const instructionCard = document.getElementById('instruction-card');
+        const digitDifficultyBox = document.getElementById('digit-difficulty-box');
 
         const startBtn = document.getElementById('start-btn');
         const stopBtn = document.getElementById('stop-btn');
@@ -267,6 +279,8 @@
             document.getElementById('instr-eval').textContent = instructions[mod] ? instructions[mod].eval : "";
             document.getElementById('instr-score-formula').textContent = instructions[mod] ? instructions[mod].scoreFormula : "";
 
+            digitDifficultyBox.style.display = (mod === 'digit_span') ? 'flex' : 'none';
+
             targetCircle.style.display = 'none';
             antisaccadeTouchZone.style.display = 'none';
             dualButtons.style.display = 'none';
@@ -279,6 +293,7 @@
             btnRightOpt.textContent = "SAĞ";
             statTimer.textContent = '0.00 s';
             statScore.textContent = '0';
+            statErrors.textContent = '0';
         }
 
         function startClock() {
@@ -292,7 +307,7 @@
         function stopClock() { if (clockInterval) clearInterval(clockInterval); }
 
         function startTest() {
-            instructionCard.style.display = 'none'; // KARTI KESİN OLARAK KAPAT
+            instructionCard.style.display = 'none';
             trialData = [];
             currentTrial = 0;
             trailStage = "DEMO1";
@@ -302,10 +317,14 @@
             statErrors.textContent = '0';
             statScore.textContent = '0';
             
+            const mod = moduleSelect.value;
+            totalTrials = (mod === 'nback') ? 40 : 10;
+
             startBtn.disabled = true;
             stopBtn.disabled = false;
             exportBtn.disabled = true;
             moduleSelect.disabled = true;
+            digitDifficultyBox.style.display = 'none';
 
             startClock();
             nextTrial();
@@ -324,7 +343,7 @@
 
         function nextTrial() {
             const mod = moduleSelect.value;
-            if (mod !== 'trailA' && mod !== 'trailB' && mod !== 'memory' && mod !== 'digit_span' && currentTrial >= totalTrials) {
+            if (!['trailA', 'trailB', 'memory', 'digit_span'].includes(mod) && currentTrial >= totalTrials) {
                 finishTest();
                 return;
             }
@@ -333,8 +352,7 @@
             statTrials.textContent = `${currentTrial}/${totalTrials}`;
             isWaiting = false;
 
-            // İLGİLİ MOD BİLEŞENLERİNİ AÇ
-            if (mod === 'simon' || mod === 'flanker') dualButtons.style.display = 'flex';
+            if (mod === 'simon' || mod === 'flanker' || mod === 'nback') dualButtons.style.display = 'flex';
             if (mod === 'agility_run' || mod === 'complex_agility' || mod === 'choice_react') spatialGrid.style.display = 'grid';
 
             if (['gonogo','stroop','sprint_ball','simon','flanker','antisaccade','visual_search'].includes(mod)) {
@@ -387,11 +405,28 @@
                 const keys = ['RED', 'BLUE', 'GREEN', 'YELLOW'];
                 const textKey = keys[Math.floor(Math.random() * keys.length)];
                 const colorKey = keys[Math.floor(Math.random() * keys.length)];
-                currentCorrectAnswer = (textKey === colorKey) ? 'MATCH' : 'MISMATCH';
+                
+                // Çelişki kontrolü: Metin yazısı ile renk aynı mı?
+                const isMatch = (textKey === colorKey);
+                currentCorrectAnswer = isMatch ? 'MATCH' : 'MISMATCH';
+
                 targetCircle.style.backgroundColor = '#000';
                 targetCircle.style.color = colorMap[colorKey].hex;
                 targetCircle.textContent = textKey;
                 playSound(600);
+
+                // Stroop için Süreli Otomatik Yanıt (Çelişkiliyse dokunulmamalı, eşleşdiyse dokunulmalı)
+                timerTimeout = setTimeout(() => {
+                    if (isWaiting) {
+                        isWaiting = false;
+                        const isCorrect = !isMatch; // Çelişkiliyse dokunmamak doğru, eşleşdiyse dokunmamak yanlış
+                        recordResult('STROOP', 1500, isCorrect, isCorrect ? 'Doğru İnhibisyon (Dokunmadı)' : 'İnhibisyon Hatası (Dokunmadı)');
+                        targetCircle.style.display = 'none';
+                        updateStats();
+                        nextTrial();
+                    }
+                }, 1500);
+
             } else if (mod === 'gonogo') {
                 targetCircle.style.left = '35%'; targetCircle.style.top = '30%';
                 const isGo = Math.random() < 0.7;
@@ -452,12 +487,13 @@
             isWaiting = false;
             clearTimeout(timerTimeout);
             const mod = moduleSelect.value;
+            
             if (mod === 'antisaccade') {
                 recordResult('ANTISACCADE', rt, false, 'Refleks İhlali (Işığa Dokundu)');
                 playSound(150); antisaccadeTouchZone.style.display = 'none';
             } else if (mod === 'stroop') {
-                const isCorrect = (currentCorrectAnswer === 'MATCH');
-                recordResult('STROOP', rt, isCorrect, isCorrect ? 'Doğru Eşleşme' : 'Çelişki Hatası');
+                const isCorrect = (currentCorrectAnswer === 'MATCH'); // Eşleşdiyse dokunmak doğru
+                recordResult('STROOP', rt, isCorrect, isCorrect ? 'Doğru Eşleşme' : 'Yanlış Dokunma (Çelişki)');
                 if (!isCorrect) playSound(150);
             } else if (mod === 'gonogo' && currentCorrectAnswer === 'NOGO') {
                 recordResult('GONOGO', rt, false, 'Baskılama Hatası'); playSound(150);
@@ -550,7 +586,7 @@
                             setTimeout(() => setupTrailNodes(mod), 1000);
                         }
                     } else {
-                        recordResult(mod.toUpperCase(), 0, false, 'Sıra Hatası'); playSound(150); updateStats();
+                        recordResult(mod.toUpperCase(), 0, false, `Sıra Hatası (${val})`); playSound(150); updateStats();
                     }
                 });
                 trailArea.appendChild(node);
@@ -599,7 +635,7 @@
             } else {
                 playSound(150); recordResult('MEMORY', 0, false, `Seviye ${memoryLevel} Başarısız`);
                 memoryConsecutiveErrors++; updateStats();
-                if (memoryConsecutiveErrors >= 2) { finishTest(); } else { setTimeout(nextTrial, 1000); }
+                if (memoryConsecutiveErrors >= 3) { finishTest(); } else { setTimeout(nextTrial, 1000); } // Hata limiti 3 yapıldı
             }
         }
 
@@ -612,7 +648,10 @@
                 btn.addEventListener('click', (e) => handleDigitInput(e, i));
                 numpadGrid.appendChild(btn);
             }
-            for (let i = 0; i < 4; i++) { memorySequence.push(Math.floor(Math.random() * 9) + 1); }
+
+            const chosenLength = parseInt(document.getElementById('digit-length-select').value) || 4;
+            for (let i = 0; i < chosenLength; i++) { memorySequence.push(Math.floor(Math.random() * 9) + 1); }
+            
             let idx = 0; isWaiting = false;
             targetCircle.style.display = 'flex'; targetCircle.style.left = '35%'; targetCircle.style.top = '30%';
             targetCircle.style.backgroundColor = '#222'; targetCircle.style.color = '#00e5ff';
@@ -638,11 +677,13 @@
                     const rt = Math.round(performance.now() - trialStartTime);
                     recordResult('DIGIT_SPAN', rt, true, `Doğru Dizi (${memorySequence.join('-')})`);
                     updateStats();
-                    numpadGrid.style.display = 'none'; setTimeout(nextTrial, 1000);
+                    numpadGrid.style.display = 'none';
+                    if (currentTrial >= totalTrials) { finishTest(); } else { setTimeout(nextTrial, 1000); }
                 }
             } else {
                 playSound(150); recordResult('DIGIT_SPAN', 0, false, `Hatalı Dizi (${memorySequence.join('-')})`);
-                updateStats(); numpadGrid.style.display = 'none'; setTimeout(nextTrial, 1000);
+                updateStats(); numpadGrid.style.display = 'none';
+                if (currentTrial >= totalTrials) { finishTest(); } else { setTimeout(nextTrial, 1000); }
             }
         }
 
@@ -704,7 +745,7 @@
             const finalScore = calculateOverallScore();
             sendDataToDatabase(trialData);
             document.getElementById('instr-title').textContent = "Test Tamamlandı!";
-            document.getElementById('instr-text').textContent = `Toplam Süre: ${totalElapsed} saniye | Bilişsel/Kinetik Puan: ${finalScore}`;
+            document.getElementById('instr-text').textContent = `Toplam Süre: ${totalElapsed} saniye | Bilişsel/Kinetik Puan: ${finalScore} | Hata Sayısı: ${statErrors.textContent}`;
             instructionCard.style.display = 'block';
             startBtn.disabled = false; stopBtn.disabled = true; exportBtn.disabled = false; moduleSelect.disabled = false;
         }
